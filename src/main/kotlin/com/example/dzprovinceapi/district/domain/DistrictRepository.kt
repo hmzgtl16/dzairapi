@@ -21,5 +21,5 @@ import java.util.UUID
 
 @Repository
 interface DistrictRepository : JpaRepository<District, UUID> {
-    fun findDistrictBySlug(slug: String): District?
+    fun findDistrictByCode(code: Short): District?
 }

@@ -25,8 +25,8 @@ interface DistrictService {
         pageable: Pageable,
     ): Page<DistrictResponse>
 
-    fun getBySlug(
+    fun getByCode(
         languages: List<String>,
-        slug: String,
+        code: Short,
     ): DistrictResponse
 }

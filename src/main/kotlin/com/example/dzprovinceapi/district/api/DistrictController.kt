@@ -41,12 +41,12 @@ class DistrictController(
         return ResponseEntity.ok(response)
     }
 
-    @GetMapping("/slug/{slug}")
+    @GetMapping("/{code}")
     fun getDistrictBySlug(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
-        @PathVariable slug: String,
+        @PathVariable code: Short,
     ): ResponseEntity<DistrictResponse> {
-        val response = districtService.getBySlug(languages, slug)
+        val response = districtService.getByCode(languages, code)
         return ResponseEntity.ok(response)
     }
 }

@@ -18,6 +18,7 @@ package com.example.dzprovinceapi.district.service
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
 import com.example.dzprovinceapi.district.domain.DistrictRepository
 import com.example.dzprovinceapi.district.mapping.toResponse
+import com.example.dzprovinceapi.shared.error.DistrictCodeNotFoundException
 import com.example.dzprovinceapi.shared.error.DistrictSlugNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -42,13 +43,13 @@ class DistrictServiceImpl(
         return response
     }
 
-    override fun getBySlug(
+    override fun getByCode(
         languages: List<String>,
-        slug: String,
+        code: Short,
     ): DistrictResponse {
         val district =
-            districtRepository.findDistrictBySlug(slug)
-                ?: throw DistrictSlugNotFoundException(slug)
+            districtRepository.findDistrictByCode(code)
+                ?: throw DistrictCodeNotFoundException(code)
         val response =
             district
                 .toResponse(languages.normalizeOrDefaults())
