@@ -38,6 +38,9 @@ class District {
     @Column(name = "slug")
     var slug: String = ""
 
+    @Column(name = "code")
+    var code: Short = 0
+
     @OneToMany(mappedBy = "district")
     var districtTranslations: MutableSet<DistrictTranslation> =
         mutableSetOf()
