@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS public.province (
 CREATE TABLE IF NOT EXISTS public.district (
   id UUID PRIMARY KEY DEFAULT uuidv7 (),
   slug VARCHAR(100) NOT NULL,
+  code SMALLINT NOT NULL UNIQUE,
   province_id UUID NOT NULL REFERENCES public.province (id) ON DELETE RESTRICT,
   CONSTRAINT uq_district_province_slug UNIQUE (province_id, slug)
 );
