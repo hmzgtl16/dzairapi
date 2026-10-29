@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.shared.serializer
+package com.example.dzprovinceapi.common.serializer
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.descriptors.SerialDescriptor
@@ -22,38 +22,27 @@ import kotlinx.serialization.descriptors.element
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.encoding.encodeStructure
-import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
 
-class PageableSerializer : KSerializer<Pageable> {
+class SortSerializer : KSerializer<Sort> {
     override val descriptor: SerialDescriptor =
-        buildClassSerialDescriptor("Pageable") {
-            element<Long>("offset")
-            element<Int>("page-number")
-            element<Int>("page-size")
-            element<Boolean>("paged")
-            element("sort", SortSerializer().descriptor)
-            element<Boolean>("unpaged")
+        buildClassSerialDescriptor("Sort") {
+            element<String>("empty")
+            element<String>("sorted")
+            element<String>("unsorted")
         }
 
     override fun serialize(
         encoder: Encoder,
-        value: Pageable,
+        value: Sort,
     ) {
         encoder.encodeStructure(descriptor) {
-            encodeLongElement(descriptor, 0, value.offset)
-            encodeIntElement(descriptor, 1, value.pageNumber)
-            encodeIntElement(descriptor, 2, value.pageSize)
-            encodeBooleanElement(descriptor, 3, value.isPaged)
-            encodeSerializableElement(
-                descriptor,
-                4,
-                SortSerializer(),
-                value.sort,
-            )
-            encodeBooleanElement(descriptor, 5, value.isUnpaged)
+            encodeBooleanElement(descriptor, 0, value.isEmpty)
+            encodeBooleanElement(descriptor, 1, value.isSorted)
+            encodeBooleanElement(descriptor, 2, value.isUnsorted)
         }
     }
 
-    override fun deserialize(decoder: Decoder): Pageable =
-        throw UnsupportedOperationException("Deserializing Pageable is not supported")
+    override fun deserialize(decoder: Decoder): Sort =
+        throw UnsupportedOperationException("Deserializing Sort is not supported")
 }

@@ -15,7 +15,7 @@
  */
 package com.example.dzprovinceapi.config
 
-import com.example.dzprovinceapi.shared.serializer.PageSerializer
+import com.example.dzprovinceapi.common.serializer.PageSerializer
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.modules.SerializersModule

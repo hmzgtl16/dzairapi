@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.municipality.api
+package com.example.dzprovinceapi.controller
 
 import com.example.dzprovinceapi.dto.MunicipalityResponse
 import com.example.dzprovinceapi.service.MunicipalityService

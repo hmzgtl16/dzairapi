@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.shared.serializer
+package com.example.dzprovinceapi.common.serializer
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.builtins.ListSerializer
