@@ -17,9 +17,8 @@ package com.example.dzprovinceapi.district.service
 
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
 import com.example.dzprovinceapi.district.domain.DistrictRepository
-import com.example.dzprovinceapi.district.mapping.toResponse
-import com.example.dzprovinceapi.shared.error.DistrictCodeNotFoundException
-import com.example.dzprovinceapi.shared.error.DistrictSlugNotFoundException
+import com.example.dzprovinceapi.exception.DistrictCodeNotFoundException
+import com.example.dzprovinceapi.mapping.toResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service

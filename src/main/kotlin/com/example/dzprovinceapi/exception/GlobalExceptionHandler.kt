@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.shared.error
+package com.example.dzprovinceapi.exception
 
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail

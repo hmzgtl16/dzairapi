@@ -17,18 +17,18 @@ package com.example.dzprovinceapi.province.service
 
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
 import com.example.dzprovinceapi.district.domain.District
+import com.example.dzprovinceapi.exception.ProvinceCodeNotFoundException
 import com.example.dzprovinceapi.municipality.api.dto.MunicipalityResponse
 import com.example.dzprovinceapi.province.api.dto.ProvinceResponse
 import com.example.dzprovinceapi.province.domain.ProvinceRepository
 import com.example.dzprovinceapi.province.mapping.toResponse
-import com.example.dzprovinceapi.shared.error.ProvinceCodeNotFoundException
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
-import com.example.dzprovinceapi.district.mapping.toResponse as toDistrictResponse
-import com.example.dzprovinceapi.municipality.mapping.toResponse as toMunicipalityResponse
+import com.example.dzprovinceapi.mapping.toResponse as toDistrictResponse
+import com.example.dzprovinceapi.mapping.toResponse as toMunicipalityResponse
 
 @Service
 class ProvinceServiceImpl(

@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.province.mapping
+package com.example.dzprovinceapi.mapping
 
-import com.example.dzprovinceapi.language.mapping.toResponse
 import com.example.dzprovinceapi.province.api.dto.ProvinceNameResponse
 import com.example.dzprovinceapi.province.api.dto.ProvinceResponse
 import com.example.dzprovinceapi.province.domain.Province

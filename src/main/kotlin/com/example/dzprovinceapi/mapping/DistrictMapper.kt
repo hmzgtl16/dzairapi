@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.district.mapping
+package com.example.dzprovinceapi.mapping
 
 import com.example.dzprovinceapi.district.api.dto.DistrictNameResponse
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
 import com.example.dzprovinceapi.district.domain.District
 import com.example.dzprovinceapi.district.domain.DistrictTranslation
-import com.example.dzprovinceapi.language.mapping.toResponse
 
 fun District?.toResponse(languages: List<String>): DistrictResponse =
     DistrictResponse(

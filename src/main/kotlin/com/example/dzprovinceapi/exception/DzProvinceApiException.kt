@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.shared.error
+package com.example.dzprovinceapi.exception
 
 sealed class DzProvinceApiException(
     override val message: String,

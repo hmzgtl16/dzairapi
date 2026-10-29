@@ -15,6 +15,7 @@
  */
 package com.example.dzprovinceapi.province.service
 
+import com.example.dzprovinceapi.exception.ProvinceCodeNotFoundException
 import com.example.dzprovinceapi.helpers.testDistrict
 import com.example.dzprovinceapi.helpers.testDistrictTranslation
 import com.example.dzprovinceapi.helpers.testLanguage
@@ -23,8 +24,6 @@ import com.example.dzprovinceapi.helpers.testMunicipalityTranslation
 import com.example.dzprovinceapi.helpers.testProvince
 import com.example.dzprovinceapi.helpers.testProvinceTranslation
 import com.example.dzprovinceapi.province.domain.ProvinceRepository
-import com.example.dzprovinceapi.shared.error.ProvinceCodeNotFoundException
-import com.example.dzprovinceapi.shared.error.ProvinceSlugNotFoundException
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
