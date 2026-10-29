@@ -34,4 +34,6 @@ interface ProvinceRepository : JpaRepository<Province, UUID> {
 
     @EntityGraph(attributePaths = ["translations", "translations.language"])
     fun findProvinceByCode(code: Short): Province?
+
+    fun existsProvinceByCode(code: Short): Boolean
 }

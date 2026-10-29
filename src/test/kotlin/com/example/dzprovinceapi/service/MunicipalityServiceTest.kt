@@ -21,7 +21,6 @@ import com.example.dzprovinceapi.helpers.testLanguage
 import com.example.dzprovinceapi.helpers.testMunicipality
 import com.example.dzprovinceapi.helpers.testMunicipalityTranslation
 import com.example.dzprovinceapi.repository.MunicipalityRepository
-import com.example.dzprovinceapi.service.MunicipalityServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -107,7 +106,7 @@ class MunicipalityServiceTest {
         assertThat(result.content).isNotEmpty
         assertThat(result.content[0].code).isEqualTo("1601")
         assertThat(result.content[0].slug).isEqualTo(municipality.slug)
-        assertThat(result.content[0].names).hasSize(municipality.municipalityTranslations.size)
+        assertThat(result.content[0].names).hasSize(municipality.translations.size)
         assertThat(result.content[0].names.map { it.language?.code }).containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(municipalityRepository).findAll(pageable)
@@ -426,7 +425,7 @@ class MunicipalityServiceTest {
 
         `when`(municipalityRepository.findMunicipalityByCode(1601)).thenReturn(municipality)
 
-        val result = municipalityService.getByCode(emptyList(), 1601)
+        val result = municipalityService.getMunicipalityByCode(emptyList(), 1601)
 
         assertThat(result.code).isEqualTo("1601")
         assertThat(result.slug).isEqualTo("bab-el-oued")
@@ -440,7 +439,7 @@ class MunicipalityServiceTest {
     fun `getByCode throws MunicipalityCodeNotFoundException when no municipality matches`() {
         `when`(municipalityRepository.findMunicipalityByCode(9999)).thenReturn(null)
 
-        assertThatThrownBy { municipalityService.getByCode(emptyList(), 9999) }
+        assertThatThrownBy { municipalityService.getMunicipalityByCode(emptyList(), 9999) }
             .isInstanceOf(MunicipalityCodeNotFoundException::class.java)
 
         verify(municipalityRepository).findMunicipalityByCode(9999)
@@ -477,7 +476,7 @@ class MunicipalityServiceTest {
         `when`(municipalityRepository.findMunicipalityByCode(1601)).thenReturn(municipality)
 
         val result =
-            municipalityService.getByCode(listOf("EN, fr", "en", "!"), 1601)
+            municipalityService.getMunicipalityByCode(listOf("EN, fr", "en", "!"), 1601)
 
         assertThat(result.names.map { it.language?.code })
             .containsExactlyInAnyOrder("en", "fr")
@@ -515,7 +514,7 @@ class MunicipalityServiceTest {
 
         `when`(municipalityRepository.findMunicipalityByCode(1601)).thenReturn(municipality)
 
-        val result = municipalityService.getByCode(emptyList(), 1601)
+        val result = municipalityService.getMunicipalityByCode(emptyList(), 1601)
 
         assertThat(result.names.map { it.language?.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")

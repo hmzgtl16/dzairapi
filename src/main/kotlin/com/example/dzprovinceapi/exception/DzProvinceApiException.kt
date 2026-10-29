@@ -19,7 +19,7 @@ sealed class DzProvinceApiException(
     override val message: String,
 ) : RuntimeException()
 
-class ProvinceCodeNotFoundException(
+class ProvinceNotFoundException(
     code: Short,
 ) : DzProvinceApiException(message = "No province exists with code $code.")
 
@@ -27,7 +27,7 @@ class ProvinceSlugNotFoundException(
     slug: String,
 ) : DzProvinceApiException(message = "No province exists with slug $slug.")
 
-class DistrictCodeNotFoundException(
+class DistrictNotFoundException(
     code: Short,
 ) : DzProvinceApiException(message = "No district exists with code $code.")
 

@@ -38,7 +38,7 @@ fun testProvince(
         this.id = id
         this.code = code
         this.slug = slug
-        this.provinceTranslations = translations.toMutableSet()
+        this.translations = translations.toMutableSet()
         this.districts = districts.toMutableSet()
     }
 
@@ -83,7 +83,7 @@ fun testDistrict(
     District().apply {
         this.id = id
         this.slug = slug
-        this.districtTranslations = translations.toMutableSet()
+        this.translations = translations.toMutableSet()
         this.municipalities = municipalities.toMutableSet()
     }
 
@@ -112,7 +112,7 @@ fun testMunicipality(
         this.id = id
         this.code = code
         this.slug = slug
-        this.municipalityTranslations = translations.toMutableSet()
+        this.translations = translations.toMutableSet()
     }
 
 fun testMunicipalityTranslation(

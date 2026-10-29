@@ -40,7 +40,7 @@ class Municipality {
     var code: Short = 0
 
     @OneToMany(mappedBy = "municipality")
-    var municipalityTranslations: MutableSet<MunicipalityTranslation> =
+    var translations: MutableSet<MunicipalityTranslation> =
         mutableSetOf()
 
     @ManyToOne(fetch = FetchType.LAZY)

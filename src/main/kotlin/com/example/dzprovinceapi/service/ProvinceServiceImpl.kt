@@ -18,12 +18,12 @@ package com.example.dzprovinceapi.service
 import com.example.dzprovinceapi.dto.DistrictResponse
 import com.example.dzprovinceapi.dto.MunicipalityResponse
 import com.example.dzprovinceapi.dto.ProvinceResponse
-import com.example.dzprovinceapi.exception.ProvinceCodeNotFoundException
+import com.example.dzprovinceapi.exception.ProvinceNotFoundException
 import com.example.dzprovinceapi.mapping.toResponse
-import com.example.dzprovinceapi.model.District
+import com.example.dzprovinceapi.repository.DistrictRepository
+import com.example.dzprovinceapi.repository.MunicipalityRepository
 import com.example.dzprovinceapi.repository.ProvinceRepository
 import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -32,14 +32,23 @@ import com.example.dzprovinceapi.mapping.toResponse as toMunicipalityResponse
 
 @Service
 class ProvinceServiceImpl(
+    private val districtRepository: DistrictRepository,
+    private val municipalityRepository: MunicipalityRepository,
     private val provinceRepository: ProvinceRepository,
 ) : ProvinceService {
     @Transactional(readOnly = true)
-    override fun getProvinces(
+    override fun getAllProvinces(
         languages: List<String>,
         pageable: Pageable,
     ): Page<ProvinceResponse> {
-        val provinces = provinceRepository.findAll(pageable)
+        val codes =
+            IntRange(1, 69)
+                .map(Int::toShort)
+                .toList()
+
+        val provinces =
+            provinceRepository
+                .findProvincesByCodeIn(codes, pageable)
         val response =
             provinces.map {
                 it.toResponse(languages.normalizeOrDefaults())
@@ -56,7 +65,7 @@ class ProvinceServiceImpl(
         val province =
             provinceRepository
                 .findProvinceByCode(code)
-                ?: throw ProvinceCodeNotFoundException(code)
+                ?: throw ProvinceNotFoundException(code)
         val response =
             province
                 .toResponse(languages.normalizeOrDefaults())
@@ -70,44 +79,34 @@ class ProvinceServiceImpl(
         code: Short,
         pageable: Pageable,
     ): Page<DistrictResponse> {
-        val province =
-            provinceRepository
-                .findProvinceByCode(code)
-                ?: throw ProvinceCodeNotFoundException(code)
+        if (!provinceRepository.existsProvinceByCode(code)) {
+            throw ProvinceNotFoundException(code)
+        }
 
-        val districts =
-            province
-                .districts
+        val response =
+            districtRepository
+                .findDistrictsByProvinceCode(code, pageable)
                 .map { it.toDistrictResponse(languages.normalizeOrDefaults()) }
 
-        return PageImpl(
-            districts,
-            pageable,
-            districts.size.toLong(),
-        )
+        return response
     }
 
+    @Transactional(readOnly = true)
     override fun getProvinceMunicipalitiesByCode(
         languages: List<String>,
         code: Short,
         pageable: Pageable,
     ): Page<MunicipalityResponse> {
-        val province =
-            provinceRepository
-                .findProvinceByCode(code)
-                ?: throw ProvinceCodeNotFoundException(code)
+        if (!provinceRepository.existsProvinceByCode(code)) {
+            throw ProvinceNotFoundException(code)
+        }
 
-        val municipalities =
-            province
-                .districts
-                .flatMap(District::municipalities)
+        val response =
+            municipalityRepository
+                .findMunicipalitiesByDistrictProvinceCode(code, pageable)
                 .map { it.toMunicipalityResponse(languages.normalizeOrDefaults()) }
 
-        return PageImpl(
-            municipalities,
-            pageable,
-            municipalities.size.toLong(),
-        )
+        return response
     }
 
     private fun List<String>.normalizeOrDefaults(): List<String> =

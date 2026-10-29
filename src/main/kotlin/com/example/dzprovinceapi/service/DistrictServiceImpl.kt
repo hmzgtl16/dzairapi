@@ -16,24 +16,30 @@
 package com.example.dzprovinceapi.service
 
 import com.example.dzprovinceapi.dto.DistrictResponse
-import com.example.dzprovinceapi.exception.DistrictCodeNotFoundException
+import com.example.dzprovinceapi.dto.MunicipalityResponse
+import com.example.dzprovinceapi.exception.DistrictNotFoundException
 import com.example.dzprovinceapi.mapping.toResponse
 import com.example.dzprovinceapi.repository.DistrictRepository
+import com.example.dzprovinceapi.repository.MunicipalityRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
+import com.example.dzprovinceapi.mapping.toResponse as toMunicipalityResponse
 
 @Service
 class DistrictServiceImpl(
     private val districtRepository: DistrictRepository,
+    private val municipalityRepository: MunicipalityRepository,
 ) : DistrictService {
     @Transactional(readOnly = true)
     override fun getAllDistricts(
         languages: List<String>,
         pageable: Pageable,
     ): Page<DistrictResponse> {
-        val districts = districtRepository.findAll(pageable)
+        val districts =
+            districtRepository
+                .findDistrictsBy(pageable)
         val response =
             districts.map {
                 it.toResponse(languages.normalizeOrDefaults())
@@ -42,16 +48,35 @@ class DistrictServiceImpl(
         return response
     }
 
-    override fun getByCode(
+    @Transactional(readOnly = true)
+    override fun getDistrictByCode(
         languages: List<String>,
         code: Short,
     ): DistrictResponse {
         val district =
             districtRepository.findDistrictByCode(code)
-                ?: throw DistrictCodeNotFoundException(code)
+                ?: throw DistrictNotFoundException(code)
         val response =
             district
                 .toResponse(languages.normalizeOrDefaults())
+
+        return response
+    }
+
+    @Transactional(readOnly = true)
+    override fun getDistrictMunicipalitiesByCode(
+        languages: List<String>,
+        code: Short,
+        pageable: Pageable,
+    ): Page<MunicipalityResponse> {
+        if (!districtRepository.existsDistrictByCode(code)) {
+            throw DistrictNotFoundException(code)
+        }
+
+        val response =
+            municipalityRepository
+                .findMunicipalitiesByDistrictCode(code, pageable)
+                .map { it.toMunicipalityResponse(languages.normalizeOrDefaults()) }
 
         return response
     }

@@ -40,7 +40,7 @@ class District {
     var code: Short = 0
 
     @OneToMany(mappedBy = "district")
-    var districtTranslations: MutableSet<DistrictTranslation> =
+    var translations: MutableSet<DistrictTranslation> =
         mutableSetOf()
 
     @ManyToOne(fetch = FetchType.LAZY)

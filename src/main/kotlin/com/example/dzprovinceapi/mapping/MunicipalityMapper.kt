@@ -26,7 +26,7 @@ fun Municipality?.toResponse(languages: List<String>): MunicipalityResponse =
         code = this?.code?.let { String.format("%04d", it) },
         names =
             this
-                ?.municipalityTranslations
+                ?.translations
                 ?.filter { languages.contains(it.language?.code) }
                 ?.map(MunicipalityTranslation::toResponse) ?: emptyList(),
     )

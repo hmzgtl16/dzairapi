@@ -92,7 +92,7 @@ class MunicipalityRepositoryTest {
         val result = municipalityRepository.findMunicipalityByCode(1601)
 
         assertThat(result).isNotNull
-        assertThat(result!!.municipalityTranslations)
+        assertThat(result!!.translations)
             .extracting(MunicipalityTranslation::name)
             .contains(Tuple("Bab El Oued"), Tuple("Bab El Oued"), Tuple("باب الوادي"))
     }

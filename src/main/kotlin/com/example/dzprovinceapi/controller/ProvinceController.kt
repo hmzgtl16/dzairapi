@@ -40,7 +40,7 @@ class ProvinceController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PageableDefault pageable: Pageable,
     ): ResponseEntity<Page<ProvinceResponse>> {
-        val response = provinceService.getProvinces(languages, pageable)
+        val response = provinceService.getAllProvinces(languages, pageable)
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 

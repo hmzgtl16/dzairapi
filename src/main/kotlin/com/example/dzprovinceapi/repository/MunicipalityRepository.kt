@@ -16,13 +16,27 @@
 package com.example.dzprovinceapi.repository
 
 import com.example.dzprovinceapi.model.Municipality
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.Pageable
+import org.springframework.data.jpa.repository.EntityGraph
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
 interface MunicipalityRepository : JpaRepository<Municipality, UUID> {
-    fun findMunicipalityBySlug(slug: String): Municipality?
-
+    @EntityGraph(attributePaths = ["translations", "translations.language"])
     fun findMunicipalityByCode(code: Short): Municipality?
+
+    @EntityGraph(attributePaths = ["translations", "translations.language"])
+    fun findMunicipalitiesByDistrictProvinceCode(
+        code: Short,
+        pageable: Pageable,
+    ): Page<Municipality>
+
+    @EntityGraph(attributePaths = ["translations", "translations.language"])
+    fun findMunicipalitiesByDistrictCode(
+        code: Short,
+        pageable: Pageable,
+    ): Page<Municipality>
 }

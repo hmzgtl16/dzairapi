@@ -16,6 +16,7 @@
 package com.example.dzprovinceapi.service
 
 import com.example.dzprovinceapi.dto.DistrictResponse
+import com.example.dzprovinceapi.dto.MunicipalityResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -25,8 +26,14 @@ interface DistrictService {
         pageable: Pageable,
     ): Page<DistrictResponse>
 
-    fun getByCode(
+    fun getDistrictByCode(
         languages: List<String>,
         code: Short,
     ): DistrictResponse
+
+    fun getDistrictMunicipalitiesByCode(
+        languages: List<String>,
+        code: Short,
+        pageable: Pageable,
+    ): Page<MunicipalityResponse>
 }

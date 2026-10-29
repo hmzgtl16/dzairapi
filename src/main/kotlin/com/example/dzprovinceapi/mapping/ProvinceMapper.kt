@@ -26,7 +26,7 @@ fun Province?.toResponse(languages: List<String>): ProvinceResponse =
         slug = this?.slug,
         names =
             this
-                ?.provinceTranslations
+                ?.translations
                 ?.filter { languages.contains(it.language?.code) }
                 ?.map { it.toResponse() } ?: emptyList(),
     )

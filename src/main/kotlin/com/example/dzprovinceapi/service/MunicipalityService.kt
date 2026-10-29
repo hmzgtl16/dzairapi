@@ -25,13 +25,8 @@ interface MunicipalityService {
         pageable: Pageable,
     ): Page<MunicipalityResponse>
 
-    fun getByCode(
+    fun getMunicipalityByCode(
         languages: List<String>,
         code: Short,
-    ): MunicipalityResponse
-
-    fun getBySlug(
-        languages: List<String>,
-        slug: String,
     ): MunicipalityResponse
 }

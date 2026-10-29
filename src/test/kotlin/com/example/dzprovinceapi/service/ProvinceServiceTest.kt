@@ -15,7 +15,7 @@
  */
 package com.example.dzprovinceapi.service
 
-import com.example.dzprovinceapi.exception.ProvinceCodeNotFoundException
+import com.example.dzprovinceapi.exception.ProvinceNotFoundException
 import com.example.dzprovinceapi.helpers.testDistrict
 import com.example.dzprovinceapi.helpers.testDistrictTranslation
 import com.example.dzprovinceapi.helpers.testLanguage
@@ -24,7 +24,6 @@ import com.example.dzprovinceapi.helpers.testMunicipalityTranslation
 import com.example.dzprovinceapi.helpers.testProvince
 import com.example.dzprovinceapi.helpers.testProvinceTranslation
 import com.example.dzprovinceapi.repository.ProvinceRepository
-import com.example.dzprovinceapi.service.ProvinceServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
@@ -61,7 +60,7 @@ class ProvinceServiceTest {
         val provincePage = PageImpl(listOf(province), pageable, 1)
         `when`(provinceRepository.findAll(pageable)).thenReturn(provincePage)
 
-        val result = provinceService.getProvinces(emptyList(), pageable)
+        val result = provinceService.getAllProvinces(emptyList(), pageable)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
@@ -100,13 +99,13 @@ class ProvinceServiceTest {
         `when`(provinceRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(province), pageable, 1))
 
-        val result = provinceService.getProvinces(emptyList(), pageable)
+        val result = provinceService.getAllProvinces(emptyList(), pageable)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
         assertThat(result.content[0].code).isEqualTo("16")
         assertThat(result.content[0].slug).isEqualTo(province.slug)
-        assertThat(result.content[0].names).hasSize(province.provinceTranslations.size)
+        assertThat(result.content[0].names).hasSize(province.translations.size)
         assertThat(result.content[0].names.map { it.language?.code }).containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).findAll(pageable)
@@ -140,7 +139,7 @@ class ProvinceServiceTest {
         `when`(provinceRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(province), pageable, 1))
 
-        val result = provinceService.getProvinces(listOf("en"), pageable)
+        val result = provinceService.getAllProvinces(listOf("en"), pageable)
 
         assertThat(result.content[0].names).hasSize(1)
         assertThat(
@@ -184,7 +183,7 @@ class ProvinceServiceTest {
 
         // " EN ", "fr,ar", "en" -> ["en", "fr", "ar"]; "12" and "e" are invalid and dropped.
         val result =
-            provinceService.getProvinces(
+            provinceService.getAllProvinces(
                 listOf(" EN ", "fr,ar", "en", "12", "e"),
                 pageable,
             )
@@ -224,7 +223,7 @@ class ProvinceServiceTest {
             .thenReturn(PageImpl(listOf(province), pageable, 1))
 
         val result =
-            provinceService.getProvinces(listOf("1", "!!", "", "e"), pageable)
+            provinceService.getAllProvinces(listOf("1", "!!", "", "e"), pageable)
 
         assertThat(result.content[0].names.map { it.language?.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
@@ -238,7 +237,7 @@ class ProvinceServiceTest {
         `when`(provinceRepository.findAll(pageable))
             .thenReturn(PageImpl(emptyList(), pageable, 0))
 
-        val result = provinceService.getProvinces(emptyList(), pageable)
+        val result = provinceService.getAllProvinces(emptyList(), pageable)
 
         assertThat(result.totalElements).isZero()
         assertThat(result.content).isEmpty()
@@ -291,7 +290,7 @@ class ProvinceServiceTest {
         `when`(provinceRepository.findProvinceByCode(99)).thenReturn(null)
 
         assertThatThrownBy { provinceService.getProvinceByCode(emptyList(), 99) }
-            .isInstanceOf(ProvinceCodeNotFoundException::class.java)
+            .isInstanceOf(ProvinceNotFoundException::class.java)
 
         verify(provinceRepository).findProvinceByCode(99)
     }
@@ -422,7 +421,7 @@ class ProvinceServiceTest {
         `when`(provinceRepository.findProvinceByCode(99)).thenReturn(null)
 
         assertThatThrownBy { provinceService.getProvinceDistrictsByCode(emptyList(), 99, pageable) }
-            .isInstanceOf(ProvinceCodeNotFoundException::class.java)
+            .isInstanceOf(ProvinceNotFoundException::class.java)
 
         verify(provinceRepository).findProvinceByCode(99)
     }
@@ -581,7 +580,7 @@ class ProvinceServiceTest {
         `when`(provinceRepository.findProvinceByCode(99)).thenReturn(null)
 
         assertThatThrownBy { provinceService.getProvinceMunicipalitiesByCode(emptyList(), 99, pageable) }
-            .isInstanceOf(ProvinceCodeNotFoundException::class.java)
+            .isInstanceOf(ProvinceNotFoundException::class.java)
 
         verify(provinceRepository).findProvinceByCode(99)
     }

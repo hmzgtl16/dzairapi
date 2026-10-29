@@ -56,7 +56,7 @@ class MunicipalityController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PathVariable code: Short,
     ): ResponseEntity<MunicipalityResponse> {
-        val response = municipalityService.getByCode(languages, code)
+        val response = municipalityService.getMunicipalityByCode(languages, code)
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }

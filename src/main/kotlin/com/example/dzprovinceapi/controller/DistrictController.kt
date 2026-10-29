@@ -46,7 +46,7 @@ class DistrictController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PathVariable code: Short,
     ): ResponseEntity<DistrictResponse> {
-        val response = districtService.getByCode(languages, code)
+        val response = districtService.getDistrictByCode(languages, code)
         return ResponseEntity.ok(response)
     }
 }

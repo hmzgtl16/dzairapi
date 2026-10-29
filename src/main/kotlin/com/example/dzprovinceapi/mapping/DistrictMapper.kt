@@ -25,7 +25,7 @@ fun District?.toResponse(languages: List<String>): DistrictResponse =
         slug = this?.slug,
         names =
             this
-                ?.districtTranslations
+                ?.translations
                 ?.filter { languages.contains(it.language?.code) }
                 ?.map { it.toResponse() } ?: emptyList(),
     )

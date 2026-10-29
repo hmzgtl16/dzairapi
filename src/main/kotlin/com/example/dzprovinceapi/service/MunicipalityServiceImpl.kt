@@ -17,7 +17,6 @@ package com.example.dzprovinceapi.service
 
 import com.example.dzprovinceapi.dto.MunicipalityResponse
 import com.example.dzprovinceapi.exception.MunicipalityCodeNotFoundException
-import com.example.dzprovinceapi.exception.MunicipalitySlugNotFoundException
 import com.example.dzprovinceapi.mapping.toResponse
 import com.example.dzprovinceapi.repository.MunicipalityRepository
 import org.springframework.data.domain.Page
@@ -44,7 +43,7 @@ class MunicipalityServiceImpl(
     }
 
     @Transactional(readOnly = true)
-    override fun getByCode(
+    override fun getMunicipalityByCode(
         languages: List<String>,
         code: Short,
     ): MunicipalityResponse {
@@ -52,22 +51,6 @@ class MunicipalityServiceImpl(
             municipalityRepository
                 .findMunicipalityByCode(code)
                 ?: throw MunicipalityCodeNotFoundException(code)
-        val response =
-            municipality
-                .toResponse(languages.normalizeOrDefaults())
-
-        return response
-    }
-
-    @Transactional(readOnly = true)
-    override fun getBySlug(
-        languages: List<String>,
-        slug: String,
-    ): MunicipalityResponse {
-        val municipality =
-            municipalityRepository
-                .findMunicipalityBySlug(slug)
-                ?: throw MunicipalitySlugNotFoundException(slug)
         val response =
             municipality
                 .toResponse(languages.normalizeOrDefaults())

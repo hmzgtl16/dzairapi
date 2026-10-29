@@ -24,8 +24,8 @@ import java.net.URI
 
 @RestControllerAdvice
 class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
-    @ExceptionHandler(ProvinceCodeNotFoundException::class)
-    fun handleProvinceCodeNotFound(ex: ProvinceCodeNotFoundException): ProblemDetail =
+    @ExceptionHandler(ProvinceNotFoundException::class)
+    fun handleProvinceCodeNotFound(ex: ProvinceNotFoundException): ProblemDetail =
         ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message).apply {
             title = "Province not found"
             type = URI.create("about:blank")

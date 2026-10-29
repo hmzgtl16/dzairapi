@@ -102,7 +102,7 @@ class DistrictServiceTest {
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
         assertThat(result.content[0].slug).isEqualTo(district.slug)
-        assertThat(result.content[0].names).hasSize(district.districtTranslations.size)
+        assertThat(result.content[0].names).hasSize(district.translations.size)
         assertThat(result.content[0].names.map { it.language?.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
