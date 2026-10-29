@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.municipality.service
+package com.example.dzprovinceapi.service
 
 import com.example.dzprovinceapi.exception.MunicipalityCodeNotFoundException
 import com.example.dzprovinceapi.exception.MunicipalitySlugNotFoundException

@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.municipality.mapping
+package com.example.dzprovinceapi.mapping
 
 import com.example.dzprovinceapi.helpers.testLanguage
 import com.example.dzprovinceapi.helpers.testMunicipality
 import com.example.dzprovinceapi.helpers.testMunicipalityTranslation
-import com.example.dzprovinceapi.mapping.toResponse
 import com.example.dzprovinceapi.model.Municipality
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test

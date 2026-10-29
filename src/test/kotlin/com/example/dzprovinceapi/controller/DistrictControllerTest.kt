@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.municipality.api
+package com.example.dzprovinceapi.controller
 
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -26,20 +26,20 @@ import org.springframework.test.web.servlet.assertj.MockMvcTester
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
-class MunicipalityControllerTest {
+class DistrictControllerTest {
     @Autowired
     private lateinit var mockMvcTester: MockMvcTester
 
     // ------------------------------------------------------------------
-    // getAllMunicipalities
+    // getDistricts
     // ------------------------------------------------------------------
 
     @Test
-    fun `getMunicipalities should return 200 with page`() {
+    fun `getDistricts should return 200 with page`() {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities")
+                .uri("/api/1.0/districts")
                 .param("lang", "en", "fr")
 
         assertThat(result)
@@ -47,57 +47,57 @@ class MunicipalityControllerTest {
             .bodyJson()
             .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
-            .hasPathSatisfying("last") { it.assertThat().isEqualTo(true) }
+            .hasPathSatisfying("last") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(5) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
-            .hasPathSatisfying("total-elements") { it.assertThat().isEqualTo(5) }
-            .hasPathSatisfying("total-pages") { it.assertThat().isEqualTo(1) }
+            .hasPathSatisfying("total-elements") { it.assertThat().isEqualTo(123) }
+            .hasPathSatisfying("total-pages") { it.assertThat().isEqualTo(13) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
     }
 
     @Test
-    fun `getMunicipalities without lang should use empty list`() {
+    fun `getDistricts without lang should use empty list`() {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities")
+                .uri("/api/1.0/districts")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
             .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
-            .hasPathSatisfying("last") { it.assertThat().isEqualTo(true) }
+            .hasPathSatisfying("last") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(5) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
-            .hasPathSatisfying("total-elements") { it.assertThat().isEqualTo(5) }
-            .hasPathSatisfying("total-pages") { it.assertThat().isEqualTo(1) }
+            .hasPathSatisfying("total-elements") { it.assertThat().isEqualTo(123) }
+            .hasPathSatisfying("total-pages") { it.assertThat().isEqualTo(13) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
     }
 
     @Test
-    fun `getMunicipalities without version segment should return 404`() {
+    fun `getDistricts without version segment should return 404`() {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/municipalities")
+                .uri("/api/districts")
 
         assertThat(result)
             .hasStatus(404)
     }
 
     // ------------------------------------------------------------------
-    // getMunicipalityBySlug
+    // getDistrictBySlug
     // ------------------------------------------------------------------
 
     @Test
-    fun `getMunicipalityBySlug should return 200`() {
+    fun `getDistrictBySlug should return 200`() {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/slug/bab-el-oued")
+                .uri("/api/1.0/districts/slug/bab-el-oued")
                 .param("lang", "en")
 
         assertThat(result)
@@ -107,11 +107,11 @@ class MunicipalityControllerTest {
     }
 
     @Test
-    fun `getMunicipalityBySlug without lang should pass an empty list to the service`() {
+    fun `getDistrictBySlug without lang should pass an empty list to the service`() {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/slug/bab-el-oued")
+                .uri("/api/1.0/districts/slug/bab-el-oued")
 
         assertThat(result)
             .hasStatusOk()
@@ -120,11 +120,26 @@ class MunicipalityControllerTest {
     }
 
     @Test
-    fun `getMunicipalityBySlug when not found should return 404`() {
+    fun `getDistrictBySlug returns payload with requested language names`() {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/slug/unknown")
+                .uri("/api/1.0/districts/slug/bab-el-oued")
+                .param("lang", "en")
+
+        assertThat(result)
+            .hasStatusOk()
+            .bodyJson()
+            .hasPathSatisfying("$.slug") { it.assertThat().isEqualTo("bab-el-oued") }
+            .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
+    }
+
+    @Test
+    fun `getDistrictBySlug when not found should return 404`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/districts/slug/unknown")
                 .param("lang", "en")
 
         assertThat(result)
@@ -132,65 +147,11 @@ class MunicipalityControllerTest {
     }
 
     @Test
-    fun `getMunicipalityBySlug without version segment should return 404`() {
+    fun `getDistrictBySlug without version segment should return 404`() {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/municipalities/slug/bab-el-oued")
-
-        assertThat(result)
-            .hasStatus(404)
-    }
-
-    // ------------------------------------------------------------------
-    // getMunicipalityByCode
-    // ------------------------------------------------------------------
-
-    @Test
-    fun `getMunicipalityByCode should return 200`() {
-        val result =
-            mockMvcTester
-                .get()
-                .uri("/api/1.0/municipalities/code/1601")
-                .param("lang", "fr")
-
-        assertThat(result)
-            .hasStatusOk()
-            .bodyJson()
-            .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("1601") }
-    }
-
-    @Test
-    fun `getMunicipalityByCode without lang should pass an empty list to the service`() {
-        val result =
-            mockMvcTester
-                .get()
-                .uri("/api/1.0/municipalities/code/1601")
-
-        assertThat(result)
-            .hasStatusOk()
-            .bodyJson()
-            .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("1601") }
-    }
-
-    @Test
-    fun `getMunicipalityByCode when not found should return 404`() {
-        val result =
-            mockMvcTester
-                .get()
-                .uri("/api/1.0/municipalities/code/9999")
-                .param("lang", "en")
-
-        assertThat(result)
-            .hasStatus(404)
-    }
-
-    @Test
-    fun `getMunicipalityByCode without version segment should return 404`() {
-        val result =
-            mockMvcTester
-                .get()
-                .uri("/api/municipalities/code/1601")
+                .uri("/api/districts/slug/bab-el-oued")
 
         assertThat(result)
             .hasStatus(404)

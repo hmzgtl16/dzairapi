@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.municipality.domain
+package com.example.dzprovinceapi.repository
 
 import com.example.dzprovinceapi.model.MunicipalityTranslation
-import com.example.dzprovinceapi.repository.MunicipalityRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.groups.Tuple
 import org.junit.jupiter.api.Test
