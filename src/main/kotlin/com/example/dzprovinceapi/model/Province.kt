@@ -35,7 +35,7 @@ class Province {
     var slug: String = ""
 
     @OneToMany(mappedBy = "province")
-    var provinceTranslations: MutableSet<ProvinceTranslation> = mutableSetOf()
+    var translations: MutableSet<ProvinceTranslation> = mutableSetOf()
 
     @OneToMany(mappedBy = "province")
     var districts: MutableSet<District> = mutableSetOf()
