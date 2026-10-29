@@ -16,7 +16,6 @@
 package com.example.dzprovinceapi.service
 
 import com.example.dzprovinceapi.exception.MunicipalityCodeNotFoundException
-import com.example.dzprovinceapi.exception.MunicipalitySlugNotFoundException
 import com.example.dzprovinceapi.helpers.testLanguage
 import com.example.dzprovinceapi.helpers.testMunicipality
 import com.example.dzprovinceapi.helpers.testMunicipalityTranslation
@@ -45,37 +44,35 @@ class MunicipalityServiceTest {
     private lateinit var municipalityService: MunicipalityServiceImpl
 
     // ------------------------------------------------------------------
-    // getAllMunicipalities
+    // getMunicipalities
     // ------------------------------------------------------------------
 
     @Test
-    fun `getAllMunicipalities returns a page of mapped responses`() {
-        val municipality =
-            testMunicipality(code = 1601, slug = "bab-el-oued", translations = emptySet())
+    fun `getMunicipalities returns a page of mapped responses`() {
+        val municipality = testMunicipality(code = 1601, slug = "test-slug", translations = emptySet())
 
         val pageable = PageRequest.of(0, 10)
         val municipalityPage = PageImpl(listOf(municipality), pageable, 1)
         `when`(municipalityRepository.findAll(pageable)).thenReturn(municipalityPage)
 
-        val result = municipalityService.getAllMunicipalities(emptyList(), pageable)
+        val result = municipalityService.getMunicipalities(emptyList(), pageable)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
         assertThat(result.content[0].code).isEqualTo("1601")
-        assertThat(result.content[0].slug).isEqualTo(municipality.slug)
         assertThat(result.content[0].names).isEmpty()
 
         verify(municipalityRepository).findAll(pageable)
     }
 
     @Test
-    fun `getAllMunicipalities falls back to default languages when none are provided`() {
+    fun `getMunicipalities falls back to default languages when none are provided`() {
         val id = UUID.randomUUID()
         val municipality =
             testMunicipality(
                 id = id,
                 code = 1601,
-                slug = "bab-el-oued",
+                slug = "test-slug",
                 translations =
                     setOf(
                         testMunicipalityTranslation(
@@ -100,26 +97,26 @@ class MunicipalityServiceTest {
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
-        val result = municipalityService.getAllMunicipalities(emptyList(), pageable)
+        val result = municipalityService.getMunicipalities(emptyList(), pageable)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
         assertThat(result.content[0].code).isEqualTo("1601")
-        assertThat(result.content[0].slug).isEqualTo(municipality.slug)
         assertThat(result.content[0].names).hasSize(municipality.translations.size)
-        assertThat(result.content[0].names.map { it.language?.code }).containsExactlyInAnyOrder("ar", "en", "fr")
+        assertThat(result.content[0].names.map { it.language?.code })
+            .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(municipalityRepository).findAll(pageable)
     }
 
     @Test
-    fun `getAllMunicipalities filters names to the requested languages`() {
+    fun `getMunicipalities filters names to the requested languages`() {
         val id = UUID.randomUUID()
         val municipality =
             testMunicipality(
                 id = id,
                 code = 1601,
-                slug = "bab-el-oued",
+                slug = "test-slug",
                 translations =
                     setOf(
                         testMunicipalityTranslation(
@@ -144,7 +141,7 @@ class MunicipalityServiceTest {
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
-        val result = municipalityService.getAllMunicipalities(listOf("en"), pageable)
+        val result = municipalityService.getMunicipalities(listOf("en"), pageable)
 
         assertThat(result.content[0].names).hasSize(1)
         assertThat(
@@ -159,13 +156,13 @@ class MunicipalityServiceTest {
     }
 
     @Test
-    fun `getAllMunicipalities normalizes languages by splitting on comma, trimming, lowercasing and de-duplicating`() {
+    fun `getMunicipalities normalizes languages by splitting on comma, trimming, lowercasing and de-duplicating`() {
         val id = UUID.randomUUID()
         val municipality =
             testMunicipality(
                 id = id,
                 code = 1601,
-                slug = "bab-el-oued",
+                slug = "test-slug",
                 translations =
                     setOf(
                         testMunicipalityTranslation(
@@ -190,9 +187,8 @@ class MunicipalityServiceTest {
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
-        // " EN ", "fr,ar", "en" -> ["en", "fr", "ar"]; "12" and "e" are invalid and dropped.
         val result =
-            municipalityService.getAllMunicipalities(
+            municipalityService.getMunicipalities(
                 listOf(" EN ", "fr,ar", "en", "12", "e"),
                 pageable,
             )
@@ -204,13 +200,13 @@ class MunicipalityServiceTest {
     }
 
     @Test
-    fun `getAllMunicipalities falls back to default languages when every entry is invalid`() {
+    fun `getMunicipalities falls back to default languages when every entry is invalid`() {
         val id = UUID.randomUUID()
         val municipality =
             testMunicipality(
                 id = id,
                 code = 1601,
-                slug = "bab-el-oued",
+                slug = "test-slug",
                 translations =
                     setOf(
                         testMunicipalityTranslation(
@@ -236,7 +232,7 @@ class MunicipalityServiceTest {
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
         val result =
-            municipalityService.getAllMunicipalities(listOf("1", "!!", "", "e"), pageable)
+            municipalityService.getMunicipalities(listOf("1", "!!", "", "e", "ara"), pageable)
 
         assertThat(result.content[0].names.map { it.language?.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
@@ -245,12 +241,12 @@ class MunicipalityServiceTest {
     }
 
     @Test
-    fun `getAllMunicipalities returns an empty page when no municipalities exist`() {
+    fun `getMunicipalities returns an empty page when no municipalities exist`() {
         val pageable = PageRequest.of(0, 10)
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(emptyList(), pageable, 0))
 
-        val result = municipalityService.getAllMunicipalities(emptyList(), pageable)
+        val result = municipalityService.getMunicipalities(emptyList(), pageable)
 
         assertThat(result.totalElements).isZero()
         assertThat(result.content).isEmpty()
@@ -259,150 +255,17 @@ class MunicipalityServiceTest {
     }
 
     // ------------------------------------------------------------------
-    // getBySlug
+    // getMunicipalityByCode
     // ------------------------------------------------------------------
 
     @Test
-    fun `getBySlug returns the mapped response`() {
+    fun `getMunicipalityByCode returns the mapped response`() {
         val id = UUID.randomUUID()
         val municipality =
             testMunicipality(
                 id = id,
                 code = 1601,
-                slug = "bab-el-oued",
-                translations =
-                    setOf(
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "Bab El Oued",
-                            language = testLanguage(code = "fr"),
-                        ),
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "Bab El Oued",
-                            language = testLanguage(code = "en"),
-                        ),
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "باب الوادي",
-                            language = testLanguage(code = "ar"),
-                        ),
-                    ),
-            )
-
-        `when`(municipalityRepository.findMunicipalityBySlug("bab-el-oued")).thenReturn(municipality)
-
-        val result = municipalityService.getBySlug(emptyList(), "bab-el-oued")
-
-        assertThat(result.code).isEqualTo("1601")
-        assertThat(result.slug).isEqualTo("bab-el-oued")
-        assertThat(result.names.map { it.name })
-            .containsExactlyInAnyOrder("Bab El Oued", "Bab El Oued", "باب الوادي")
-        assertThat(result.names.map { it.language?.code })
-            .containsExactlyInAnyOrder("ar", "en", "fr")
-
-        verify(municipalityRepository).findMunicipalityBySlug("bab-el-oued")
-    }
-
-    @Test
-    fun `getBySlug throws MunicipalitySlugNotFoundException when no municipality matches`() {
-        `when`(municipalityRepository.findMunicipalityBySlug("unknown")).thenReturn(null)
-
-        assertThatThrownBy { municipalityService.getBySlug(emptyList(), "unknown") }
-            .isInstanceOf(MunicipalitySlugNotFoundException::class.java)
-
-        verify(municipalityRepository).findMunicipalityBySlug("unknown")
-    }
-
-    @Test
-    fun `getBySlug normalizes the given languages`() {
-        val id = UUID.randomUUID()
-        val municipality =
-            testMunicipality(
-                id = id,
-                code = 1601,
-                slug = "bab-el-oued",
-                translations =
-                    setOf(
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "Bab El Oued",
-                            language = testLanguage(code = "fr"),
-                        ),
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "Bab El Oued",
-                            language = testLanguage(code = "en"),
-                        ),
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "باب الوادي",
-                            language = testLanguage(code = "ar"),
-                        ),
-                    ),
-            )
-
-        `when`(municipalityRepository.findMunicipalityBySlug("bab-el-oued")).thenReturn(municipality)
-
-        val result =
-            municipalityService.getBySlug(listOf(" FR ", "en,AR", "fr"), "bab-el-oued")
-
-        assertThat(result.names.map { it.language?.code })
-            .containsExactlyInAnyOrder("fr", "en", "ar")
-
-        verify(municipalityRepository).findMunicipalityBySlug("bab-el-oued")
-    }
-
-    @Test
-    fun `getBySlug falls back to default languages when none are provided`() {
-        val id = UUID.randomUUID()
-        val municipality =
-            testMunicipality(
-                id = id,
-                code = 1601,
-                slug = "bab-el-oued",
-                translations =
-                    setOf(
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "Bab El Oued",
-                            language = testLanguage(code = "fr"),
-                        ),
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "Bab El Oued",
-                            language = testLanguage(code = "en"),
-                        ),
-                        testMunicipalityTranslation(
-                            municipalityId = id,
-                            name = "باب الوادي",
-                            language = testLanguage(code = "ar"),
-                        ),
-                    ),
-            )
-
-        `when`(municipalityRepository.findMunicipalityBySlug("bab-el-oued")).thenReturn(municipality)
-
-        val result = municipalityService.getBySlug(emptyList(), "bab-el-oued")
-
-        assertThat(result.names.map { it.language?.code })
-            .containsExactlyInAnyOrder("ar", "en", "fr")
-
-        verify(municipalityRepository).findMunicipalityBySlug("bab-el-oued")
-    }
-
-    // ------------------------------------------------------------------
-    // getByCode
-    // ------------------------------------------------------------------
-
-    @Test
-    fun `getByCode returns the mapped response`() {
-        val id = UUID.randomUUID()
-        val municipality =
-            testMunicipality(
-                id = id,
-                code = 1601,
-                slug = "bab-el-oued",
+                slug = "test-slug",
                 translations =
                     setOf(
                         testMunicipalityTranslation(
@@ -428,7 +291,6 @@ class MunicipalityServiceTest {
         val result = municipalityService.getMunicipalityByCode(emptyList(), 1601)
 
         assertThat(result.code).isEqualTo("1601")
-        assertThat(result.slug).isEqualTo("bab-el-oued")
         assertThat(result.names.map { it.language?.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
@@ -436,7 +298,7 @@ class MunicipalityServiceTest {
     }
 
     @Test
-    fun `getByCode throws MunicipalityCodeNotFoundException when no municipality matches`() {
+    fun `getMunicipalityByCode throws MunicipalityCodeNotFoundException when no municipality matches`() {
         `when`(municipalityRepository.findMunicipalityByCode(9999)).thenReturn(null)
 
         assertThatThrownBy { municipalityService.getMunicipalityByCode(emptyList(), 9999) }
@@ -446,13 +308,13 @@ class MunicipalityServiceTest {
     }
 
     @Test
-    fun `getByCode normalizes the given languages`() {
+    fun `getMunicipalityByCode normalizes the given languages`() {
         val id = UUID.randomUUID()
         val municipality =
             testMunicipality(
                 id = id,
                 code = 1601,
-                slug = "bab-el-oued",
+                slug = "test-slug",
                 translations =
                     setOf(
                         testMunicipalityTranslation(
@@ -485,13 +347,13 @@ class MunicipalityServiceTest {
     }
 
     @Test
-    fun `getByCode falls back to default languages when none are provided`() {
+    fun `getMunicipalityByCode falls back to default languages when every entry is invalid`() {
         val id = UUID.randomUUID()
         val municipality =
             testMunicipality(
                 id = id,
                 code = 1601,
-                slug = "bab-el-oued",
+                slug = "test-slug",
                 translations =
                     setOf(
                         testMunicipalityTranslation(
@@ -514,7 +376,8 @@ class MunicipalityServiceTest {
 
         `when`(municipalityRepository.findMunicipalityByCode(1601)).thenReturn(municipality)
 
-        val result = municipalityService.getMunicipalityByCode(emptyList(), 1601)
+        val result =
+            municipalityService.getMunicipalityByCode(listOf("1", "!!", "", "e"), 1601)
 
         assertThat(result.names.map { it.language?.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")

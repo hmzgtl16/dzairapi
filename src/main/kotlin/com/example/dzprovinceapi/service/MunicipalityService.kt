@@ -20,7 +20,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface MunicipalityService {
-    fun getAllMunicipalities(
+    fun getMunicipalities(
         languages: List<String>,
         pageable: Pageable,
     ): Page<MunicipalityResponse>

@@ -40,7 +40,7 @@ class ProvinceController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PageableDefault pageable: Pageable,
     ): ResponseEntity<Page<ProvinceResponse>> {
-        val response = provinceService.getAllProvinces(languages, pageable)
+        val response = provinceService.getProvinces(languages, pageable)
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 
@@ -54,7 +54,7 @@ class ProvinceController(
     }
 
     @GetMapping("/{code}/districts")
-    fun getDistrictsByProvinceCode(
+    fun getProvinceDistrictsByCode(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PathVariable code: Short,
         @PageableDefault pageable: Pageable,
@@ -64,7 +64,7 @@ class ProvinceController(
     }
 
     @GetMapping("/{code}/municipalities")
-    fun getMunicipalitiesByProvinceCode(
+    fun getProvinceMunicipalitiesByCode(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PathVariable code: Short,
         @PageableDefault pageable: Pageable,

@@ -21,7 +21,7 @@ import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface DistrictService {
-    fun getAllDistricts(
+    fun getDistricts(
         languages: List<String>,
         pageable: Pageable,
     ): Page<DistrictResponse>

@@ -29,7 +29,7 @@ class MunicipalityServiceImpl(
     private val municipalityRepository: MunicipalityRepository,
 ) : MunicipalityService {
     @Transactional(readOnly = true)
-    override fun getAllMunicipalities(
+    override fun getMunicipalities(
         languages: List<String>,
         pageable: Pageable,
     ): Page<MunicipalityResponse> {

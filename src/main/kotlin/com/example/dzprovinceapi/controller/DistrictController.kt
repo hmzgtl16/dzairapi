@@ -16,10 +16,12 @@
 package com.example.dzprovinceapi.controller
 
 import com.example.dzprovinceapi.dto.DistrictResponse
+import com.example.dzprovinceapi.dto.MunicipalityResponse
 import com.example.dzprovinceapi.service.DistrictService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -37,7 +39,7 @@ class DistrictController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PageableDefault pageable: Pageable,
     ): ResponseEntity<Page<DistrictResponse>> {
-        val response = districtService.getAllDistricts(languages, pageable)
+        val response = districtService.getDistricts(languages, pageable)
         return ResponseEntity.ok(response)
     }
 
@@ -48,5 +50,15 @@ class DistrictController(
     ): ResponseEntity<DistrictResponse> {
         val response = districtService.getDistrictByCode(languages, code)
         return ResponseEntity.ok(response)
+    }
+
+    @GetMapping("/{code}/municipalities")
+    fun getDistrictMunicipalitiesByCode(
+        @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
+        @PathVariable code: Short,
+        @PageableDefault pageable: Pageable,
+    ): ResponseEntity<Page<MunicipalityResponse>> {
+        val response = districtService.getDistrictMunicipalitiesByCode(languages, code, pageable)
+        return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }

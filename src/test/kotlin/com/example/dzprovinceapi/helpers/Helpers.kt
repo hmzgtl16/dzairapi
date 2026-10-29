@@ -76,12 +76,14 @@ fun testLanguage(
 
 fun testDistrict(
     id: UUID = UUID.randomUUID(),
+    code: Short,
     slug: String,
     translations: Set<DistrictTranslation> = emptySet(),
     municipalities: Set<Municipality> = emptySet(),
 ): District =
     District().apply {
         this.id = id
+        this.code = code
         this.slug = slug
         this.translations = translations.toMutableSet()
         this.municipalities = municipalities.toMutableSet()

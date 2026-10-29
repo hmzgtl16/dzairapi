@@ -37,7 +37,7 @@ class ProvinceServiceImpl(
     private val provinceRepository: ProvinceRepository,
 ) : ProvinceService {
     @Transactional(readOnly = true)
-    override fun getAllProvinces(
+    override fun getProvinces(
         languages: List<String>,
         pageable: Pageable,
     ): Page<ProvinceResponse> {

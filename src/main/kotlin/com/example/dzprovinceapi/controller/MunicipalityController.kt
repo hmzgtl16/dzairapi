@@ -38,20 +38,11 @@ class MunicipalityController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PageableDefault pageable: Pageable,
     ): ResponseEntity<Page<MunicipalityResponse>> {
-        val response = municipalityService.getAllMunicipalities(languages, pageable)
+        val response = municipalityService.getMunicipalities(languages, pageable)
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 
-    @GetMapping("/slug/{slug}")
-    fun getMunicipalityBySlug(
-        @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
-        @PathVariable slug: String,
-    ): ResponseEntity<MunicipalityResponse> {
-        val response = municipalityService.getBySlug(languages, slug)
-        return ResponseEntity.status(HttpStatus.OK).body(response)
-    }
-
-    @GetMapping("/code/{code}")
+    @GetMapping("/{code}")
     fun getMunicipalityByCode(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PathVariable code: Short,

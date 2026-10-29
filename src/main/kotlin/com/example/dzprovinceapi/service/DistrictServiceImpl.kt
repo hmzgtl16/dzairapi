@@ -33,7 +33,7 @@ class DistrictServiceImpl(
     private val municipalityRepository: MunicipalityRepository,
 ) : DistrictService {
     @Transactional(readOnly = true)
-    override fun getAllDistricts(
+    override fun getDistricts(
         languages: List<String>,
         pageable: Pageable,
     ): Page<DistrictResponse> {
