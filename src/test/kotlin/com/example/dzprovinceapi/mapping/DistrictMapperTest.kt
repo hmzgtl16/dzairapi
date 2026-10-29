@@ -37,6 +37,7 @@ class DistrictMapperTest {
     fun `district with no translations returns empty names`() {
         val district =
             testDistrict(
+                code = 1602,
                 slug = "cheraga",
                 translations = emptySet(),
             )
@@ -53,6 +54,7 @@ class DistrictMapperTest {
         val district =
             testDistrict(
                 id = id,
+                code = 1602,
                 slug = "cheraga",
                 translations =
                     setOf(
@@ -77,6 +79,7 @@ class DistrictMapperTest {
         val district =
             testDistrict(
                 id = id,
+                code = 1602,
                 slug = "cheraga",
                 translations =
                     setOf(
@@ -96,6 +99,7 @@ class DistrictMapperTest {
         val district =
             testDistrict(
                 id = id,
+                code = 1602,
                 slug = "cheraga",
                 translations =
                     setOf(
@@ -116,6 +120,7 @@ class DistrictMapperTest {
         val district =
             testDistrict(
                 id = id,
+                code = 1602,
                 slug = "cheraga",
                 translations =
                     setOf(
@@ -136,6 +141,7 @@ class DistrictMapperTest {
         val district =
             testDistrict(
                 id = id,
+                code = 1602,
                 slug = "cheraga",
                 translations =
                     setOf(
@@ -157,6 +163,7 @@ class DistrictMapperTest {
         val district =
             testDistrict(
                 id = id,
+                code = 1602,
                 slug = "cheraga",
                 translations =
                     setOf(

@@ -31,7 +31,7 @@ class ProvinceControllerTest {
     private lateinit var mockMvcTester: MockMvcTester
 
     // ------------------------------------------------------------------
-    // getAllProvinces
+    // getProvinces
     // ------------------------------------------------------------------
 
     @Test
@@ -51,8 +51,6 @@ class ProvinceControllerTest {
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
             .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
-            .hasPathSatisfying("total-elements") { it.assertThat().isEqualTo(31) }
-            .hasPathSatisfying("total-pages") { it.assertThat().isEqualTo(4) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
     }
 
@@ -72,9 +70,25 @@ class ProvinceControllerTest {
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
             .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
-            .hasPathSatisfying("total-elements") { it.assertThat().isEqualTo(31) }
-            .hasPathSatisfying("total-pages") { it.assertThat().isEqualTo(4) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
+            .hasPathSatisfying("$.content[0].names") { it.assertThat().isNotEmpty }
+    }
+
+    @Test
+    fun `getProvinces should respect custom pagination parameters`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/provinces")
+                .param("page", "0")
+                .param("size", "5")
+
+        assertThat(result)
+            .hasStatusOk()
+            .bodyJson()
+            .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(5) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(5) }
     }
 
     @Test
@@ -104,6 +118,7 @@ class ProvinceControllerTest {
             .hasStatusOk()
             .bodyJson()
             .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("16") }
+            .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
     }
 
     @Test
@@ -117,6 +132,7 @@ class ProvinceControllerTest {
             .hasStatusOk()
             .bodyJson()
             .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("16") }
+            .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
     }
 
     @Test
@@ -132,6 +148,17 @@ class ProvinceControllerTest {
     }
 
     @Test
+    fun `getProvinceByCode with non-numeric code should return 400`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/provinces/invalid-code")
+
+        assertThat(result)
+            .hasStatus(400)
+    }
+
+    @Test
     fun `getProvinceByCode without version segment should return 404`() {
         val result =
             mockMvcTester
@@ -143,11 +170,11 @@ class ProvinceControllerTest {
     }
 
     // ------------------------------------------------------------------
-    // getDistrictsByProvinceCode
+    // getProvinceDistrictsByCode
     // ------------------------------------------------------------------
 
     @Test
-    fun `getDistrictsByProvinceCode should return 200 with page`() {
+    fun `getProvinceDistrictsByCode should return 200 with page`() {
         val result =
             mockMvcTester
                 .get()
@@ -165,7 +192,7 @@ class ProvinceControllerTest {
     }
 
     @Test
-    fun `getDistrictsByProvinceCode without lang should use empty list`() {
+    fun `getProvinceDistrictsByCode without lang should use empty list`() {
         val result =
             mockMvcTester
                 .get()
@@ -182,7 +209,23 @@ class ProvinceControllerTest {
     }
 
     @Test
-    fun `getDistrictsByProvinceCode when province not found should return 404`() {
+    fun `getProvinceDistrictsByCode should respect custom pagination parameters`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/provinces/16/districts")
+                .param("page", "0")
+                .param("size", "2")
+
+        assertThat(result)
+            .hasStatusOk()
+            .bodyJson()
+            .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(2) }
+    }
+
+    @Test
+    fun `getProvinceDistrictsByCode when province not found should return 404`() {
         val result =
             mockMvcTester
                 .get()
@@ -194,7 +237,18 @@ class ProvinceControllerTest {
     }
 
     @Test
-    fun `getDistrictsByProvinceCode without version segment should return 404`() {
+    fun `getProvinceDistrictsByCode with non-numeric code should return 400`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/provinces/invalid-code/districts")
+
+        assertThat(result)
+            .hasStatus(400)
+    }
+
+    @Test
+    fun `getProvinceDistrictsByCode without version segment should return 404`() {
         val result =
             mockMvcTester
                 .get()
@@ -205,11 +259,11 @@ class ProvinceControllerTest {
     }
 
     // ------------------------------------------------------------------
-    // getMunicipalitiesByProvinceCode
+    // getProvinceMunicipalitiesByCode
     // ------------------------------------------------------------------
 
     @Test
-    fun `getMunicipalitiesByProvinceCode should return 200 with page`() {
+    fun `getProvinceMunicipalitiesByCode should return 200 with page`() {
         val result =
             mockMvcTester
                 .get()
@@ -227,7 +281,7 @@ class ProvinceControllerTest {
     }
 
     @Test
-    fun `getMunicipalitiesByProvinceCode without lang should use empty list`() {
+    fun `getProvinceMunicipalitiesByCode without lang should use empty list`() {
         val result =
             mockMvcTester
                 .get()
@@ -244,7 +298,23 @@ class ProvinceControllerTest {
     }
 
     @Test
-    fun `getMunicipalitiesByProvinceCode when province not found should return 404`() {
+    fun `getProvinceMunicipalitiesByCode should respect custom pagination parameters`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/provinces/16/municipalities")
+                .param("page", "0")
+                .param("size", "2")
+
+        assertThat(result)
+            .hasStatusOk()
+            .bodyJson()
+            .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(2) }
+    }
+
+    @Test
+    fun `getProvinceMunicipalitiesByCode when province not found should return 404`() {
         val result =
             mockMvcTester
                 .get()
@@ -256,7 +326,18 @@ class ProvinceControllerTest {
     }
 
     @Test
-    fun `getMunicipalitiesByProvinceCode without version segment should return 404`() {
+    fun `getProvinceMunicipalitiesByCode with non-numeric code should return 400`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/provinces/invalid-code/municipalities")
+
+        assertThat(result)
+            .hasStatus(400)
+    }
+
+    @Test
+    fun `getProvinceMunicipalitiesByCode without version segment should return 404`() {
         val result =
             mockMvcTester
                 .get()

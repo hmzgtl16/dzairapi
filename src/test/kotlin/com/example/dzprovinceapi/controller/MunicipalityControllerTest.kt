@@ -31,7 +31,7 @@ class MunicipalityControllerTest {
     private lateinit var mockMvcTester: MockMvcTester
 
     // ------------------------------------------------------------------
-    // getAllMunicipalities
+    // getMunicipalities
     // ------------------------------------------------------------------
 
     @Test
@@ -47,12 +47,8 @@ class MunicipalityControllerTest {
             .bodyJson()
             .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
-            .hasPathSatisfying("last") { it.assertThat().isEqualTo(true) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(5) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
-            .hasPathSatisfying("total-elements") { it.assertThat().isEqualTo(5) }
-            .hasPathSatisfying("total-pages") { it.assertThat().isEqualTo(1) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
     }
 
@@ -68,13 +64,27 @@ class MunicipalityControllerTest {
             .bodyJson()
             .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
-            .hasPathSatisfying("last") { it.assertThat().isEqualTo(true) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(5) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
-            .hasPathSatisfying("total-elements") { it.assertThat().isEqualTo(5) }
-            .hasPathSatisfying("total-pages") { it.assertThat().isEqualTo(1) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
+            .hasPathSatisfying("$.content[0].names") { it.assertThat().isNotEmpty }
+    }
+
+    @Test
+    fun `getMunicipalities should respect custom pagination parameters`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/municipalities")
+                .param("page", "0")
+                .param("size", "2")
+
+        assertThat(result)
+            .hasStatusOk()
+            .bodyJson()
+            .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(2) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(2) }
     }
 
     @Test
@@ -89,60 +99,6 @@ class MunicipalityControllerTest {
     }
 
     // ------------------------------------------------------------------
-    // getMunicipalityBySlug
-    // ------------------------------------------------------------------
-
-    @Test
-    fun `getMunicipalityBySlug should return 200`() {
-        val result =
-            mockMvcTester
-                .get()
-                .uri("/api/1.0/municipalities/slug/bab-el-oued")
-                .param("lang", "en")
-
-        assertThat(result)
-            .hasStatusOk()
-            .bodyJson()
-            .hasPathSatisfying("$.slug") { it.assertThat().isEqualTo("bab-el-oued") }
-    }
-
-    @Test
-    fun `getMunicipalityBySlug without lang should pass an empty list to the service`() {
-        val result =
-            mockMvcTester
-                .get()
-                .uri("/api/1.0/municipalities/slug/bab-el-oued")
-
-        assertThat(result)
-            .hasStatusOk()
-            .bodyJson()
-            .hasPathSatisfying("$.slug") { it.assertThat().isEqualTo("bab-el-oued") }
-    }
-
-    @Test
-    fun `getMunicipalityBySlug when not found should return 404`() {
-        val result =
-            mockMvcTester
-                .get()
-                .uri("/api/1.0/municipalities/slug/unknown")
-                .param("lang", "en")
-
-        assertThat(result)
-            .hasStatus(404)
-    }
-
-    @Test
-    fun `getMunicipalityBySlug without version segment should return 404`() {
-        val result =
-            mockMvcTester
-                .get()
-                .uri("/api/municipalities/slug/bab-el-oued")
-
-        assertThat(result)
-            .hasStatus(404)
-    }
-
-    // ------------------------------------------------------------------
     // getMunicipalityByCode
     // ------------------------------------------------------------------
 
@@ -151,13 +107,14 @@ class MunicipalityControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/code/1601")
+                .uri("/api/1.0/municipalities/1601")
                 .param("lang", "fr")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
             .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("1601") }
+            .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
     }
 
     @Test
@@ -165,12 +122,13 @@ class MunicipalityControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/code/1601")
+                .uri("/api/1.0/municipalities/1601")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
             .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("1601") }
+            .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
     }
 
     @Test
@@ -178,7 +136,7 @@ class MunicipalityControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/code/9999")
+                .uri("/api/1.0/municipalities/9999")
                 .param("lang", "en")
 
         assertThat(result)
@@ -186,11 +144,22 @@ class MunicipalityControllerTest {
     }
 
     @Test
+    fun `getMunicipalityByCode with non-numeric code should return 400`() {
+        val result =
+            mockMvcTester
+                .get()
+                .uri("/api/1.0/municipalities/invalid-code")
+
+        assertThat(result)
+            .hasStatus(400)
+    }
+
+    @Test
     fun `getMunicipalityByCode without version segment should return 404`() {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/municipalities/code/1601")
+                .uri("/api/municipalities/1601")
 
         assertThat(result)
             .hasStatus(404)

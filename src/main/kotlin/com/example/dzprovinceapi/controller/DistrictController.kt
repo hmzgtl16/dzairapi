@@ -44,7 +44,7 @@ class DistrictController(
     }
 
     @GetMapping("/{code}")
-    fun getDistrictBySlug(
+    fun getDistrictByCode(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @PathVariable code: Short,
     ): ResponseEntity<DistrictResponse> {
