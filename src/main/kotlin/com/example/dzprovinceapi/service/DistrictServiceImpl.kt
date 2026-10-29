@@ -15,7 +15,7 @@
  */
 package com.example.dzprovinceapi.service
 
-import com.example.dzprovinceapi.district.api.dto.DistrictResponse
+import com.example.dzprovinceapi.dto.DistrictResponse
 import com.example.dzprovinceapi.exception.DistrictCodeNotFoundException
 import com.example.dzprovinceapi.mapping.toResponse
 import com.example.dzprovinceapi.repository.DistrictRepository

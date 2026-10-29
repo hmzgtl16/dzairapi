@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.language.api.dto
+package com.example.dzprovinceapi.dto
 
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class LanguageResponse(
-    val code: String?,
+data class DistrictNameResponse(
     val name: String?,
+    val language: LanguageResponse?,
 )

@@ -15,8 +15,8 @@
  */
 package com.example.dzprovinceapi.mapping
 
-import com.example.dzprovinceapi.district.api.dto.DistrictNameResponse
-import com.example.dzprovinceapi.district.api.dto.DistrictResponse
+import com.example.dzprovinceapi.dto.DistrictNameResponse
+import com.example.dzprovinceapi.dto.DistrictResponse
 import com.example.dzprovinceapi.model.District
 import com.example.dzprovinceapi.model.DistrictTranslation
 

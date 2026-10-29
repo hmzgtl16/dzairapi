@@ -15,10 +15,10 @@
  */
 package com.example.dzprovinceapi.service
 
+import com.example.dzprovinceapi.dto.MunicipalityResponse
 import com.example.dzprovinceapi.exception.MunicipalityCodeNotFoundException
 import com.example.dzprovinceapi.exception.MunicipalitySlugNotFoundException
 import com.example.dzprovinceapi.mapping.toResponse
-import com.example.dzprovinceapi.municipality.api.dto.MunicipalityResponse
 import com.example.dzprovinceapi.repository.MunicipalityRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable

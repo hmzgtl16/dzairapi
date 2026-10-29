@@ -15,12 +15,12 @@
  */
 package com.example.dzprovinceapi.service
 
-import com.example.dzprovinceapi.district.api.dto.DistrictResponse
+import com.example.dzprovinceapi.dto.DistrictResponse
+import com.example.dzprovinceapi.dto.MunicipalityResponse
+import com.example.dzprovinceapi.dto.ProvinceResponse
 import com.example.dzprovinceapi.exception.ProvinceCodeNotFoundException
 import com.example.dzprovinceapi.mapping.toResponse
 import com.example.dzprovinceapi.model.District
-import com.example.dzprovinceapi.municipality.api.dto.MunicipalityResponse
-import com.example.dzprovinceapi.province.api.dto.ProvinceResponse
 import com.example.dzprovinceapi.repository.ProvinceRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl

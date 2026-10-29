@@ -15,7 +15,7 @@
  */
 package com.example.dzprovinceapi.mapping
 
-import com.example.dzprovinceapi.language.api.dto.LanguageResponse
+import com.example.dzprovinceapi.dto.LanguageResponse
 import com.example.dzprovinceapi.model.Language
 
 fun Language?.toResponse(): LanguageResponse =
