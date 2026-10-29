@@ -12,7 +12,7 @@
 -- See the License for the specific language governing permissions and
 -- limitations under the License.
 INSERT INTO
-  language (id, code, name)
+  public.language (id, code, name)
 VALUES
   (
     '01a111c9-7c99-7ec7-b4f3-79818a78eb97',
@@ -31,160 +31,155 @@ VALUES
   );
 
 INSERT INTO
-  province (id, code, slug)
+  public.province (id, code, slug)
 VALUES
   (
-    '01a111c9-7c97-74e5-ad55-0f9088f67249',
+    '01a111ca-0001-7000-8000-000000000001',
     1,
-    'adrar'
+    'province-1'
   ),
   (
-    '01a111c9-7c97-7e60-94b1-bb3f493c707b',
+    '01a111ca-0002-7000-8000-000000000002',
     2,
-    'chlef'
+    'province-2'
   ),
   (
-    '01a111c9-7c97-7e8f-943b-04d565dfb874',
+    '01a111ca-0003-7000-8000-000000000003',
     3,
-    'laghouat'
+    'province-3'
   ),
   (
-    '01a111c9-7c97-7ea1-a7e1-ea7d1cbff747',
+    '01a111ca-0004-7000-8000-000000000004',
     4,
-    'oum-el-bouaghi'
+    'province-4'
   ),
   (
-    '01a111c9-7c97-7eb2-b3fb-114830589ff3',
+    '01a111ca-0005-7000-8000-000000000005',
     5,
-    'batna'
+    'province-5'
   ),
   (
-    '01a111c9-7c97-7ec4-aa1d-685ed991fb22',
+    '01a111ca-0006-7000-8000-000000000006',
     6,
-    'bejaia'
+    'province-6'
   ),
   (
-    '01a111c9-7c97-7ed4-b145-f1066a9bcc35',
+    '01a111ca-0007-7000-8000-000000000007',
     7,
-    'biskra'
+    'province-7'
   ),
   (
-    '01a111c9-7c97-7ee5-b2d8-30e106e9074a',
+    '01a111ca-0008-7000-8000-000000000008',
     8,
-    'bechar'
+    'province-8'
   ),
   (
-    '01a111c9-7c97-7ef6-b071-afefeb4269db',
+    '01a111ca-0009-7000-8000-000000000009',
     9,
-    'blida'
+    'province-9'
   ),
   (
-    '01a111c9-7c97-7f06-8f8b-3521090cd5b6',
+    '01a111ca-0010-7000-8000-000000000010',
     10,
-    'bouira'
+    'province-10'
   ),
   (
-    '01a111c9-7c97-7f17-aa91-9bba9ddba556',
+    '01a111ca-0011-7000-8000-000000000011',
     11,
-    'tamanrasset'
+    'province-11'
   ),
   (
-    '01a111c9-7c97-7f27-a9e0-600523514d70',
+    '01a111ca-0012-7000-8000-000000000012',
     12,
-    'tebessa'
+    'province-12'
   ),
   (
-    '01a111c9-7c97-7f38-b001-7cc39f2ae81d',
+    '01a111ca-0013-7000-8000-000000000013',
     13,
-    'tlemcen'
+    'province-13'
   ),
   (
-    '01a111c9-7c97-7f48-a74d-095c80ef9a42',
+    '01a111ca-0014-7000-8000-000000000014',
     14,
-    'tiaret'
+    'province-14'
   ),
   (
-    '01a111c9-7c97-7f59-95c1-ffc575fb9ef5',
+    '01a111ca-0015-7000-8000-000000000015',
     15,
-    'tizi-ouzou'
+    'province-15'
   ),
   (
-    '01a111c9-7c97-7f6a-b53d-286d84704b4b',
+    '01a111ca-0016-7000-8000-000000000016',
     16,
-    'algiers'
+    'province-16'
   ),
   (
-    '01a111c9-7c97-7f83-aa60-2d4fe05bba82',
+    '01a111ca-0017-7000-8000-000000000017',
     17,
-    'djelfa'
+    'province-17'
   ),
   (
-    '01a111c9-7c97-7f95-8ecd-a99a0cc5ebb5',
+    '01a111ca-0018-7000-8000-000000000018',
     18,
-    'jijel'
+    'province-18'
   ),
   (
-    '01a111c9-7c97-7fa6-a57d-139abeef876e',
+    '01a111ca-0019-7000-8000-000000000019',
     19,
-    'setif'
+    'province-19'
   ),
   (
-    '01a111c9-7c97-7fb6-bf04-f373673ae29f',
+    '01a111ca-0020-7000-8000-000000000020',
     20,
-    'saida'
+    'province-20'
   ),
   (
-    '01a111c9-7c97-7fc7-a4ed-ed1640e36fa7',
+    '01a111ca-0021-7000-8000-000000000021',
     21,
-    'skikda'
+    'province-21'
   ),
   (
-    '01a111c9-7c97-7fd8-b7cc-d8c2b3382fdb',
+    '01a111ca-0022-7000-8000-000000000022',
     22,
-    'sidi-bel-abbes'
+    'province-22'
   ),
   (
-    '01a111c9-7c97-7fe9-9438-92670e90f8e3',
+    '01a111ca-0023-7000-8000-000000000023',
     23,
-    'annaba'
+    'province-23'
   ),
   (
-    '01a111c9-7c97-7ffa-a5ba-c500c79f9209',
+    '01a111ca-0024-7000-8000-000000000024',
     24,
-    'guelma'
+    'province-24'
   ),
   (
-    '01a111c9-7c98-700a-b695-6e75f363eb83',
+    '01a111ca-0025-7000-8000-000000000025',
     25,
-    'constantine'
+    'province-25'
   ),
   (
-    '01a111c9-7c98-701c-9ed0-fcac6ff834bc',
+    '01a111ca-0026-7000-8000-000000000026',
     26,
-    'medea'
+    'province-26'
   ),
   (
-    '01a111c9-7c98-702d-aa2e-6e050f900367',
+    '01a111ca-0027-7000-8000-000000000027',
     27,
-    'mostaganem'
+    'province-27'
   ),
   (
-    '01a111c9-7c98-703f-98aa-0439520e9537',
+    '01a111ca-0028-7000-8000-000000000028',
     28,
-    'msila'
+    'province-28'
   ),
   (
-    '01a111c9-7c98-7050-ab72-aa9dad316cf4',
+    '01a111ca-0029-7000-8000-000000000029',
     29,
-    'mascara'
+    'province-29'
   ),
   (
-    '01a111c9-7c98-7061-bfb5-3a99fd9cc0dd',
+    '01a111ca-0030-7000-8000-000000000030',
     30,
-    'ouargla'
-  ),
-  (
-    '01a111c9-7c98-707b-b5b9-78aa7796d2da',
-    31,
-    'oran'
+    'province-30'
   );

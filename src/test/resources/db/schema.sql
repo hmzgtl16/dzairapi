@@ -32,7 +32,8 @@ CREATE TABLE IF NOT EXISTS province_translation (
 
 CREATE TABLE IF NOT EXISTS district (
   id UUID PRIMARY KEY,
-  slug VARCHAR(100) NOT NULL,
+  slug VARCHAR(100) NOT NULL UNIQUE,
+  code SMALLINT NOT NULL UNIQUE,
   province_id UUID NOT NULL REFERENCES province (id) ON DELETE RESTRICT,
   CONSTRAINT uq_district_province_slug UNIQUE (province_id, slug)
 );
