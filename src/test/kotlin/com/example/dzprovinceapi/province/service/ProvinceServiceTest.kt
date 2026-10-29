@@ -23,7 +23,8 @@ import com.example.dzprovinceapi.helpers.testMunicipality
 import com.example.dzprovinceapi.helpers.testMunicipalityTranslation
 import com.example.dzprovinceapi.helpers.testProvince
 import com.example.dzprovinceapi.helpers.testProvinceTranslation
-import com.example.dzprovinceapi.province.domain.ProvinceRepository
+import com.example.dzprovinceapi.repository.ProvinceRepository
+import com.example.dzprovinceapi.service.ProvinceServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

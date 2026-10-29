@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.municipality.domain
+package com.example.dzprovinceapi.model
 
 import jakarta.persistence.Column
 import jakarta.persistence.Embeddable
@@ -23,9 +23,9 @@ import java.util.Objects
 import java.util.UUID
 
 @Embeddable
-class MunicipalityTranslationId : Serializable {
-    @Column(name = "municipality_id", nullable = false)
-    var municipalityId: UUID? = null
+class DistrictTranslationId : Serializable {
+    @Column(name = "district_id", nullable = false)
+    var districtId: UUID? = null
 
     @Column(name = "language_id", nullable = false)
     var languageId: UUID? = null
@@ -34,13 +34,13 @@ class MunicipalityTranslationId : Serializable {
         if (this === other) return true
         if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) return false
 
-        other as MunicipalityTranslationId
+        other as DistrictTranslationId
 
-        return municipalityId == other.municipalityId &&
+        return districtId == other.districtId &&
             languageId == other.languageId
     }
 
-    override fun hashCode(): Int = Objects.hash(municipalityId, languageId)
+    override fun hashCode(): Int = Objects.hash(districtId, languageId)
 
     companion object {
         private const val serialVersionUID = 0L

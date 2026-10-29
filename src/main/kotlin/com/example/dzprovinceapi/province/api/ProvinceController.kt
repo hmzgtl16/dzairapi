@@ -18,7 +18,7 @@ package com.example.dzprovinceapi.province.api
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
 import com.example.dzprovinceapi.municipality.api.dto.MunicipalityResponse
 import com.example.dzprovinceapi.province.api.dto.ProvinceResponse
-import com.example.dzprovinceapi.province.service.ProvinceService
+import com.example.dzprovinceapi.service.ProvinceService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault

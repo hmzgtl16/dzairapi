@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.municipality.service
+package com.example.dzprovinceapi.service
 
 import com.example.dzprovinceapi.exception.MunicipalityCodeNotFoundException
 import com.example.dzprovinceapi.exception.MunicipalitySlugNotFoundException
 import com.example.dzprovinceapi.mapping.toResponse
 import com.example.dzprovinceapi.municipality.api.dto.MunicipalityResponse
-import com.example.dzprovinceapi.municipality.domain.MunicipalityRepository
+import com.example.dzprovinceapi.repository.MunicipalityRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service

@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.province.domain
+package com.example.dzprovinceapi.model
 
-import com.example.dzprovinceapi.language.domain.Language
 import jakarta.persistence.Column
 import jakarta.persistence.EmbeddedId
 import jakarta.persistence.Entity
@@ -28,16 +27,16 @@ import org.hibernate.annotations.OnDelete
 import org.hibernate.annotations.OnDeleteAction
 
 @Entity
-@Table(name = "province_translation", schema = "public")
-class ProvinceTranslation {
+@Table(name = "district_translation", schema = "public")
+class DistrictTranslation {
     @EmbeddedId
-    var id: ProvinceTranslationId? = null
+    var id: DistrictTranslationId? = null
 
-    @MapsId("provinceId")
+    @MapsId("districtId")
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "province_id")
-    var province: Province? = null
+    @JoinColumn(name = "district_id")
+    var district: District? = null
 
     @MapsId("languageId")
     @ManyToOne(fetch = FetchType.LAZY)

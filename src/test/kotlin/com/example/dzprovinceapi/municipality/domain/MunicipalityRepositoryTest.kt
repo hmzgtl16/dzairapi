@@ -15,6 +15,8 @@
  */
 package com.example.dzprovinceapi.municipality.domain
 
+import com.example.dzprovinceapi.model.MunicipalityTranslation
+import com.example.dzprovinceapi.repository.MunicipalityRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.groups.Tuple
 import org.junit.jupiter.api.Test

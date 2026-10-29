@@ -13,13 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.district.domain
+package com.example.dzprovinceapi.repository
 
+import com.example.dzprovinceapi.model.Municipality
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 import java.util.UUID
 
 @Repository
-interface DistrictRepository : JpaRepository<District, UUID> {
-    fun findDistrictByCode(code: Short): District?
+interface MunicipalityRepository : JpaRepository<Municipality, UUID> {
+    fun findMunicipalityBySlug(slug: String): Municipality?
+
+    fun findMunicipalityByCode(code: Short): Municipality?
 }

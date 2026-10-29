@@ -15,11 +15,11 @@
  */
 package com.example.dzprovinceapi.district.mapping
 
-import com.example.dzprovinceapi.district.domain.District
 import com.example.dzprovinceapi.helpers.testDistrict
 import com.example.dzprovinceapi.helpers.testDistrictTranslation
 import com.example.dzprovinceapi.helpers.testLanguage
 import com.example.dzprovinceapi.mapping.toResponse
+import com.example.dzprovinceapi.model.District
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.UUID

@@ -19,7 +19,7 @@ import com.example.dzprovinceapi.helpers.testLanguage
 import com.example.dzprovinceapi.helpers.testMunicipality
 import com.example.dzprovinceapi.helpers.testMunicipalityTranslation
 import com.example.dzprovinceapi.mapping.toResponse
-import com.example.dzprovinceapi.municipality.domain.Municipality
+import com.example.dzprovinceapi.model.Municipality
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.UUID

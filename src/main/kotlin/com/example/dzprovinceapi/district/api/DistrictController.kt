@@ -16,7 +16,7 @@
 package com.example.dzprovinceapi.district.api
 
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
-import com.example.dzprovinceapi.district.service.DistrictService
+import com.example.dzprovinceapi.service.DistrictService
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault

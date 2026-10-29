@@ -15,16 +15,16 @@
  */
 package com.example.dzprovinceapi.helpers
 
-import com.example.dzprovinceapi.district.domain.District
-import com.example.dzprovinceapi.district.domain.DistrictTranslation
-import com.example.dzprovinceapi.district.domain.DistrictTranslationId
-import com.example.dzprovinceapi.language.domain.Language
-import com.example.dzprovinceapi.municipality.domain.Municipality
-import com.example.dzprovinceapi.municipality.domain.MunicipalityTranslation
-import com.example.dzprovinceapi.municipality.domain.MunicipalityTranslationId
-import com.example.dzprovinceapi.province.domain.Province
-import com.example.dzprovinceapi.province.domain.ProvinceTranslation
-import com.example.dzprovinceapi.province.domain.ProvinceTranslationId
+import com.example.dzprovinceapi.model.District
+import com.example.dzprovinceapi.model.DistrictTranslation
+import com.example.dzprovinceapi.model.DistrictTranslationId
+import com.example.dzprovinceapi.model.Language
+import com.example.dzprovinceapi.model.Municipality
+import com.example.dzprovinceapi.model.MunicipalityTranslation
+import com.example.dzprovinceapi.model.MunicipalityTranslationId
+import com.example.dzprovinceapi.model.Province
+import com.example.dzprovinceapi.model.ProvinceTranslation
+import com.example.dzprovinceapi.model.ProvinceTranslationId
 import java.util.UUID
 
 fun testProvince(

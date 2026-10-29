@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.language.domain
+package com.example.dzprovinceapi.model
 
-import com.example.dzprovinceapi.province.domain.ProvinceTranslation
 import jakarta.persistence.Column
 import jakarta.persistence.Entity
 import jakarta.persistence.Id
@@ -24,17 +23,20 @@ import jakarta.persistence.Table
 import java.util.UUID
 
 @Entity
-@Table(name = "language", schema = "public")
-class Language {
+@Table(name = "province", schema = "public")
+class Province {
     @Id
     var id: UUID? = null
 
     @Column(name = "code")
-    var code: String = ""
+    var code: Short = 0
 
-    @Column(name = "name")
-    var name: String = ""
+    @Column(name = "slug")
+    var slug: String = ""
 
-    @OneToMany(mappedBy = "language")
+    @OneToMany(mappedBy = "province")
     var provinceTranslations: MutableSet<ProvinceTranslation> = mutableSetOf()
+
+    @OneToMany(mappedBy = "province")
+    var districts: MutableSet<District> = mutableSetOf()
 }

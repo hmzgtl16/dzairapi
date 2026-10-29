@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.district.service
+package com.example.dzprovinceapi.service
 
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
-import com.example.dzprovinceapi.district.domain.DistrictRepository
 import com.example.dzprovinceapi.exception.DistrictCodeNotFoundException
 import com.example.dzprovinceapi.mapping.toResponse
+import com.example.dzprovinceapi.repository.DistrictRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service

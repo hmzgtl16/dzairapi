@@ -13,15 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.municipality.domain
+package com.example.dzprovinceapi.model
 
-import org.springframework.data.jpa.repository.JpaRepository
-import org.springframework.stereotype.Repository
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.Id
+import jakarta.persistence.Table
 import java.util.UUID
 
-@Repository
-interface MunicipalityRepository : JpaRepository<Municipality, UUID> {
-    fun findMunicipalityBySlug(slug: String): Municipality?
+@Entity
+@Table(name = "language", schema = "public")
+class Language {
+    @Id
+    var id: UUID? = null
 
-    fun findMunicipalityByCode(code: Short): Municipality?
+    @Column(name = "code")
+    var code: String = ""
+
+    @Column(name = "name")
+    var name: String = ""
 }

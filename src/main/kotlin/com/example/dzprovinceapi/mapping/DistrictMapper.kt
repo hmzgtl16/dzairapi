@@ -17,8 +17,8 @@ package com.example.dzprovinceapi.mapping
 
 import com.example.dzprovinceapi.district.api.dto.DistrictNameResponse
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
-import com.example.dzprovinceapi.district.domain.District
-import com.example.dzprovinceapi.district.domain.DistrictTranslation
+import com.example.dzprovinceapi.model.District
+import com.example.dzprovinceapi.model.DistrictTranslation
 
 fun District?.toResponse(languages: List<String>): DistrictResponse =
     DistrictResponse(

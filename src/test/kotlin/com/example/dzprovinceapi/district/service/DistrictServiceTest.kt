@@ -15,11 +15,12 @@
  */
 package com.example.dzprovinceapi.district.service
 
-import com.example.dzprovinceapi.district.domain.DistrictRepository
 import com.example.dzprovinceapi.exception.DistrictSlugNotFoundException
 import com.example.dzprovinceapi.helpers.testDistrict
 import com.example.dzprovinceapi.helpers.testDistrictTranslation
 import com.example.dzprovinceapi.helpers.testLanguage
+import com.example.dzprovinceapi.repository.DistrictRepository
+import com.example.dzprovinceapi.service.DistrictServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test

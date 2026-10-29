@@ -18,7 +18,8 @@ package com.example.dzprovinceapi.province.mapping
 import com.example.dzprovinceapi.helpers.testLanguage
 import com.example.dzprovinceapi.helpers.testProvince
 import com.example.dzprovinceapi.helpers.testProvinceTranslation
-import com.example.dzprovinceapi.province.domain.Province
+import com.example.dzprovinceapi.mapping.toResponse
+import com.example.dzprovinceapi.model.Province
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.UUID

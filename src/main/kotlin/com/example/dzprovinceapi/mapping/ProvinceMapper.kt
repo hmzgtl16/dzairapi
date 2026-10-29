@@ -15,10 +15,10 @@
  */
 package com.example.dzprovinceapi.mapping
 
+import com.example.dzprovinceapi.model.Province
+import com.example.dzprovinceapi.model.ProvinceTranslation
 import com.example.dzprovinceapi.province.api.dto.ProvinceNameResponse
 import com.example.dzprovinceapi.province.api.dto.ProvinceResponse
-import com.example.dzprovinceapi.province.domain.Province
-import com.example.dzprovinceapi.province.domain.ProvinceTranslation
 
 fun Province?.toResponse(languages: List<String>): ProvinceResponse =
     ProvinceResponse(

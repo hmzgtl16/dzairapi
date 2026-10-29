@@ -13,15 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.province.service
+package com.example.dzprovinceapi.service
 
 import com.example.dzprovinceapi.district.api.dto.DistrictResponse
-import com.example.dzprovinceapi.district.domain.District
 import com.example.dzprovinceapi.exception.ProvinceCodeNotFoundException
+import com.example.dzprovinceapi.mapping.toResponse
+import com.example.dzprovinceapi.model.District
 import com.example.dzprovinceapi.municipality.api.dto.MunicipalityResponse
 import com.example.dzprovinceapi.province.api.dto.ProvinceResponse
-import com.example.dzprovinceapi.province.domain.ProvinceRepository
-import com.example.dzprovinceapi.province.mapping.toResponse
+import com.example.dzprovinceapi.repository.ProvinceRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.PageImpl
 import org.springframework.data.domain.Pageable

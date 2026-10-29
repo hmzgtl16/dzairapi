@@ -20,7 +20,8 @@ import com.example.dzprovinceapi.exception.MunicipalitySlugNotFoundException
 import com.example.dzprovinceapi.helpers.testLanguage
 import com.example.dzprovinceapi.helpers.testMunicipality
 import com.example.dzprovinceapi.helpers.testMunicipalityTranslation
-import com.example.dzprovinceapi.municipality.domain.MunicipalityRepository
+import com.example.dzprovinceapi.repository.MunicipalityRepository
+import com.example.dzprovinceapi.service.MunicipalityServiceImpl
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
