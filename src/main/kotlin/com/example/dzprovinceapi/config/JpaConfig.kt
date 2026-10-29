@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzprovinceapi.shared.config
+package com.example.dzprovinceapi.config
 
-import org.springframework.cache.annotation.EnableCaching
 import org.springframework.context.annotation.Configuration
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories
+import org.springframework.transaction.annotation.EnableTransactionManagement
 
 @Configuration
-@EnableCaching
-class CacheConfig
+@EnableJpaRepositories(basePackages = ["com.example.dzprovinceapi"])
+@EnableTransactionManagement
+class JpaConfig
