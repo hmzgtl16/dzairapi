@@ -13,6 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import kotlinx.kover.gradle.plugin.dsl.AggregationType
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+
 plugins {
     alias(libs.plugins.graalvm.native)
     alias(libs.plugins.kotlin.jvm)
@@ -110,5 +113,21 @@ spotless {
             ),
         )
         licenseHeaderFile(rootDir.resolve("spotless/license-header.sql"), "^[^-]")
+    }
+}
+
+kover {
+    reports {
+        total {
+            log {
+                aggregationForGroup = AggregationType.COVERED_PERCENTAGE
+                coverageUnits = CoverageUnit.LINE
+            }
+            verify {
+                rule {
+                    minBound(90)
+                }
+            }
+        }
     }
 }
