@@ -19,6 +19,7 @@ plugins {
     alias(libs.plugins.kotlin.jpa)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.kover)
     alias(libs.plugins.spotless)
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependencyManagement)
