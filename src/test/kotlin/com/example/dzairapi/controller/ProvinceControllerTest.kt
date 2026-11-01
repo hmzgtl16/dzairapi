@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.assertj.MockMvcTester
 
@@ -99,7 +100,7 @@ class ProvinceControllerTest {
                 .uri("/api/provinces")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     // ------------------------------------------------------------------
@@ -144,7 +145,7 @@ class ProvinceControllerTest {
                 .param("lang", "en")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     @Test
@@ -155,7 +156,7 @@ class ProvinceControllerTest {
                 .uri("/api/1.0/provinces/invalid-code")
 
         assertThat(result)
-            .hasStatus(400)
+            .hasStatus(HttpStatus.BAD_REQUEST)
     }
 
     @Test
@@ -166,7 +167,7 @@ class ProvinceControllerTest {
                 .uri("/api/provinces/16")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     // ------------------------------------------------------------------
@@ -233,7 +234,7 @@ class ProvinceControllerTest {
                 .param("lang", "en")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     @Test
@@ -244,7 +245,7 @@ class ProvinceControllerTest {
                 .uri("/api/1.0/provinces/invalid-code/districts")
 
         assertThat(result)
-            .hasStatus(400)
+            .hasStatus(HttpStatus.BAD_REQUEST)
     }
 
     @Test
@@ -255,7 +256,7 @@ class ProvinceControllerTest {
                 .uri("/api/provinces/16/districts")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     // ------------------------------------------------------------------
@@ -322,7 +323,7 @@ class ProvinceControllerTest {
                 .param("lang", "en")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     @Test
@@ -333,7 +334,7 @@ class ProvinceControllerTest {
                 .uri("/api/1.0/provinces/invalid-code/municipalities")
 
         assertThat(result)
-            .hasStatus(400)
+            .hasStatus(HttpStatus.BAD_REQUEST)
     }
 
     @Test
@@ -344,6 +345,6 @@ class ProvinceControllerTest {
                 .uri("/api/provinces/16/municipalities")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 }

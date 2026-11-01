@@ -15,47 +15,58 @@
  */
 package com.example.dzairapi.exception
 
+import jakarta.servlet.http.HttpServletRequest
 import org.springframework.http.HttpStatus
 import org.springframework.http.ProblemDetail
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.bind.annotation.RestControllerAdvice
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.net.URI
 
 @RestControllerAdvice
 class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
     @ExceptionHandler(ProvinceNotFoundException::class)
-    fun handleProvinceCodeNotFound(ex: ProvinceNotFoundException): ProblemDetail =
+    fun handleProvinceCodeNotFound(
+        ex: ProvinceNotFoundException,
+        request: HttpServletRequest,
+    ): ProblemDetail =
         ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message).apply {
             title = "Province not found"
             type = URI.create("about:blank")
+            instance = URI.create(request.requestURI)
         }
 
-    @ExceptionHandler(ProvinceSlugNotFoundException::class)
-    fun handleProvinceSlugNotFound(ex: ProvinceSlugNotFoundException): ProblemDetail =
-        ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message).apply {
-            title = "Province not found"
-            type = URI.create("about:blank")
-        }
-
-    @ExceptionHandler(DistrictSlugNotFoundException::class)
-    fun handleDistrictSlugNotFound(ex: DistrictSlugNotFoundException): ProblemDetail =
+    @ExceptionHandler(DistrictNotFoundException::class)
+    fun handleDistrictNotFound(
+        ex: DistrictNotFoundException,
+        request: HttpServletRequest,
+    ): ProblemDetail =
         ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message).apply {
             title = "District not found"
             type = URI.create("about:blank")
+            instance = URI.create(request.requestURI)
         }
 
-    @ExceptionHandler(MunicipalityCodeNotFoundException::class)
-    fun handleMunicipalityCodeNotFound(ex: MunicipalityCodeNotFoundException): ProblemDetail =
+    @ExceptionHandler(MunicipalityNotFoundException::class)
+    fun handleMunicipalityCodeNotFound(
+        ex: MunicipalityNotFoundException,
+        request: HttpServletRequest,
+    ): ProblemDetail =
         ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message).apply {
             title = "Municipality not found"
             type = URI.create("about:blank")
+            instance = URI.create(request.requestURI)
         }
 
-    @ExceptionHandler(MunicipalitySlugNotFoundException::class)
-    fun handleMunicipalitySlugNotFound(ex: MunicipalitySlugNotFoundException): ProblemDetail =
-        ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.message).apply {
-            title = "Municipality not found"
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    fun handleMethodArgumentTypeMismatchException(
+        ex: MethodArgumentTypeMismatchException,
+        request: HttpServletRequest,
+    ): ProblemDetail =
+        ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message).apply {
+            title = "Method argument type mismatch"
             type = URI.create("about:blank")
+            instance = URI.create(request.requestURI)
         }
 }

@@ -15,7 +15,7 @@
  */
 package com.example.dzairapi.service
 
-import com.example.dzairapi.exception.MunicipalityCodeNotFoundException
+import com.example.dzairapi.exception.MunicipalityNotFoundException
 import com.example.dzairapi.helpers.testLanguage
 import com.example.dzairapi.helpers.testMunicipality
 import com.example.dzairapi.helpers.testMunicipalityTranslation
@@ -302,7 +302,7 @@ class MunicipalityServiceTest {
         `when`(municipalityRepository.findMunicipalityByCode(9999)).thenReturn(null)
 
         assertThatThrownBy { municipalityService.getMunicipalityByCode(emptyList(), 9999) }
-            .isInstanceOf(MunicipalityCodeNotFoundException::class.java)
+            .isInstanceOf(MunicipalityNotFoundException::class.java)
 
         verify(municipalityRepository).findMunicipalityByCode(9999)
     }

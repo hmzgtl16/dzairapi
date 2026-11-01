@@ -22,6 +22,7 @@ import com.example.dzairapi.model.DistrictTranslation
 
 fun District?.toResponse(languages: List<String>): DistrictResponse =
     DistrictResponse(
+        code = this?.code?.let { String.format("%04d", it) },
         slug = this?.slug,
         names =
             this

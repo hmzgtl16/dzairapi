@@ -21,7 +21,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
-import org.springframework.data.domain.PageRequest
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.assertj.MockMvcTester
 
@@ -34,13 +34,6 @@ class DistrictControllerTest {
 
     @Autowired
     private lateinit var districtRepository: DistrictRepository
-
-    private fun existingDistrictCode(): Short =
-        districtRepository
-            .findDistrictsBy(PageRequest.of(0, 1))
-            .content
-            .first()
-            .code
 
     // ------------------------------------------------------------------
     // getDistricts
@@ -59,13 +52,15 @@ class DistrictControllerTest {
             .bodyJson()
             .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
+            .hasPathSatisfying("last") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
     }
 
     @Test
-    fun `getDistricts without lang should use empty list and return default languages`() {
+    fun `getDistricts without lang should use empty list`() {
         val result =
             mockMvcTester
                 .get()
@@ -76,7 +71,9 @@ class DistrictControllerTest {
             .bodyJson()
             .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
+            .hasPathSatisfying("last") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
             .hasPathSatisfying("$.content[0].names") { it.assertThat().isNotEmpty }
@@ -89,14 +86,14 @@ class DistrictControllerTest {
                 .get()
                 .uri("/api/1.0/districts")
                 .param("page", "0")
-                .param("size", "2")
+                .param("size", "5")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("size") { it.assertThat().isEqualTo(2) }
-            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(2) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(5) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(5) }
     }
 
     @Test
@@ -107,7 +104,7 @@ class DistrictControllerTest {
                 .uri("/api/districts")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     // ------------------------------------------------------------------
@@ -116,30 +113,29 @@ class DistrictControllerTest {
 
     @Test
     fun `getDistrictByCode should return 200`() {
-        val code = existingDistrictCode()
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/districts/$code")
-                .param("lang", "en")
+                .uri("/api/1.0/districts/101")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
+            .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("0101") }
             .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
     }
 
     @Test
     fun `getDistrictByCode without lang should pass an empty list to the service`() {
-        val code = existingDistrictCode()
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/districts/$code")
+                .uri("/api/1.0/districts/101")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
+            .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("0101") }
             .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
     }
 
@@ -148,11 +144,10 @@ class DistrictControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/districts/${Short.MAX_VALUE}")
-                .param("lang", "en")
+                .uri("/api/1.0/districts/999")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     @Test
@@ -163,16 +158,15 @@ class DistrictControllerTest {
                 .uri("/api/1.0/districts/invalid-code")
 
         assertThat(result)
-            .hasStatus(400)
+            .hasStatus(HttpStatus.BAD_REQUEST)
     }
 
     @Test
     fun `getDistrictByCode without version segment should return 404`() {
-        val code = existingDistrictCode()
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/districts/$code")
+                .uri("/api/districts/101")
 
         assertThat(result)
             .hasStatus(404)
@@ -184,16 +178,16 @@ class DistrictControllerTest {
 
     @Test
     fun `getDistrictMunicipalitiesByCode should return 200 with page`() {
-        val code = existingDistrictCode()
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/districts/$code/municipalities")
+                .uri("/api/1.0/districts/101/municipalities")
                 .param("lang", "en", "fr")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
+            .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
@@ -202,11 +196,10 @@ class DistrictControllerTest {
 
     @Test
     fun `getDistrictMunicipalitiesByCode without lang should use empty list`() {
-        val code = existingDistrictCode()
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/districts/$code/municipalities")
+                .uri("/api/1.0/districts/101/municipalities")
 
         assertThat(result)
             .hasStatusOk()
@@ -219,19 +212,18 @@ class DistrictControllerTest {
 
     @Test
     fun `getDistrictMunicipalitiesByCode should respect custom pagination parameters`() {
-        val code = existingDistrictCode()
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/districts/$code/municipalities")
+                .uri("/api/1.0/districts/101/municipalities")
                 .param("page", "0")
-                .param("size", "1")
+                .param("size", "2")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("size") { it.assertThat().isEqualTo(1) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(2) }
     }
 
     @Test
@@ -239,11 +231,11 @@ class DistrictControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/districts/${Short.MAX_VALUE}/municipalities")
+                .uri("/api/1.0/districts/999/municipalities")
                 .param("lang", "en")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     @Test
@@ -254,18 +246,17 @@ class DistrictControllerTest {
                 .uri("/api/1.0/districts/invalid-code/municipalities")
 
         assertThat(result)
-            .hasStatus(400)
+            .hasStatus(HttpStatus.BAD_REQUEST)
     }
 
     @Test
     fun `getDistrictMunicipalitiesByCode without version segment should return 404`() {
-        val code = existingDistrictCode()
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/districts/$code/municipalities")
+                .uri("/api/districts/101/municipalities")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 }

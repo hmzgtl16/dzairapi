@@ -20,6 +20,7 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.web.servlet.assertj.MockMvcTester
 
@@ -47,7 +48,9 @@ class MunicipalityControllerTest {
             .bodyJson()
             .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
+            .hasPathSatisfying("last") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
     }
@@ -77,14 +80,14 @@ class MunicipalityControllerTest {
                 .get()
                 .uri("/api/1.0/municipalities")
                 .param("page", "0")
-                .param("size", "2")
+                .param("size", "5")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("size") { it.assertThat().isEqualTo(2) }
-            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(2) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(5) }
+            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(5) }
     }
 
     @Test
@@ -95,7 +98,7 @@ class MunicipalityControllerTest {
                 .uri("/api/municipalities")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     // ------------------------------------------------------------------
@@ -107,13 +110,13 @@ class MunicipalityControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/1601")
+                .uri("/api/1.0/municipalities/101")
                 .param("lang", "fr")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
-            .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("1601") }
+            .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("0101") }
             .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
     }
 
@@ -122,12 +125,12 @@ class MunicipalityControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/1601")
+                .uri("/api/1.0/municipalities/101")
 
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
-            .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("1601") }
+            .hasPathSatisfying("$.code") { it.assertThat().isEqualTo("0101") }
             .hasPathSatisfying("$.names") { it.assertThat().isNotEmpty }
     }
 
@@ -136,11 +139,11 @@ class MunicipalityControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/1.0/municipalities/9999")
+                .uri("/api/1.0/municipalities/999")
                 .param("lang", "en")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 
     @Test
@@ -151,7 +154,7 @@ class MunicipalityControllerTest {
                 .uri("/api/1.0/municipalities/invalid-code")
 
         assertThat(result)
-            .hasStatus(400)
+            .hasStatus(HttpStatus.BAD_REQUEST)
     }
 
     @Test
@@ -159,9 +162,9 @@ class MunicipalityControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/api/municipalities/1601")
+                .uri("/api/municipalities/101")
 
         assertThat(result)
-            .hasStatus(404)
+            .hasStatus(HttpStatus.NOT_FOUND)
     }
 }

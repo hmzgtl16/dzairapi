@@ -16,7 +16,7 @@
 package com.example.dzairapi.service
 
 import com.example.dzairapi.dto.MunicipalityResponse
-import com.example.dzairapi.exception.MunicipalityCodeNotFoundException
+import com.example.dzairapi.exception.MunicipalityNotFoundException
 import com.example.dzairapi.mapping.toResponse
 import com.example.dzairapi.repository.MunicipalityRepository
 import org.springframework.data.domain.Page
@@ -50,7 +50,7 @@ class MunicipalityServiceImpl(
         val municipality =
             municipalityRepository
                 .findMunicipalityByCode(code)
-                ?: throw MunicipalityCodeNotFoundException(code)
+                ?: throw MunicipalityNotFoundException(code)
         val response =
             municipality
                 .toResponse(languages.normalizeOrDefaults())

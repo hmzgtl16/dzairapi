@@ -19,6 +19,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DistrictResponse(
+    val code: String?,
     val slug: String?,
     val names: List<DistrictNameResponse>,
 )
