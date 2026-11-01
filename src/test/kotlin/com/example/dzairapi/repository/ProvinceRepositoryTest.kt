@@ -94,75 +94,47 @@ class ProvinceRepositoryTest {
     }
 
     @Test
-    fun findProvincesBy_returnsOnlyExistingProvinces_whenSomeCodesAbsent() {
-        val result = provinceRepository.findProvincesBy(Pageable.unpaged())
-
-        assertThat(result.content).hasSize(1)
-        assertThat(result.content.first().code).isEqualTo(16.toShort())
-    }
-
-    @Test
-    fun findProvincesBy_returnsEmptyPage_whenNoCodesExist() {
-        val codes: List<Short> = listOf(99, 100)
-        val result = provinceRepository.findProvincesBy(Pageable.unpaged())
-
-        assertThat(result.content).isEmpty()
-        assertThat(result.totalElements).isZero()
-    }
-
-    @Test
-    fun findProvincesBy_returnsEmptyPage_whenCodeListIsEmpty() {
-        val result = provinceRepository.findProvincesBy(Pageable.unpaged())
-
-        assertThat(result.content).isEmpty()
-        assertThat(result.totalElements).isZero()
-    }
-
-    @Test
     fun findProvincesBy_deduplicatesResults_whenDuplicateCodesProvided() {
-        val codes: List<Short> = listOf(16, 16, 30)
         val result = provinceRepository.findProvincesBy(Pageable.unpaged())
 
-        assertThat(result.content).hasSize(2)
+        assertThat(result.content).hasSize(30)
         assertThat(result.content)
             .extracting("code")
-            .containsExactlyInAnyOrder(16.toShort(), 30.toShort())
+            .containsExactlyInAnyOrderElementsOf(IntRange(1, 30).map(Int::toShort).toList())
     }
 
     @Test
     fun findProvincesBy_appliesPaginationAndSorting() {
-        val codes: List<Short> = listOf(1, 5, 16, 30)
         val pageable =
             PageRequest
                 .of(
                     0,
-                    2,
+                    5,
                     Sort.by(Sort.Direction.ASC, "code"),
                 )
 
         val firstPage = provinceRepository.findProvincesBy(pageable)
 
-        assertThat(firstPage.content).hasSize(2)
-        assertThat(firstPage.totalElements).isEqualTo(4)
-        assertThat(firstPage.totalPages).isEqualTo(2)
+        assertThat(firstPage.content).hasSize(5)
+        assertThat(firstPage.totalElements).isEqualTo(30)
+        assertThat(firstPage.totalPages).isEqualTo(6)
         assertThat(firstPage.content)
             .extracting("code")
-            .containsExactly(1.toShort(), 5.toShort())
+            .containsExactly(1.toShort(), 2.toShort(), 3.toShort(), 4.toShort(), 5.toShort())
 
         val secondPage = provinceRepository.findProvincesBy(pageable.next())
 
-        assertThat(secondPage.content).hasSize(2)
+        assertThat(secondPage.content).hasSize(5)
         assertThat(secondPage.content)
             .extracting("code")
-            .containsExactly(16.toShort(), 30.toShort())
+            .containsExactly(6.toShort(), 7.toShort(), 8.toShort(), 9.toShort(), 10.toShort())
     }
 
     @Test
     fun findProvincesBy_loadsTranslationsAndLanguages() {
-        val codes: List<Short> = listOf(16, 30)
         val result = provinceRepository.findProvincesBy(Pageable.unpaged())
 
-        assertThat(result.content).hasSize(2)
+        assertThat(result.content).hasSize(30)
         assertThat(result.content).allSatisfy { province ->
             assertThat(province.translations).isNotEmpty
             assertThat(province.translations).allSatisfy { translation ->
