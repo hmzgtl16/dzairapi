@@ -64,9 +64,13 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
         ex: MethodArgumentTypeMismatchException,
         request: HttpServletRequest,
     ): ProblemDetail =
-        ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message).apply {
-            title = "Method argument type mismatch"
-            type = URI.create("about:blank")
-            instance = URI.create(request.requestURI)
-        }
+        ProblemDetail
+            .forStatusAndDetail(
+                HttpStatus.BAD_REQUEST,
+                "Parameter '${ex.name}' must be a valid ${ex.requiredType?.simpleName}.",
+            ).apply {
+                title = "Method argument type mismatch"
+                type = URI.create("about:blank")
+                instance = URI.create(request.requestURI)
+            }
 }
