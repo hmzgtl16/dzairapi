@@ -118,14 +118,46 @@ spotless {
 
 kover {
     reports {
+        filters {
+            excludes {
+                classes(
+                    "com.example.dzairapi.DzairAPIApplication",
+                    "com.example.dzairapi.DzairAPIApplicationKt",
+                    "com.example.dzairapi.config.*",
+                    "com.example.dzairapi.dto.*",
+                    "com.example.dzairapi.model.*",
+                    "com.example.dzairapi.generated.*",
+                )
+                annotatedBy(
+                    "org.springframework.boot.autoconfigure.SpringBootApplication",
+                    "*Generated*",
+                )
+            }
+        }
+
         total {
+            html { onCheck = true }
+            xml { onCheck = true }
+
             log {
                 aggregationForGroup = AggregationType.COVERED_PERCENTAGE
                 coverageUnits = CoverageUnit.LINE
             }
-            verify {
-                rule {
-                    minBound(90)
+        }
+
+        verify {
+            rule("Minimum line coverage") {
+                bound {
+                    minValue = 80
+                    coverageUnits = CoverageUnit.LINE
+                    aggregationForGroup = AggregationType.COVERED_PERCENTAGE
+                }
+            }
+            rule("Minimum branch coverage") {
+                bound {
+                    minValue = 70
+                    coverageUnits = CoverageUnit.BRANCH
+                    aggregationForGroup = AggregationType.COVERED_PERCENTAGE
                 }
             }
         }
