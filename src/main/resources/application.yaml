@@ -16,7 +16,7 @@ server:
 
 spring:
   application:
-    name: dz-province-api
+    name: dzairapi
   profiles:
     active: dev
   mvc:
