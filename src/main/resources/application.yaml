@@ -37,3 +37,6 @@ spring:
     serialization:
       json:
         naming-strategy: snake_case
+  threads:
+    virtual:
+      enabled: true
