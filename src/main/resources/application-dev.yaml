@@ -19,7 +19,7 @@ spring:
     activate:
       on-profile: "dev"
   datasource:
-    url: jdbc:postgresql://localhost:5432/dz_province_dev
+    url: jdbc:postgresql://localhost:5432/dzairapi_dev
     username: dzairapi_user
     password: dzairapi_password
     driver-class-name: org.postgresql.Driver
