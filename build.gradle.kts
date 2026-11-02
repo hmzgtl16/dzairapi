@@ -15,6 +15,7 @@
  */
 import kotlinx.kover.gradle.plugin.dsl.AggregationType
 import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
 plugins {
     alias(libs.plugins.graalvm.native)
@@ -161,5 +162,34 @@ kover {
                 }
             }
         }
+    }
+}
+
+tasks.withType<BootBuildImage> {
+    imageName = "docker.io/library/${project.name}:${project.version}"
+    builder = "paketobuildpacks/builder-noble-java-tiny:0.0.206"
+    runImage = "paketobuildpacks/ubuntu-noble-run-tiny:0.0.153"
+    environment.set(
+        mapOf(
+            "BP_NATIVE_IMAGE" to "false",
+            "BP_JVM_VERSION" to "25",
+        ),
+    )
+    buildpacks.set(
+        listOf(
+            "paketobuildpacks/ca-certificates:3.14.4",
+            "paketobuildpacks/bellsoft-liberica:11.10.4",
+            "paketobuildpacks/syft:2.43.4",
+            "paketobuildpacks/executable-jar:6.17.5",
+            "paketobuildpacks/spring-boot:5.40.4",
+            "paketobuildpacks/native-image:5.19.1",
+        ),
+    )
+}
+
+graalvmNative {
+    metadataRepository {
+        enabled = true
+        version = libs.versions.graalvmReachabilityMetadata.get()
     }
 }

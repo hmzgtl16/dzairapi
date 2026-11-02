@@ -1,7 +1,8 @@
 [versions]
 bucket4j-spring-boot-starter = "0.14.0"
 caffeine = "3.3.0"
-graalvm = "1.1.13"
+graalvm = "1.1.18"
+graalvmReachabilityMetadata = "1.0.22"
 kotlin = "2.3.21"
 kover = "0.9.11"
 ktlint = "1.8.0"
