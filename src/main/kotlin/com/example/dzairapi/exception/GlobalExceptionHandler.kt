@@ -73,4 +73,19 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
                 type = URI.create("about:blank")
                 instance = URI.create(request.requestURI)
             }
+
+    @ExceptionHandler(Exception::class)
+    fun handleGenericException(
+        ex: Exception,
+        request: HttpServletRequest,
+    ): ProblemDetail =
+        ProblemDetail
+            .forStatusAndDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "An unexpected error occurred. Please try again later.",
+            ).apply {
+                title = "Internal server error"
+                type = URI.create("about:blank")
+                instance = URI.create(request.requestURI)
+            }
 }
