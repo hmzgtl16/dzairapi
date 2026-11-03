@@ -21,10 +21,12 @@ import com.example.dzairapi.dto.ProvinceResponse
 import com.example.dzairapi.exception.ProvinceNotFoundException
 import com.example.dzairapi.mapping.toResponse
 import com.example.dzairapi.model.District
+import com.example.dzairapi.model.Province
 import com.example.dzairapi.repository.DistrictRepository
 import com.example.dzairapi.repository.DistrictStatsRepository
 import com.example.dzairapi.repository.MunicipalityRepository
 import com.example.dzairapi.repository.ProvinceRepository
+import com.example.dzairapi.repository.ProvinceStatsRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -50,11 +52,15 @@ class ProvinceServiceImpl(
                 .findProvincesBy(pageable)
 
         val stats =
-            districtStatsRepository
-                .findDistrictStatsByCodeIn(provinces.content.map { it.code })
+            provinceStatsRepository
+                .findProvinceStatsByCodeIn(provinces.content.map(Province::code))
+
         val response =
             provinces.map {
-                it.toResponse(languages.normalizeOrDefaults())
+                it.toResponse(
+                    languages.normalizeOrDefaults(),
+                    stats.firstOrNull { s -> s.code == it.code }.toResponse(),
+                )
             }
 
         return response
@@ -69,9 +75,11 @@ class ProvinceServiceImpl(
             provinceRepository
                 .findProvinceByCode(code)
                 ?: throw ProvinceNotFoundException(code)
+        val stats =
+            provinceStatsRepository.findProvinceStatsByCode(code)
         val response =
             province
-                .toResponse(languages.normalizeOrDefaults())
+                .toResponse(languages.normalizeOrDefaults(), stats.toResponse())
 
         return response
     }
