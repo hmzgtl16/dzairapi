@@ -17,7 +17,9 @@ package com.example.dzairapi.mapping
 
 import com.example.dzairapi.dto.ProvinceNameResponse
 import com.example.dzairapi.dto.ProvinceResponse
+import com.example.dzairapi.dto.ProvinceStatsResponse
 import com.example.dzairapi.model.Province
+import com.example.dzairapi.model.ProvinceStats
 import com.example.dzairapi.model.ProvinceTranslation
 
 fun Province?.toResponse(languages: List<String>): ProvinceResponse =
@@ -36,3 +38,12 @@ fun ProvinceTranslation.toResponse(): ProvinceNameResponse =
         name = name,
         language = language.toResponse(),
     )
+
+fun ProvinceStats?.toResponse(): ProvinceStatsResponse? =
+    this?.let {
+        ProvinceStatsResponse(
+            code = it.code,
+            districtCount = it.districtCount,
+            municipalityCount = it.municipalityCount,
+        )
+    }
