@@ -18,7 +18,7 @@ spring:
   application:
     name: dzairapi
   profiles:
-    active: dev
+    default: dev
   mvc:
     apiversion:
       supported:
@@ -40,3 +40,8 @@ spring:
   threads:
     virtual:
       enabled: true
+
+logging:
+  level:
+    org.hibernate.validator.internal.metadata.aggregated.CascadingMetaDataBuilder: error
+    org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration: off

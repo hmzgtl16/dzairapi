@@ -169,22 +169,26 @@ tasks.withType<BootBuildImage> {
     imageName = "docker.io/library/${project.name}:${project.version}"
     builder = "paketobuildpacks/builder-noble-java-tiny:0.0.206"
     runImage = "paketobuildpacks/ubuntu-noble-run-tiny:0.0.153"
-    environment.set(
+    environment.putAll(
         mapOf(
-            "BP_NATIVE_IMAGE" to "false",
+            "BP_NATIVE_IMAGE" to "true",
             "BP_JVM_VERSION" to "25",
+            // "BP_JVM_CDS_ENABLED" to "true",
+            // "BP_JVM_JLINK_ENABLED" to "true",
+            // "BP_SPRING_AOT_ENABLED" to "true",
         ),
     )
-    buildpacks.set(
+    buildpacks.addAll(
         listOf(
             "paketobuildpacks/ca-certificates:3.14.4",
-            "paketobuildpacks/bellsoft-liberica:11.10.4",
+            "paketobuildpacks/bellsoft-liberica:11.10.5",
             "paketobuildpacks/syft:2.43.4",
             "paketobuildpacks/executable-jar:6.17.5",
             "paketobuildpacks/spring-boot:5.40.4",
             "paketobuildpacks/native-image:5.19.1",
         ),
     )
+    cleanCache = true
 }
 
 graalvmNative {
