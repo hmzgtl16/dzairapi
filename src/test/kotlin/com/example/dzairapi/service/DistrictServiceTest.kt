@@ -17,11 +17,14 @@ package com.example.dzairapi.service
 
 import com.example.dzairapi.exception.DistrictNotFoundException
 import com.example.dzairapi.helpers.testDistrict
+import com.example.dzairapi.helpers.testDistrictStats
 import com.example.dzairapi.helpers.testDistrictTranslation
 import com.example.dzairapi.helpers.testLanguage
 import com.example.dzairapi.helpers.testMunicipality
 import com.example.dzairapi.helpers.testMunicipalityTranslation
+import com.example.dzairapi.model.District
 import com.example.dzairapi.repository.DistrictRepository
+import com.example.dzairapi.repository.DistrictStatsRepository
 import com.example.dzairapi.repository.MunicipalityRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -45,6 +48,9 @@ class DistrictServiceTest {
     private lateinit var districtRepository: DistrictRepository
 
     @Mock
+    private lateinit var districtStatsRepository: DistrictStatsRepository
+
+    @Mock
     private lateinit var municipalityRepository: MunicipalityRepository
 
     @InjectMocks
@@ -57,10 +63,14 @@ class DistrictServiceTest {
     @Test
     fun `getDistricts returns a page of mapped responses`() {
         val district = testDistrict(code = 1601, slug = "test-slug", translations = emptySet())
+        val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
         val pageable = PageRequest.of(0, 10)
-        val districtPage = PageImpl(listOf(district), pageable, 1)
-        `when`(districtRepository.findDistrictsBy(pageable)).thenReturn(districtPage)
+        val page = PageImpl(listOf(district), pageable, 1)
+        `when`(districtRepository.findDistrictsBy(pageable)).thenReturn(page)
+        `when`(
+            districtStatsRepository.findDistrictStatsByCodeIn(page.content.map(District::code)),
+        ).thenReturn(listOf(districtStats))
 
         val result = districtService.getDistricts(emptyList(), pageable)
 
@@ -69,6 +79,7 @@ class DistrictServiceTest {
         assertThat(result.content[0].names).isEmpty()
 
         verify(districtRepository).findDistrictsBy(pageable)
+        verify(districtStatsRepository).findDistrictStatsByCodeIn(page.content.map(District::code))
     }
 
     @Test
@@ -98,10 +109,14 @@ class DistrictServiceTest {
                         ),
                     ),
             )
+        val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
         val pageable = PageRequest.of(0, 10)
+        val page = PageImpl(listOf(district), pageable, 1)
         `when`(districtRepository.findDistrictsBy(pageable))
-            .thenReturn(PageImpl(listOf(district), pageable, 1))
+            .thenReturn(page)
+        `when`(districtStatsRepository.findDistrictStatsByCodeIn(page.content.map(District::code)))
+            .thenReturn(listOf(districtStats))
 
         val result = districtService.getDistricts(emptyList(), pageable)
 
@@ -112,6 +127,7 @@ class DistrictServiceTest {
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(districtRepository).findDistrictsBy(pageable)
+        verify(districtStatsRepository).findDistrictStatsByCodeIn(page.content.map(District::code))
     }
 
     @Test
@@ -141,10 +157,14 @@ class DistrictServiceTest {
                         ),
                     ),
             )
+        val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
         val pageable = PageRequest.of(0, 10)
+        val page = PageImpl(listOf(district), pageable, 1)
         `when`(districtRepository.findDistrictsBy(pageable))
-            .thenReturn(PageImpl(listOf(district), pageable, 1))
+            .thenReturn(page)
+        `when`(districtStatsRepository.findDistrictStatsByCodeIn(page.content.map(District::code)))
+            .thenReturn(listOf(districtStats))
 
         val result = districtService.getDistricts(listOf("en"), pageable)
 
@@ -158,6 +178,7 @@ class DistrictServiceTest {
         ).isEqualTo("en")
 
         verify(districtRepository).findDistrictsBy(pageable)
+        verify(districtStatsRepository).findDistrictStatsByCodeIn(page.content.map(District::code))
     }
 
     @Test
@@ -187,10 +208,14 @@ class DistrictServiceTest {
                         ),
                     ),
             )
+        val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
         val pageable = PageRequest.of(0, 10)
+        val page = PageImpl(listOf(district), pageable, 1)
         `when`(districtRepository.findDistrictsBy(pageable))
-            .thenReturn(PageImpl(listOf(district), pageable, 1))
+            .thenReturn(page)
+        `when`(districtStatsRepository.findDistrictStatsByCodeIn(page.content.map(District::code)))
+            .thenReturn(listOf(districtStats))
 
         val result =
             districtService.getDistricts(
@@ -202,6 +227,7 @@ class DistrictServiceTest {
             .containsExactlyInAnyOrder("en", "fr", "ar")
 
         verify(districtRepository).findDistrictsBy(pageable)
+        verify(districtStatsRepository).findDistrictStatsByCodeIn(page.content.map(District::code))
     }
 
     @Test
@@ -231,10 +257,14 @@ class DistrictServiceTest {
                         ),
                     ),
             )
+        val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
         val pageable = PageRequest.of(0, 10)
+        val page = PageImpl(listOf(district), pageable, 1)
         `when`(districtRepository.findDistrictsBy(pageable))
-            .thenReturn(PageImpl(listOf(district), pageable, 1))
+            .thenReturn(page)
+        `when`(districtStatsRepository.findDistrictStatsByCodeIn(page.content.map(District::code)))
+            .thenReturn(listOf(districtStats))
 
         val result =
             districtService.getDistricts(listOf("1", "!!", "", "e", "eng"), pageable)
@@ -243,6 +273,7 @@ class DistrictServiceTest {
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(districtRepository).findDistrictsBy(pageable)
+        verify(districtStatsRepository).findDistrictStatsByCodeIn(page.content.map(District::code))
     }
 
     @Test
@@ -290,8 +321,10 @@ class DistrictServiceTest {
                         ),
                     ),
             )
+        val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
         `when`(districtRepository.findDistrictByCode(1601)).thenReturn(district)
+        `when`(districtStatsRepository.findDistrictStatsByCode(1601)).thenReturn(districtStats)
 
         val result = districtService.getDistrictByCode(emptyList(), 1601)
 
@@ -299,6 +332,7 @@ class DistrictServiceTest {
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(districtRepository).findDistrictByCode(1601)
+        verify(districtStatsRepository).findDistrictStatsByCode(1601)
     }
 
     @Test
@@ -338,8 +372,10 @@ class DistrictServiceTest {
                         ),
                     ),
             )
+        val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
         `when`(districtRepository.findDistrictByCode(1601)).thenReturn(district)
+        `when`(districtStatsRepository.findDistrictStatsByCode(1601)).thenReturn(districtStats)
 
         val result =
             districtService.getDistrictByCode(listOf(" FR ", "en", "fr", "123"), 1601)
@@ -348,6 +384,7 @@ class DistrictServiceTest {
             .containsExactlyInAnyOrder("fr", "en")
 
         verify(districtRepository).findDistrictByCode(1601)
+        verify(districtStatsRepository).findDistrictStatsByCode(1601)
     }
 
     @Test
@@ -377,8 +414,9 @@ class DistrictServiceTest {
                         ),
                     ),
             )
-
+        val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
         `when`(districtRepository.findDistrictByCode(1601)).thenReturn(district)
+        `when`(districtStatsRepository.findDistrictStatsByCode(1601)).thenReturn(districtStats)
 
         val result =
             districtService.getDistrictByCode(listOf("1", "!!", "", "e"), 1601)
@@ -387,6 +425,7 @@ class DistrictServiceTest {
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(districtRepository).findDistrictByCode(1601)
+        verify(districtStatsRepository).findDistrictStatsByCode(1601)
     }
 
     // ------------------------------------------------------------------

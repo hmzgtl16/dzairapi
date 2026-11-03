@@ -16,6 +16,7 @@
 package com.example.dzairapi.helpers
 
 import com.example.dzairapi.model.District
+import com.example.dzairapi.model.DistrictStats
 import com.example.dzairapi.model.DistrictTranslation
 import com.example.dzairapi.model.DistrictTranslationId
 import com.example.dzairapi.model.Language
@@ -23,6 +24,7 @@ import com.example.dzairapi.model.Municipality
 import com.example.dzairapi.model.MunicipalityTranslation
 import com.example.dzairapi.model.MunicipalityTranslationId
 import com.example.dzairapi.model.Province
+import com.example.dzairapi.model.ProvinceStats
 import com.example.dzairapi.model.ProvinceTranslation
 import com.example.dzairapi.model.ProvinceTranslationId
 import java.util.UUID
@@ -56,6 +58,17 @@ fun testProvinceTranslation(
         this.language = language
         this.name = name
     }
+
+fun testProvinceStats(
+    code: Short,
+    districtCount: Short,
+    municipalityCount: Short,
+): ProvinceStats =
+    ProvinceStats(
+        code = code,
+        districtCount = districtCount,
+        municipalityCount = municipalityCount,
+    )
 
 fun testLanguage(
     id: UUID = UUID.randomUUID(),
@@ -103,6 +116,15 @@ fun testDistrictTranslation(
         this.language = language
         this.name = name
     }
+
+fun testDistrictStats(
+    code: Short,
+    municipalityCount: Short,
+): DistrictStats =
+    DistrictStats(
+        code = code,
+        municipalityCount = municipalityCount,
+    )
 
 fun testMunicipality(
     id: UUID = UUID.randomUUID(),

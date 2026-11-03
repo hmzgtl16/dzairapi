@@ -22,7 +22,7 @@ import kotlinx.serialization.Serializable
 data class ProvinceStatsResponse(
     val code: Short,
     @SerialName("district-count")
-    val districtCount: Long,
+    val districtCount: Short,
     @SerialName("municipality-count")
     val municipalityCount: Short,
 )

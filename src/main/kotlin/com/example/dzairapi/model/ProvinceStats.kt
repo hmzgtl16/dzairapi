@@ -28,7 +28,7 @@ class ProvinceStats(
     @Id
     var code: Short,
     @Column(name = "district_count")
-    var districtCount: Long,
+    var districtCount: Short,
     @Column(name = "municipality_count")
     var municipalityCount: Short,
 )
