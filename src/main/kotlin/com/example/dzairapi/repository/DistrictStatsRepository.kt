@@ -20,6 +20,8 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface DistrictStatRepository : JpaRepository<DistrictStats, Short> {
+interface DistrictStatsRepository : JpaRepository<DistrictStats, Short> {
     fun findDistrictStatsByCode(code: Short): DistrictStats?
+
+    fun findDistrictStatsByCodeIn(codes: List<Short>): List<DistrictStats>
 }
