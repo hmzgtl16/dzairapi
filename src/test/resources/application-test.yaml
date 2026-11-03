@@ -40,6 +40,7 @@ spring:
         - classpath:db/test-district-translation-data.sql
         - classpath:db/test-municipality-data.sql
         - classpath:db/test-municipality-translation-data.sql
+        - classpath:db/test-materialized-views.sql
   cache:
     type: none
 bucket4j:
