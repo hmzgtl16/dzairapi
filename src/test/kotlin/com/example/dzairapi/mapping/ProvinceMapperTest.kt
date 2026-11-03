@@ -27,7 +27,7 @@ import kotlin.collections.emptySet
 class ProvinceMapperTest {
     @Test
     fun `null province maps to empty response`() {
-        val result = (null as Province?).toResponse(listOf("fr"))
+        val result = (null as Province?).toResponse(listOf("fr"), null)
 
         assertThat(result.code).isNull()
         assertThat(result.slug).isNull()
@@ -43,7 +43,7 @@ class ProvinceMapperTest {
                 translations = emptySet(),
             )
 
-        val result = province.toResponse(listOf("fr"))
+        val result = province.toResponse(listOf("fr"), null)
 
         assertThat(result.code).isEqualTo("16")
         assertThat(result.slug).isEqualTo("algiers")
@@ -66,7 +66,7 @@ class ProvinceMapperTest {
                     ),
             )
 
-        val result = province.toResponse(listOf("fr", "ar"))
+        val result = province.toResponse(listOf("fr", "ar"), null)
 
         assertThat(result.names).hasSize(2)
         assertThat(result.names.map { it.language?.code })
@@ -89,7 +89,7 @@ class ProvinceMapperTest {
                     ),
             )
 
-        val result = province.toResponse(listOf("de", "es"))
+        val result = province.toResponse(listOf("de", "es"), null)
 
         assertThat(result.names).isEmpty()
     }
@@ -109,7 +109,7 @@ class ProvinceMapperTest {
                     ),
             )
 
-        val result = province.toResponse(emptyList())
+        val result = province.toResponse(emptyList(), null)
 
         assertThat(result.names).isEmpty()
     }
@@ -125,7 +125,7 @@ class ProvinceMapperTest {
                 translations = setOf(testProvinceTranslation(id, "Alger", testLanguage(code = "fr"))),
             )
 
-        val result = province.toResponse(listOf("FR", "Fr", "fR"))
+        val result = province.toResponse(listOf("FR", "Fr", "fR"), null)
 
         assertThat(result.names).isEmpty()
     }
@@ -141,7 +141,7 @@ class ProvinceMapperTest {
                 translations = setOf(testProvinceTranslation(id, "Alger", testLanguage(code = "fr"))),
             )
 
-        val result = province.toResponse(listOf("fr", "fr", "fr"))
+        val result = province.toResponse(listOf("fr", "fr", "fr"), null)
 
         assertThat(result.names).hasSize(1)
         assertThat(result.names.single().name).isEqualTo("Alger")
@@ -163,7 +163,7 @@ class ProvinceMapperTest {
                     ),
             )
 
-        val result = province.toResponse(listOf("ar", "fr", "en"))
+        val result = province.toResponse(listOf("ar", "fr", "en"), null)
 
         assertThat(result.names).hasSize(3)
         assertThat(result.names.associate { it.language?.code to it.name })

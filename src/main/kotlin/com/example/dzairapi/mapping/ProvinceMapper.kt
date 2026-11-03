@@ -17,10 +17,15 @@ package com.example.dzairapi.mapping
 
 import com.example.dzairapi.dto.ProvinceNameResponse
 import com.example.dzairapi.dto.ProvinceResponse
+import com.example.dzairapi.dto.ProvinceStatsResponse
 import com.example.dzairapi.model.Province
+import com.example.dzairapi.model.ProvinceStats
 import com.example.dzairapi.model.ProvinceTranslation
 
-fun Province?.toResponse(languages: List<String>): ProvinceResponse =
+fun Province?.toResponse(
+    languages: List<String>,
+    stats: ProvinceStatsResponse?,
+): ProvinceResponse =
     ProvinceResponse(
         code = this?.code?.let { String.format("%02d", it) },
         slug = this?.slug,
@@ -29,6 +34,7 @@ fun Province?.toResponse(languages: List<String>): ProvinceResponse =
                 ?.translations
                 ?.filter { languages.contains(it.language?.code) }
                 ?.map { it.toResponse() } ?: emptyList(),
+        stats = stats,
     )
 
 fun ProvinceTranslation.toResponse(): ProvinceNameResponse =
@@ -36,3 +42,12 @@ fun ProvinceTranslation.toResponse(): ProvinceNameResponse =
         name = name,
         language = language.toResponse(),
     )
+
+fun ProvinceStats?.toResponse(): ProvinceStatsResponse? =
+    this?.let {
+        ProvinceStatsResponse(
+            code = it.code,
+            districtCount = it.districtCount,
+            municipalityCount = it.municipalityCount,
+        )
+    }

@@ -20,9 +20,13 @@ import com.example.dzairapi.dto.MunicipalityResponse
 import com.example.dzairapi.dto.ProvinceResponse
 import com.example.dzairapi.exception.ProvinceNotFoundException
 import com.example.dzairapi.mapping.toResponse
+import com.example.dzairapi.model.District
+import com.example.dzairapi.model.Province
 import com.example.dzairapi.repository.DistrictRepository
+import com.example.dzairapi.repository.DistrictStatsRepository
 import com.example.dzairapi.repository.MunicipalityRepository
 import com.example.dzairapi.repository.ProvinceRepository
+import com.example.dzairapi.repository.ProvinceStatsRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
@@ -33,8 +37,10 @@ import com.example.dzairapi.mapping.toResponse as toMunicipalityResponse
 @Service
 class ProvinceServiceImpl(
     private val districtRepository: DistrictRepository,
+    private val districtStatsRepository: DistrictStatsRepository,
     private val municipalityRepository: MunicipalityRepository,
     private val provinceRepository: ProvinceRepository,
+    private val provinceStatsRepository: ProvinceStatsRepository,
 ) : ProvinceService {
     @Transactional(readOnly = true)
     override fun getProvinces(
@@ -44,9 +50,17 @@ class ProvinceServiceImpl(
         val provinces =
             provinceRepository
                 .findProvincesBy(pageable)
+
+        val stats =
+            provinceStatsRepository
+                .findProvinceStatsByCodeIn(provinces.content.map(Province::code))
+
         val response =
             provinces.map {
-                it.toResponse(languages.normalizeOrDefaults())
+                it.toResponse(
+                    languages.normalizeOrDefaults(),
+                    stats.firstOrNull { s -> s.code == it.code }.toResponse(),
+                )
             }
 
         return response
@@ -61,9 +75,11 @@ class ProvinceServiceImpl(
             provinceRepository
                 .findProvinceByCode(code)
                 ?: throw ProvinceNotFoundException(code)
+        val stats =
+            provinceStatsRepository.findProvinceStatsByCode(code)
         val response =
             province
-                .toResponse(languages.normalizeOrDefaults())
+                .toResponse(languages.normalizeOrDefaults(), stats.toResponse())
 
         return response
     }
@@ -78,10 +94,21 @@ class ProvinceServiceImpl(
             throw ProvinceNotFoundException(code)
         }
 
-        val response =
+        val districts =
             districtRepository
                 .findDistrictsByProvinceCode(code, pageable)
-                .map { it.toDistrictResponse(languages.normalizeOrDefaults()) }
+        val stats =
+            districtStatsRepository
+                .findDistrictStatsByCodeIn(
+                    districts.content.map(District::code),
+                )
+        val response =
+            districts.map {
+                it.toDistrictResponse(
+                    languages.normalizeOrDefaults(),
+                    stats.firstOrNull { s -> s.code == it.code }.toResponse(),
+                )
+            }
 
         return response
     }

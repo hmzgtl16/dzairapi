@@ -22,4 +22,5 @@ data class ProvinceResponse(
     val code: String?,
     val slug: String?,
     val names: List<ProvinceNameResponse>,
+    val stats: ProvinceStatsResponse? = null,
 )

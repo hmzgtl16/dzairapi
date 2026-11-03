@@ -26,7 +26,7 @@ import java.util.UUID
 class DistrictMapperTest {
     @Test
     fun `null District returns empty response`() {
-        val result = (null as District?).toResponse(listOf("fr"))
+        val result = (null as District?).toResponse(listOf("fr"), null)
 
         assertThat(result.slug).isNull()
         assertThat(result.names).isEmpty()
@@ -41,7 +41,7 @@ class DistrictMapperTest {
                 translations = emptySet(),
             )
 
-        val result = district.toResponse(listOf("fr"))
+        val result = district.toResponse(listOf("fr"), null)
 
         assertThat(result.slug).isEqualTo("cheraga")
         assertThat(result.names).isEmpty()
@@ -63,7 +63,7 @@ class DistrictMapperTest {
                     ),
             )
 
-        val result = district.toResponse(listOf("fr", "ar"))
+        val result = district.toResponse(listOf("fr", "ar"), null)
 
         assertThat(result.names).hasSize(2)
         assertThat(result.names.map { it.language?.code })
@@ -87,7 +87,7 @@ class DistrictMapperTest {
                     ),
             )
 
-        val result = district.toResponse(listOf("en", "es"))
+        val result = district.toResponse(listOf("en", "es"), null)
 
         assertThat(result.names).isEmpty()
     }
@@ -108,7 +108,7 @@ class DistrictMapperTest {
                     ),
             )
 
-        val result = district.toResponse(emptyList())
+        val result = district.toResponse(emptyList(), null)
 
         assertThat(result.names).isEmpty()
     }
@@ -129,7 +129,7 @@ class DistrictMapperTest {
                     ),
             )
 
-        val result = district.toResponse(listOf("FR", "Fr", "fR"))
+        val result = district.toResponse(listOf("FR", "Fr", "fR"), null)
 
         assertThat(result.names).isEmpty()
     }
@@ -150,7 +150,7 @@ class DistrictMapperTest {
                     ),
             )
 
-        val result = district.toResponse(listOf("fr", "fr", "fr"))
+        val result = district.toResponse(listOf("fr", "fr", "fr"), null)
 
         assertThat(result.names).hasSize(1)
         assertThat(result.names.single().name).isEqualTo("Cheraga")
@@ -172,7 +172,7 @@ class DistrictMapperTest {
                     ),
             )
 
-        val result = district.toResponse(listOf("ar", "fr", "en"))
+        val result = district.toResponse(listOf("ar", "fr", "en"), null)
 
         assertThat(result.names).hasSize(3)
         assertThat(result.names.associate { it.language?.code to it.name })

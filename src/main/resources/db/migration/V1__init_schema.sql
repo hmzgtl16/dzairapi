@@ -67,3 +67,33 @@ CREATE INDEX IF NOT EXISTS idx_province_translation_name_trgm ON public.province
 CREATE INDEX IF NOT EXISTS idx_district_translation_name_trgm ON public.district_translation USING gin (name gin_trgm_ops);
 
 CREATE INDEX IF NOT EXISTS idx_municipality_translation_name_trgm ON public.municipality_translation USING gin (name gin_trgm_ops);
+
+CREATE MATERIALIZED VIEW IF NOT EXISTS public.province_stats AS
+SELECT
+  p.code,
+  COUNT(DISTINCT d.id) AS district_count,
+  COUNT(m.id) AS municipality_count
+FROM
+  public.province p
+  LEFT JOIN public.district d ON p.id = d.province_id
+  LEFT JOIN public.municipality m ON d.id = m.district_id
+GROUP BY
+  p.code
+ORDER BY
+  p.code
+WITH
+  DATA;
+
+CREATE MATERIALIZED VIEW IF NOT EXISTS public.district_stats AS
+SELECT
+  d.code,
+  COUNT(m.id) AS municipality_count
+FROM
+  public.district d
+  LEFT JOIN public.municipality m ON d.id = m.district_id
+GROUP BY
+  d.code
+ORDER BY
+  d.code
+WITH
+  DATA;

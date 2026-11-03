@@ -22,4 +22,5 @@ data class DistrictResponse(
     val code: String?,
     val slug: String?,
     val names: List<DistrictNameResponse>,
+    val stats: DistrictStatsResponse? = null,
 )

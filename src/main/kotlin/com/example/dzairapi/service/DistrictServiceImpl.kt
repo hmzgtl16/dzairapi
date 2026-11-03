@@ -19,7 +19,9 @@ import com.example.dzairapi.dto.DistrictResponse
 import com.example.dzairapi.dto.MunicipalityResponse
 import com.example.dzairapi.exception.DistrictNotFoundException
 import com.example.dzairapi.mapping.toResponse
+import com.example.dzairapi.model.District
 import com.example.dzairapi.repository.DistrictRepository
+import com.example.dzairapi.repository.DistrictStatsRepository
 import com.example.dzairapi.repository.MunicipalityRepository
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -30,6 +32,7 @@ import com.example.dzairapi.mapping.toResponse as toMunicipalityResponse
 @Service
 class DistrictServiceImpl(
     private val districtRepository: DistrictRepository,
+    private val districtStatsRepository: DistrictStatsRepository,
     private val municipalityRepository: MunicipalityRepository,
 ) : DistrictService {
     @Transactional(readOnly = true)
@@ -40,9 +43,17 @@ class DistrictServiceImpl(
         val districts =
             districtRepository
                 .findDistrictsBy(pageable)
+
+        val stats =
+            districtStatsRepository
+                .findDistrictStatsByCodeIn(districts.content.map(District::code))
+
         val response =
             districts.map {
-                it.toResponse(languages.normalizeOrDefaults())
+                it.toResponse(
+                    languages.normalizeOrDefaults(),
+                    stats.firstOrNull { s -> s.code == it.code }.toResponse(),
+                )
             }
 
         return response
@@ -56,9 +67,14 @@ class DistrictServiceImpl(
         val district =
             districtRepository.findDistrictByCode(code)
                 ?: throw DistrictNotFoundException(code)
+        val stats =
+            districtStatsRepository.findDistrictStatsByCode(code)
         val response =
             district
-                .toResponse(languages.normalizeOrDefaults())
+                .toResponse(
+                    languages.normalizeOrDefaults(),
+                    stats.toResponse(),
+                )
 
         return response
     }
