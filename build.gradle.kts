@@ -13,29 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import com.diffplug.gradle.spotless.SpotlessTask
+import kotlinx.kover.gradle.plugin.dsl.AggregationType
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
+import org.springframework.boot.gradle.tasks.bundling.BootBuildImage
 
-/*
- * Copyright 2026 Hamza Gattal
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 plugins {
     alias(libs.plugins.graalvm.native)
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.jpa)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kotlin.spring)
+    alias(libs.plugins.kover)
     alias(libs.plugins.spotless)
     alias(libs.plugins.spring.boot)
     alias(libs.plugins.spring.dependencyManagement)
@@ -43,11 +31,11 @@ plugins {
 
 group = "com.example"
 version = "0.0.1-SNAPSHOT"
-description = "dz-province-api"
+description = "dzairapi"
 
 java {
     toolchain {
-        languageVersion = JavaLanguageVersion.of(17)
+        languageVersion = JavaLanguageVersion.of(25)
     }
 }
 
@@ -67,6 +55,7 @@ dependencies {
     implementation(libs.spring.boot.starter.kotlinx.serialization.json)
     implementation(libs.spring.boot.starter.security)
     implementation(libs.spring.boot.starter.webmvc)
+    implementation(libs.spring.boot.starter.validation)
     developmentOnly(libs.spring.boot.docker.compose)
     runtimeOnly(libs.postgresql)
     testImplementation(libs.spring.boot.starter.data.jpa.test)
@@ -125,5 +114,86 @@ spotless {
             ),
         )
         licenseHeaderFile(rootDir.resolve("spotless/license-header.sql"), "^[^-]")
+    }
+}
+
+kover {
+    reports {
+        filters {
+            excludes {
+                classes(
+                    "com.example.dzairapi.DzairAPIApplication",
+                    "com.example.dzairapi.DzairAPIApplicationKt",
+                    "com.example.dzairapi.config.*",
+                    "com.example.dzairapi.dto.*",
+                    "com.example.dzairapi.model.*",
+                    "com.example.dzairapi.generated.*",
+                )
+                annotatedBy(
+                    "org.springframework.boot.autoconfigure.SpringBootApplication",
+                    "*Generated*",
+                )
+            }
+        }
+
+        total {
+            html { onCheck = true }
+            xml { onCheck = true }
+
+            log {
+                aggregationForGroup = AggregationType.COVERED_PERCENTAGE
+                coverageUnits = CoverageUnit.LINE
+            }
+        }
+
+        verify {
+            rule("Minimum line coverage") {
+                bound {
+                    minValue = 80
+                    coverageUnits = CoverageUnit.LINE
+                    aggregationForGroup = AggregationType.COVERED_PERCENTAGE
+                }
+            }
+            rule("Minimum branch coverage") {
+                bound {
+                    minValue = 70
+                    coverageUnits = CoverageUnit.BRANCH
+                    aggregationForGroup = AggregationType.COVERED_PERCENTAGE
+                }
+            }
+        }
+    }
+}
+
+tasks.withType<BootBuildImage> {
+    imageName = "docker.io/library/${project.name}:${project.version}"
+    builder = "paketobuildpacks/builder-noble-java-tiny:0.0.206"
+    runImage = "paketobuildpacks/ubuntu-noble-run-tiny:0.0.153"
+    environment.putAll(
+        mapOf(
+            "BP_NATIVE_IMAGE" to "true",
+            "BP_JVM_VERSION" to "25",
+            // "BP_JVM_CDS_ENABLED" to "true",
+            // "BP_JVM_JLINK_ENABLED" to "true",
+            // "BP_SPRING_AOT_ENABLED" to "true",
+        ),
+    )
+    buildpacks.addAll(
+        listOf(
+            "paketobuildpacks/ca-certificates:3.14.4",
+            "paketobuildpacks/bellsoft-liberica:11.10.5",
+            "paketobuildpacks/syft:2.43.4",
+            "paketobuildpacks/executable-jar:6.17.5",
+            "paketobuildpacks/spring-boot:5.40.4",
+            "paketobuildpacks/native-image:5.19.1",
+        ),
+    )
+    cleanCache = true
+}
+
+graalvmNative {
+    metadataRepository {
+        enabled = true
+        version = libs.versions.graalvmReachabilityMetadata.get()
     }
 }

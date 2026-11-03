@@ -16,9 +16,9 @@ server:
 
 spring:
   application:
-    name: dz-province-api
+    name: dzairapi
   profiles:
-    active: dev
+    default: dev
   mvc:
     apiversion:
       supported:
@@ -37,3 +37,11 @@ spring:
     serialization:
       json:
         naming-strategy: snake_case
+  threads:
+    virtual:
+      enabled: true
+
+logging:
+  level:
+    org.hibernate.validator.internal.metadata.aggregated.CascadingMetaDataBuilder: error
+    org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration: off

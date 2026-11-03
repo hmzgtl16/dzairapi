@@ -27,7 +27,8 @@ CREATE TABLE IF NOT EXISTS public.province (
 
 CREATE TABLE IF NOT EXISTS public.district (
   id UUID PRIMARY KEY DEFAULT uuidv7 (),
-  slug VARCHAR(100) NOT NULL,
+  slug VARCHAR(100) NOT NULL UNIQUE,
+  code SMALLINT NOT NULL UNIQUE,
   province_id UUID NOT NULL REFERENCES public.province (id) ON DELETE RESTRICT,
   CONSTRAINT uq_district_province_slug UNIQUE (province_id, slug)
 );
@@ -66,10 +67,3 @@ CREATE INDEX IF NOT EXISTS idx_province_translation_name_trgm ON public.province
 CREATE INDEX IF NOT EXISTS idx_district_translation_name_trgm ON public.district_translation USING gin (name gin_trgm_ops);
 
 CREATE INDEX IF NOT EXISTS idx_municipality_translation_name_trgm ON public.municipality_translation USING gin (name gin_trgm_ops);
-
-INSERT INTO
-  public.language (code, name)
-VALUES
-  ('fr', 'Français'),
-  ('ar', 'العربية'),
-  ('en', 'English');

@@ -1,0 +1,167 @@
+/*
+ * Copyright 2026 Hamza Gattal
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package com.example.dzairapi.repository
+
+import com.example.dzairapi.model.ProvinceTranslation
+import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.groups.Tuple
+import org.junit.jupiter.api.Test
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Pageable
+import org.springframework.data.domain.Sort
+import org.springframework.test.context.ActiveProfiles
+
+@DataJpaTest
+@ActiveProfiles("test")
+class ProvinceRepositoryTest {
+    @Autowired
+    private lateinit var provinceRepository: ProvinceRepository
+
+    // ------------------------------------------------------------------
+    // findProvinceByCode
+    // ------------------------------------------------------------------
+
+    @Test
+    fun findProvinceByCode_returnsProvince_whenCodeExists() {
+        val result = provinceRepository.findProvinceByCode(16)
+
+        assertThat(result).isNotNull
+        assertThat(result!!.code).isEqualTo(16.toShort())
+    }
+
+    @Test
+    fun findProvinceByCode_returnsNull_whenCodeAbsent() {
+        val result = provinceRepository.findProvinceByCode(99)
+
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun findProvinceByCode_returnsNull_whenCodeIsNegativeOrZero() {
+        assertThat(provinceRepository.findProvinceByCode(0)).isNull()
+        assertThat(provinceRepository.findProvinceByCode(-1)).isNull()
+    }
+
+    @Test
+    fun findProvinceByCode_returnsExactMatch_whenMultipleExist() {
+        val result = provinceRepository.findProvinceByCode(30)
+
+        assertThat(result).isNotNull
+        assertThat(result!!.code).isEqualTo(30.toShort())
+    }
+
+    @Test
+    fun findProvinceByCode_loadsTranslationsAndLanguages() {
+        val result = provinceRepository.findProvinceByCode(16)
+
+        assertThat(result).isNotNull
+        assertThat(result!!.translations)
+            .isNotEmpty
+            .extracting(ProvinceTranslation::name)
+            .contains(Tuple("Province 16 (FR)"), Tuple("Province 16 (EN)"), Tuple("الولاية 16"))
+
+        assertThat(result.translations)
+            .allSatisfy { translation ->
+                assertThat(translation.language).isNotNull
+            }
+    }
+
+    // ------------------------------------------------------------------
+    // findProvincesBy
+    // ------------------------------------------------------------------
+
+    @Test
+    fun findProvincesBy_returnsMatchingProvinces_whenAllCodesExist() {
+        val result = provinceRepository.findProvincesBy(Pageable.unpaged())
+
+        assertThat(result.totalElements).isEqualTo(30)
+        assertThat(result.content).isNotEmpty
+    }
+
+    @Test
+    fun findProvincesBy_deduplicatesResults_whenDuplicateCodesProvided() {
+        val result = provinceRepository.findProvincesBy(Pageable.unpaged())
+
+        assertThat(result.content).hasSize(30)
+        assertThat(result.content)
+            .extracting("code")
+            .containsExactlyInAnyOrderElementsOf(IntRange(1, 30).map(Int::toShort).toList())
+    }
+
+    @Test
+    fun findProvincesBy_appliesPaginationAndSorting() {
+        val pageable =
+            PageRequest
+                .of(
+                    0,
+                    5,
+                    Sort.by(Sort.Direction.ASC, "code"),
+                )
+
+        val firstPage = provinceRepository.findProvincesBy(pageable)
+
+        assertThat(firstPage.content).hasSize(5)
+        assertThat(firstPage.totalElements).isEqualTo(30)
+        assertThat(firstPage.totalPages).isEqualTo(6)
+        assertThat(firstPage.content)
+            .extracting("code")
+            .containsExactly(1.toShort(), 2.toShort(), 3.toShort(), 4.toShort(), 5.toShort())
+
+        val secondPage = provinceRepository.findProvincesBy(pageable.next())
+
+        assertThat(secondPage.content).hasSize(5)
+        assertThat(secondPage.content)
+            .extracting("code")
+            .containsExactly(6.toShort(), 7.toShort(), 8.toShort(), 9.toShort(), 10.toShort())
+    }
+
+    @Test
+    fun findProvincesBy_loadsTranslationsAndLanguages() {
+        val result = provinceRepository.findProvincesBy(Pageable.unpaged())
+
+        assertThat(result.content).hasSize(30)
+        assertThat(result.content).allSatisfy { province ->
+            assertThat(province.translations).isNotEmpty
+            assertThat(province.translations).allSatisfy { translation ->
+                assertThat(translation.name).isNotBlank()
+                assertThat(translation.language).isNotNull
+            }
+        }
+    }
+
+    // ------------------------------------------------------------------
+    // existsProvinceByCode
+    // ------------------------------------------------------------------
+
+    @Test
+    fun existsProvinceByCode_returnsTrue_whenCodeExists() {
+        assertThat(provinceRepository.existsProvinceByCode(16)).isTrue()
+        assertThat(provinceRepository.existsProvinceByCode(30)).isTrue()
+    }
+
+    @Test
+    fun existsProvinceByCode_returnsFalse_whenCodeAbsent() {
+        assertThat(provinceRepository.existsProvinceByCode(99)).isFalse()
+    }
+
+    @Test
+    fun existsProvinceByCode_returnsFalse_whenCodeIsNegativeOrZero() {
+        assertThat(provinceRepository.existsProvinceByCode(0)).isFalse()
+        assertThat(provinceRepository.existsProvinceByCode(-1)).isFalse()
+    }
+}

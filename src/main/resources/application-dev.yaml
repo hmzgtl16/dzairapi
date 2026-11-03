@@ -19,11 +19,11 @@ spring:
     activate:
       on-profile: "dev"
   datasource:
-    url: jdbc:postgresql://localhost:5432/dz_province_dev
-    username: dz_province_user
-    password: dz_province_password
+    url: jdbc:postgresql://localhost:5432/dzairapi_dev
+    username: dzairapi_user
+    password: dzairapi_password
     driver-class-name: org.postgresql.Driver
-    name: dz_province_dev
+    name: dzairapi_dev
   flyway:
     enabled: true
     locations: classpath:db/migration
@@ -33,7 +33,7 @@ spring:
     jcache:
       provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
     cache-names:
-      - dz-province-api-rate-limit-buckets
+      - dzairapi-rate-limit-buckets
     caffeine:
       spec: maximumSize=100000,expireAfterAccess=3600s
 logging:
@@ -47,8 +47,8 @@ bucket4j:
   cache-to-use: jcache
 
   filters:
-    - id: dz-province-api-filter
-      cache-name: dz-province-api-rate-limit-buckets
+    - id: dzairapi-filter
+      cache-name: dzairapi-rate-limit-buckets
       filter-method: servlet
       filter-order: 0
       url: ^/api/.*

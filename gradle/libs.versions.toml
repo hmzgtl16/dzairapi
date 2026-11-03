@@ -1,8 +1,10 @@
 [versions]
 bucket4j-spring-boot-starter = "0.14.0"
 caffeine = "3.3.0"
-graalvm = "1.1.13"
+graalvm = "1.1.18"
+graalvmReachabilityMetadata = "1.0.22"
 kotlin = "2.3.21"
+kover = "0.9.11"
 ktlint = "1.8.0"
 prettier = "3.9.8"
 prettierPluginSql = "0.20.0"
@@ -29,6 +31,7 @@ spring-boot-starter-kotlinx-serialization-json = { group = "org.springframework.
 spring-boot-starter-kotlinx-serialization-json-test = { group = "org.springframework.boot", name = "spring-boot-starter-kotlinx-serialization-json-test" }
 spring-boot-starter-security = { group = "org.springframework.boot", name = "spring-boot-starter-security" }
 spring-boot-starter-security-test = { group = "org.springframework.boot", name = "spring-boot-starter-security-test" }
+spring-boot-starter-validation = { group = "org.springframework.boot", name = "spring-boot-starter-validation" }
 spring-boot-starter-webmvc = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc" }
 spring-boot-starter-webmvc-test = { group = "org.springframework.boot", name = "spring-boot-starter-webmvc-test" }
 spring-boot-configuration-processor = { group = "org.springframework.boot", name = "spring-boot-configuration-processor" }
@@ -43,6 +46,7 @@ kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-jpa = { id = "org.jetbrains.kotlin.plugin.jpa", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlin-spring = { id = "org.jetbrains.kotlin.plugin.spring", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 spring-boot = { id = "org.springframework.boot", version.ref = "springBoot" }
 spring-dependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
