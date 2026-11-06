@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.spring.boot.starter.security)
     implementation(libs.spring.boot.starter.webmvc)
     implementation(libs.spring.boot.starter.validation)
+    implementation(libs.springdoc.openapi.starter.webmvc.ui)
     developmentOnly(libs.spring.boot.docker.compose)
     runtimeOnly(libs.postgresql)
     testImplementation(libs.spring.boot.starter.data.jpa.test)

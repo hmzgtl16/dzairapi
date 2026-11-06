@@ -11,6 +11,7 @@ prettierPluginSql = "0.20.0"
 spotless = "8.10.2"
 springBoot = "4.1.1"
 springDependencyManagement = "1.1.7"
+springdoc = "3.2.0"
 
 [libraries]
 caffeine = { group = "com.github.ben-manes.caffeine", name = "caffeine", version.ref = "caffeine" }
@@ -21,6 +22,7 @@ junit-platform-launcher = { group = "org.junit.platform", name = "junit-platform
 kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect"}
 kotlin-test-junit5= { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5" }
 postgresql = { group = "org.postgresql", name = "postgresql" }
+springdoc-openapi-starter-webmvc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
 spring-boot-starter-bucket4j = { group = "com.giffing.bucket4j.spring.boot.starter", name = "bucket4j-spring-boot-starter", version.ref = "bucket4j-spring-boot-starter" }
 spring-boot-starter-cache = { group = "org.springframework.boot", name = "spring-boot-starter-cache" }
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
