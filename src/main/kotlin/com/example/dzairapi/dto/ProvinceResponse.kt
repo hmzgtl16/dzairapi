@@ -15,12 +15,17 @@
  */
 package com.example.dzairapi.dto
 
+import io.swagger.v3.oas.annotations.media.Schema
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Schema(additionalProperties = Schema.AdditionalPropertiesValue.FALSE)
 data class ProvinceResponse(
-    val code: String?,
-    val slug: String?,
+    @field:Schema(required = true, minLength = 1)
+    val code: String,
+    @field:Schema(required = true, minLength = 1)
+    val slug: String,
+    @field:Schema(required = true)
     val names: List<ProvinceNameResponse>,
-    val stats: ProvinceStatsResponse? = null,
+    val stats: ProvinceStatsResponse?,
 )

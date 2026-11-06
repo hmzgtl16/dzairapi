@@ -15,14 +15,17 @@
  */
 package com.example.dzairapi.dto
 
+import io.swagger.v3.oas.annotations.media.Schema
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+@Schema(additionalProperties = Schema.AdditionalPropertiesValue.FALSE)
 data class ProvinceStatsResponse(
-    val code: Short,
     @SerialName("district-count")
+    @field:Schema(name = "district-count", required = true, minimum = "1")
     val districtCount: Short,
     @SerialName("municipality-count")
+    @field:Schema(name = "municipality-count", required = true, minimum = "1")
     val municipalityCount: Short,
 )
