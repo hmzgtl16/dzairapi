@@ -17,6 +17,7 @@ package com.example.dzairapi.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer
@@ -57,5 +58,21 @@ class SecurityConfig {
                     .referrerPolicy { it.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER) }
                     .xssProtection { it.headerValue(XXssProtectionHeaderWriter.HeaderValue.DISABLED) }
                     .httpStrictTransportSecurity { it.includeSubDomains(true).maxAgeInSeconds(31_536_000) }
+            }.build()
+
+    @Bean
+    @Order(1)
+    fun actuatorSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http
+            .securityMatcher("/actuator/**")
+            .csrf(CsrfConfigurer<HttpSecurity>::disable)
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .authorizeHttpRequests {
+                it
+                    .requestMatchers("/actuator/health/**", "/actuator/info")
+                    .permitAll()
+                it
+                    .anyRequest()
+                    .hasRole("ADMIN")
             }.build()
 }
