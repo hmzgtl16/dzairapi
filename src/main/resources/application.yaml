@@ -36,7 +36,7 @@ spring:
   kotlinx:
     serialization:
       json:
-        naming-strategy: snake_case
+        naming-strategy: kebab_case
   threads:
     virtual:
       enabled: true
