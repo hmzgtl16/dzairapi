@@ -26,28 +26,33 @@ data class PageResponse<T>(
     @field:Schema(requiredMode = Schema.RequiredMode.REQUIRED)
     val content: List<T>,
     @field:Schema(
+        type = "integer",
         minimum = "0",
         requiredMode = Schema.RequiredMode.REQUIRED,
     )
     val number: Int,
     @field:Schema(
+        type = "integer",
         minimum = "0",
         requiredMode = Schema.RequiredMode.REQUIRED,
     )
     @SerialName("number-of-elements")
     val numberOfElements: Int,
     @field:Schema(
-        minimum = "1",
+        type = "integer",
+        minimum = "0",
         requiredMode = Schema.RequiredMode.REQUIRED,
     )
     val size: Int,
     @field:Schema(
+        type = "integer",
         minimum = "0",
         requiredMode = Schema.RequiredMode.REQUIRED,
     )
     @SerialName("total-pages")
     val totalPages: Int,
     @field:Schema(
+        type = "long",
         minimum = "0",
         requiredMode = Schema.RequiredMode.REQUIRED,
     )

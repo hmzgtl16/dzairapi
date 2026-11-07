@@ -24,5 +24,5 @@ data class ProvinceNameResponse(
     @field:Schema(required = true, minLength = 3)
     val name: String,
     @field:Schema(required = true)
-    val language: LanguageResponse?,
+    val language: LanguageResponse,
 )
