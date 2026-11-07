@@ -34,6 +34,7 @@ import org.springframework.security.web.header.writers.XXssProtectionHeaderWrite
 @EnableWebSecurity
 class SecurityConfig {
     @Bean
+    @Order(2)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
         http
             .csrf(CsrfConfigurer<HttpSecurity>::disable)
@@ -46,7 +47,7 @@ class SecurityConfig {
                     .requestMatchers("/api/**")
                     .permitAll()
                 it
-                    .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+                    .requestMatchers("/openapi/**", "/swagger-ui/**", "/swagger-ui.html")
                     .permitAll()
                 it
                     .anyRequest()
@@ -64,15 +65,12 @@ class SecurityConfig {
     @Order(1)
     fun actuatorSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
         http
-            .securityMatcher("/actuator/**")
+            .securityMatcher("/health/**")
             .csrf(CsrfConfigurer<HttpSecurity>::disable)
             .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
             .authorizeHttpRequests {
                 it
-                    .requestMatchers("/actuator/health/**", "/actuator/info")
-                    .permitAll()
-                it
                     .anyRequest()
-                    .hasRole("ADMIN")
+                    .permitAll()
             }.build()
 }

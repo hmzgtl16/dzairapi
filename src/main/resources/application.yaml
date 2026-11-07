@@ -43,7 +43,7 @@ spring:
 
 springdoc:
   api-docs:
-    path: /v3/api-docs
+    path: /openapi
   swagger-ui:
     path: /swagger-ui.html
     operations-sorter: method
@@ -59,12 +59,15 @@ logging:
 management:
   endpoints:
     web:
+      base-path: /
       exposure:
-        include: health,info,metrics,prometheus
+        include: health
   endpoint:
     health:
-      show-details: when-authorized
-      show-components: when-authorized
+      show-details: never
+      show-components: never
+      probes:
+        enabled: false
   info:
     env:
       enabled: true

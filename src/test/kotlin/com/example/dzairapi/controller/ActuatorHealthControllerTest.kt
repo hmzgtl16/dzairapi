@@ -35,7 +35,7 @@ class ActuatorHealthControllerTest {
         val result =
             mockMvcTester
                 .get()
-                .uri("/actuator/health")
+                .uri("/health")
 
         assertThat(result)
             .hasStatusOk()
