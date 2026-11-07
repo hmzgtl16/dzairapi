@@ -22,31 +22,29 @@ import com.example.dzairapi.model.Province
 import com.example.dzairapi.model.ProvinceStats
 import com.example.dzairapi.model.ProvinceTranslation
 
-fun Province?.toResponse(
+fun Province.toResponse(
     languages: List<String>,
     stats: ProvinceStatsResponse?,
 ): ProvinceResponse =
     ProvinceResponse(
-        code = this?.code?.let { String.format("%02d", it) },
-        slug = this?.slug,
+        code = String.format("%02d", code),
+        slug = slug,
         names =
-            this
-                ?.translations
-                ?.filter { languages.contains(it.language?.code) }
-                ?.map { it.toResponse() } ?: emptyList(),
+            translations
+                .filter { languages.contains(it.language?.code) }
+                .map(ProvinceTranslation::toResponse),
         stats = stats,
     )
 
 fun ProvinceTranslation.toResponse(): ProvinceNameResponse =
     ProvinceNameResponse(
         name = name,
-        language = language.toResponse(),
+        language = language!!.toResponse(),
     )
 
 fun ProvinceStats?.toResponse(): ProvinceStatsResponse? =
     this?.let {
         ProvinceStatsResponse(
-            code = it.code,
             districtCount = it.districtCount,
             municipalityCount = it.municipalityCount,
         )
