@@ -44,10 +44,10 @@ spring:
 springdoc:
   api-docs:
     path: /openapi
+    resolve-schema-properties: true
   swagger-ui:
     path: /swagger-ui.html
     operations-sorter: method
-    tags-sorter: alpha
     display-request-duration: true
   show-actuator: true
 
