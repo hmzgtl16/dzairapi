@@ -16,11 +16,11 @@
 package com.example.dzairapi.service
 
 import com.example.dzairapi.dto.MunicipalityResponse
+import com.example.dzairapi.dto.PageQuery
 import com.example.dzairapi.dto.PageResponse
 import com.example.dzairapi.exception.MunicipalityNotFoundException
 import com.example.dzairapi.mapping.toResponse
 import com.example.dzairapi.repository.MunicipalityRepository
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -31,9 +31,9 @@ class MunicipalityServiceImpl(
     @Transactional(readOnly = true)
     override fun getMunicipalities(
         languages: List<String>,
-        pageable: Pageable,
+        pageQuery: PageQuery,
     ): PageResponse<MunicipalityResponse> {
-        val municipalities = municipalityRepository.findAll(pageable)
+        val municipalities = municipalityRepository.findAll(pageQuery.toPageable())
 
         val response = PageResponse.from(
             municipalities,

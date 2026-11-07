@@ -17,6 +17,7 @@ package com.example.dzairapi.service
 
 import com.example.dzairapi.dto.DistrictResponse
 import com.example.dzairapi.dto.MunicipalityResponse
+import com.example.dzairapi.dto.PageQuery
 import com.example.dzairapi.dto.PageResponse
 import com.example.dzairapi.exception.DistrictNotFoundException
 import com.example.dzairapi.mapping.toResponse
@@ -24,7 +25,6 @@ import com.example.dzairapi.model.District
 import com.example.dzairapi.repository.DistrictRepository
 import com.example.dzairapi.repository.DistrictStatsRepository
 import com.example.dzairapi.repository.MunicipalityRepository
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import com.example.dzairapi.mapping.toResponse as toMunicipalityResponse
@@ -38,11 +38,11 @@ class DistrictServiceImpl(
     @Transactional(readOnly = true)
     override fun getDistricts(
         languages: List<String>,
-        pageable: Pageable,
+        pageQuery: PageQuery,
     ): PageResponse<DistrictResponse> {
         val districts =
             districtRepository
-                .findDistrictsBy(pageable)
+                .findDistrictsBy(pageQuery.toPageable())
 
         val stats =
             districtStatsRepository
@@ -85,14 +85,14 @@ class DistrictServiceImpl(
     override fun getDistrictMunicipalitiesByCode(
         languages: List<String>,
         code: Short,
-        pageable: Pageable,
+        pageQuery: PageQuery,
     ): PageResponse<MunicipalityResponse> {
         if (!districtRepository.existsDistrictByCode(code)) {
             throw DistrictNotFoundException(code)
         }
 
         val municipalities = municipalityRepository
-            .findMunicipalitiesByDistrictCode(code, pageable)
+            .findMunicipalitiesByDistrictCode(code, pageQuery.toPageable())
 
         val response = PageResponse.from(
             municipalities,

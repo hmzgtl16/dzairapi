@@ -16,13 +16,13 @@
 package com.example.dzairapi.service
 
 import com.example.dzairapi.dto.MunicipalityResponse
+import com.example.dzairapi.dto.PageQuery
 import com.example.dzairapi.dto.PageResponse
-import org.springframework.data.domain.Pageable
 
 interface MunicipalityService {
     fun getMunicipalities(
         languages: List<String>,
-        pageable: Pageable,
+        pageQuery: PageQuery,
     ): PageResponse<MunicipalityResponse>
 
     fun getMunicipalityByCode(
