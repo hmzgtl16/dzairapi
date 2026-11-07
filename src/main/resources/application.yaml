@@ -49,6 +49,7 @@ springdoc:
     operations-sorter: method
     tags-sorter: alpha
     display-request-duration: true
+  show-actuator: true
 
 logging:
   level:
