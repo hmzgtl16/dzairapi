@@ -54,6 +54,16 @@ class MunicipalityController(
             description = "List of municipalities",
         ),
         ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
             responseCode = "500",
             description = "Unexpected error",
             content = [
@@ -99,6 +109,16 @@ class MunicipalityController(
         ApiResponse(
             responseCode = "404",
             description = "Municipality not found",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
             content = [
                 Content(
                     mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,

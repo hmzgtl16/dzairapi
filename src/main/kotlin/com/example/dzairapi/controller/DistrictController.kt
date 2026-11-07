@@ -55,6 +55,16 @@ class DistrictController(
             description = "List of districts",
         ),
         ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
             responseCode = "500",
             description = "Unexpected error",
             content = [
@@ -107,6 +117,16 @@ class DistrictController(
             ],
         ),
         ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
             responseCode = "500",
             description = "Unexpected error",
             content = [
@@ -150,6 +170,16 @@ class DistrictController(
         ApiResponse(
             responseCode = "404",
             description = "District not found",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
             content = [
                 Content(
                     mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,

@@ -17,6 +17,7 @@ package com.example.dzairapi.config
 
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer
@@ -33,6 +34,7 @@ import org.springframework.security.web.header.writers.XXssProtectionHeaderWrite
 @EnableWebSecurity
 class SecurityConfig {
     @Bean
+    @Order(2)
     fun securityFilterChain(http: HttpSecurity): SecurityFilterChain =
         http
             .csrf(CsrfConfigurer<HttpSecurity>::disable)
@@ -45,7 +47,7 @@ class SecurityConfig {
                     .requestMatchers("/api/**")
                     .permitAll()
                 it
-                    .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+                    .requestMatchers("/openapi/**", "/swagger-ui/**", "/swagger-ui.html")
                     .permitAll()
                 it
                     .anyRequest()
@@ -57,5 +59,18 @@ class SecurityConfig {
                     .referrerPolicy { it.policy(ReferrerPolicyHeaderWriter.ReferrerPolicy.NO_REFERRER) }
                     .xssProtection { it.headerValue(XXssProtectionHeaderWriter.HeaderValue.DISABLED) }
                     .httpStrictTransportSecurity { it.includeSubDomains(true).maxAgeInSeconds(31_536_000) }
+            }.build()
+
+    @Bean
+    @Order(1)
+    fun actuatorSecurityFilterChain(http: HttpSecurity): SecurityFilterChain =
+        http
+            .securityMatcher("/health/**")
+            .csrf(CsrfConfigurer<HttpSecurity>::disable)
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .authorizeHttpRequests {
+                it
+                    .anyRequest()
+                    .permitAll()
             }.build()
 }

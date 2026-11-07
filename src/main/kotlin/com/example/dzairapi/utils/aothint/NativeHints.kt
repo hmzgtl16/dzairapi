@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzairapi.config
+package com.example.dzairapi.utils.aothint
 
 import com.giffing.bucket4j.spring.boot.starter.context.constraintvalidations.Bucket4JConfigurationPredicateNameValidator
 import com.giffing.bucket4j.spring.boot.starter.context.constraintvalidations.DurationChronoUnitValidator
@@ -22,12 +22,7 @@ import org.springframework.aot.hint.MemberCategory
 import org.springframework.aot.hint.RuntimeHints
 import org.springframework.aot.hint.RuntimeHintsRegistrar
 import org.springframework.aot.hint.registerType
-import org.springframework.context.annotation.Configuration
-import org.springframework.context.annotation.ImportRuntimeHints
-
-@Configuration
-@ImportRuntimeHints(NativeHints::class)
-class NativeHintsConfig
+import java.util.UUID
 
 class NativeHints : RuntimeHintsRegistrar {
     override fun registerHints(
@@ -48,6 +43,6 @@ class NativeHints : RuntimeHintsRegistrar {
 
         hints
             .reflection()
-            .registerType(java.util.UUID::class.java.arrayType())
+            .registerType(UUID::class.java.arrayType())
     }
 }

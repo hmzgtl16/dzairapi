@@ -15,7 +15,11 @@
  */
 package com.example.dzairapi.utils.openapi
 
+import io.swagger.v3.oas.models.media.Content
 import io.swagger.v3.oas.models.media.Schema
+import io.swagger.v3.oas.models.responses.ApiResponse
+import org.springframework.http.MediaType
+import io.swagger.v3.oas.models.media.MediaType as OasMediaType
 
 private val CAMEL_BOUNDARY = Regex("([a-z0-9])([A-Z])")
 
@@ -32,3 +36,16 @@ internal fun Schema<*>.renamePropertiesToKebabCase() {
     oneOf?.forEach { it.renamePropertiesToKebabCase() }
     not?.renamePropertiesToKebabCase()
 }
+
+fun jsonResponse(
+    description: String,
+    schemaName: String,
+): ApiResponse =
+    ApiResponse()
+        .description(description)
+        .content(
+            Content().addMediaType(
+                MediaType.APPLICATION_JSON_VALUE,
+                OasMediaType().schema(Schema<Any>().`$ref`("#/components/schemas/$schemaName")),
+            ),
+        )
