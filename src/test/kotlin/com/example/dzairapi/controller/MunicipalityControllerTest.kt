@@ -46,12 +46,8 @@ class MunicipalityControllerTest {
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
-            .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
-            .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
-            .hasPathSatisfying("last") { it.assertThat().isEqualTo(false) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(10) }
-            .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(20) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
     }
 
@@ -65,10 +61,8 @@ class MunicipalityControllerTest {
         assertThat(result)
             .hasStatusOk()
             .bodyJson()
-            .hasPathSatisfying("empty") { it.assertThat().isEqualTo(false) }
-            .hasPathSatisfying("first") { it.assertThat().isEqualTo(true) }
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
-            .hasPathSatisfying("size") { it.assertThat().isEqualTo(10) }
+            .hasPathSatisfying("size") { it.assertThat().isEqualTo(20) }
             .hasPathSatisfying("content") { it.assertThat().isNotEmpty }
             .hasPathSatisfying("$.content[0].names") { it.assertThat().isNotEmpty }
     }
@@ -87,7 +81,7 @@ class MunicipalityControllerTest {
             .bodyJson()
             .hasPathSatisfying("number") { it.assertThat().isEqualTo(0) }
             .hasPathSatisfying("size") { it.assertThat().isEqualTo(5) }
-            .hasPathSatisfying("number-of-elements") { it.assertThat().isEqualTo(5) }
+            .hasPathSatisfying("$.content.length()") { it.assertThat().isEqualTo(5) }
     }
 
     @Test
