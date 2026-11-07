@@ -15,6 +15,7 @@
  */
 package com.example.dzairapi.service
 
+import com.example.dzairapi.dto.PageQuery
 import com.example.dzairapi.exception.ProvinceNotFoundException
 import com.example.dzairapi.helpers.testDistrict
 import com.example.dzairapi.helpers.testDistrictStats
@@ -77,14 +78,15 @@ class ProvinceServiceTest {
         val province = testProvince(code = 16, slug = "alger", translations = emptySet())
         val provinceStats = testProvinceStats(code = 16, districtCount = 10, municipalityCount = 50)
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(listOf(province), pageable, 1)
         `when`(provinceRepository.findProvincesBy(pageable))
             .thenReturn(page)
         `when`(provinceStatsRepository.findProvinceStatsByCodeIn(page.content.map(Province::code)))
             .thenReturn(listOf(provinceStats))
 
-        val result = provinceService.getProvinces(emptyList(), pageable)
+        val result = provinceService.getProvinces(emptyList(), pageQuery)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
@@ -124,7 +126,8 @@ class ProvinceServiceTest {
             )
         val provinceStats = testProvinceStats(code = 16, districtCount = 10, municipalityCount = 50)
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(listOf(province), pageable, 1)
 
         `when`(provinceRepository.findProvincesBy(pageable))
@@ -132,13 +135,13 @@ class ProvinceServiceTest {
         `when`(provinceStatsRepository.findProvinceStatsByCodeIn(page.content.map(Province::code)))
             .thenReturn(listOf(provinceStats))
 
-        val result = provinceService.getProvinces(emptyList(), pageable)
+        val result = provinceService.getProvinces(emptyList(), pageQuery)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
         assertThat(result.content[0].code).isEqualTo("16")
         assertThat(result.content[0].names).hasSize(province.translations.size)
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).findProvincesBy(pageable)
@@ -174,14 +177,15 @@ class ProvinceServiceTest {
             )
         val provinceStats = testProvinceStats(code = 16, districtCount = 10, municipalityCount = 50)
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(listOf(province), pageable, 1)
         `when`(provinceRepository.findProvincesBy(pageable))
             .thenReturn(page)
         `when`(provinceStatsRepository.findProvinceStatsByCodeIn(page.content.map(Province::code)))
             .thenReturn(listOf(provinceStats))
 
-        val result = provinceService.getProvinces(listOf("en"), pageable)
+        val result = provinceService.getProvinces(listOf("en"), pageQuery)
 
         assertThat(result.content[0].names).hasSize(1)
         assertThat(
@@ -189,7 +193,7 @@ class ProvinceServiceTest {
                 .names
                 .single()
                 .language
-                ?.code,
+                .code,
         ).isEqualTo("en")
 
         verify(provinceRepository).findProvincesBy(pageable)
@@ -225,7 +229,8 @@ class ProvinceServiceTest {
             )
         val provinceStats = testProvinceStats(code = 16, districtCount = 10, municipalityCount = 50)
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(listOf(province), pageable, 1)
         `when`(provinceRepository.findProvincesBy(pageable))
             .thenReturn(page)
@@ -235,10 +240,10 @@ class ProvinceServiceTest {
         val result =
             provinceService.getProvinces(
                 listOf(" EN ", "fr,ar", "en", "12", "e"),
-                pageable,
+                pageQuery,
             )
 
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("en", "fr", "ar")
 
         verify(provinceRepository).findProvincesBy(pageable)
@@ -274,7 +279,8 @@ class ProvinceServiceTest {
             )
         val provinceStats = testProvinceStats(code = 16, districtCount = 10, municipalityCount = 50)
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(listOf(province), pageable, 1)
         `when`(provinceRepository.findProvincesBy(pageable))
             .thenReturn(page)
@@ -282,9 +288,9 @@ class ProvinceServiceTest {
             .thenReturn(listOf(provinceStats))
 
         val result =
-            provinceService.getProvinces(listOf("1", "!!", "", "e", "eng"), pageable)
+            provinceService.getProvinces(listOf("1", "!!", "", "e", "eng"), pageQuery)
 
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).findProvincesBy(pageable)
@@ -293,14 +299,15 @@ class ProvinceServiceTest {
 
     @Test
     fun `getProvinces returns an empty page when no provinces exist`() {
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(emptyList<Province>(), pageable, 0)
         `when`(provinceRepository.findProvincesBy(pageable))
             .thenReturn(PageImpl(emptyList(), pageable, 0))
         `when`(provinceStatsRepository.findProvinceStatsByCodeIn(page.content.map(Province::code)))
             .thenReturn(emptyList())
 
-        val result = provinceService.getProvinces(emptyList(), pageable)
+        val result = provinceService.getProvinces(emptyList(), pageQuery)
 
         assertThat(result.totalElements).isZero()
         assertThat(result.content).isEmpty()
@@ -348,7 +355,7 @@ class ProvinceServiceTest {
         val result = provinceService.getProvinceByCode(emptyList(), 16)
 
         assertThat(result.code).isEqualTo("16")
-        assertThat(result.names.map { it.language?.code })
+        assertThat(result.names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).findProvinceByCode(16)
@@ -400,7 +407,7 @@ class ProvinceServiceTest {
         val result =
             provinceService.getProvinceByCode(listOf("EN, fr", "en", "!"), 16)
 
-        assertThat(result.names.map { it.language?.code })
+        assertThat(result.names.map { it.language.code })
             .containsExactlyInAnyOrder("en", "fr")
 
         verify(provinceRepository).findProvinceByCode(16)
@@ -442,7 +449,7 @@ class ProvinceServiceTest {
         val result =
             provinceService.getProvinceByCode(listOf("1", "!!", "", "e"), 16)
 
-        assertThat(result.names.map { it.language?.code })
+        assertThat(result.names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).findProvinceByCode(16)
@@ -482,7 +489,8 @@ class ProvinceServiceTest {
             )
         val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(listOf(district), pageable, 1)
         `when`(provinceRepository.existsProvinceByCode(16)).thenReturn(true)
         `when`(districtRepository.findDistrictsByProvinceCode(16, pageable))
@@ -490,11 +498,11 @@ class ProvinceServiceTest {
         `when`(districtStatsRepository.findDistrictStatsByCodeIn(page.content.map(District::code)))
             .thenReturn(listOf(districtStats))
 
-        val result = provinceService.getProvinceDistrictsByCode(emptyList(), 16, pageable)
+        val result = provinceService.getProvinceDistrictsByCode(emptyList(), 16, pageQuery)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).hasSize(1)
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).existsProvinceByCode(16)
@@ -504,10 +512,10 @@ class ProvinceServiceTest {
 
     @Test
     fun `getProvinceDistrictsByCode throws ProvinceNotFoundException when province does not exist`() {
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
         `when`(provinceRepository.existsProvinceByCode(99)).thenReturn(false)
 
-        assertThatThrownBy { provinceService.getProvinceDistrictsByCode(emptyList(), 99, pageable) }
+        assertThatThrownBy { provinceService.getProvinceDistrictsByCode(emptyList(), 99, pageQuery) }
             .isInstanceOf(ProvinceNotFoundException::class.java)
 
         verify(provinceRepository).existsProvinceByCode(99)
@@ -543,7 +551,8 @@ class ProvinceServiceTest {
             )
         val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(listOf(district), pageable, 1)
         `when`(provinceRepository.existsProvinceByCode(16)).thenReturn(true)
         `when`(districtRepository.findDistrictsByProvinceCode(16, pageable))
@@ -552,9 +561,9 @@ class ProvinceServiceTest {
             .thenReturn(listOf(districtStats))
 
         val result =
-            provinceService.getProvinceDistrictsByCode(listOf("EN, fr", "en", "!"), 16, pageable)
+            provinceService.getProvinceDistrictsByCode(listOf("EN, fr", "en", "!"), 16, pageQuery)
 
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("en", "fr")
 
         verify(provinceRepository).existsProvinceByCode(16)
@@ -591,7 +600,8 @@ class ProvinceServiceTest {
             )
         val districtStats = testDistrictStats(code = 1601, municipalityCount = 5)
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(listOf(district), pageable, 1)
         `when`(provinceRepository.existsProvinceByCode(16)).thenReturn(true)
         `when`(districtRepository.findDistrictsByProvinceCode(16, pageable))
@@ -600,9 +610,9 @@ class ProvinceServiceTest {
             .thenReturn(listOf(districtStats))
 
         val result =
-            provinceService.getProvinceDistrictsByCode(listOf("1", "!!", "", "e"), 16, pageable)
+            provinceService.getProvinceDistrictsByCode(listOf("1", "!!", "", "e"), 16, pageQuery)
 
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).existsProvinceByCode(16)
@@ -612,7 +622,8 @@ class ProvinceServiceTest {
 
     @Test
     fun `getProvinceDistrictsByCode returns an empty page when province has no districts`() {
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val page = PageImpl(emptyList<District>(), pageable, 0)
         `when`(provinceRepository.existsProvinceByCode(16)).thenReturn(true)
         `when`(districtRepository.findDistrictsByProvinceCode(16, pageable))
@@ -620,7 +631,7 @@ class ProvinceServiceTest {
         `when`(districtStatsRepository.findDistrictStatsByCodeIn(page.content.map(District::code)))
             .thenReturn(emptyList())
 
-        val result = provinceService.getProvinceDistrictsByCode(emptyList(), 16, pageable)
+        val result = provinceService.getProvinceDistrictsByCode(emptyList(), 16, pageQuery)
 
         assertThat(result.totalElements).isZero()
         assertThat(result.content).isEmpty()
@@ -688,18 +699,19 @@ class ProvinceServiceTest {
                     ),
             )
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(provinceRepository.existsProvinceByCode(16)).thenReturn(true)
         `when`(municipalityRepository.findMunicipalitiesByDistrictProvinceCode(16, pageable))
             .thenReturn(PageImpl(listOf(municipality1, municipality2), pageable, 2))
 
-        val result = provinceService.getProvinceMunicipalitiesByCode(emptyList(), 16, pageable)
+        val result = provinceService.getProvinceMunicipalitiesByCode(emptyList(), 16, pageQuery)
 
         assertThat(result.totalElements).isEqualTo(2)
         assertThat(result.content).hasSize(2)
         assertThat(result.content.map { it.code })
             .containsExactlyInAnyOrder("1601", "1602")
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).existsProvinceByCode(16)
@@ -708,10 +720,10 @@ class ProvinceServiceTest {
 
     @Test
     fun `getProvinceMunicipalitiesByCode throws ProvinceNotFoundException when province does not exist`() {
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
         `when`(provinceRepository.existsProvinceByCode(99)).thenReturn(false)
 
-        assertThatThrownBy { provinceService.getProvinceMunicipalitiesByCode(emptyList(), 99, pageable) }
+        assertThatThrownBy { provinceService.getProvinceMunicipalitiesByCode(emptyList(), 99, pageQuery) }
             .isInstanceOf(ProvinceNotFoundException::class.java)
 
         verify(provinceRepository).existsProvinceByCode(99)
@@ -746,15 +758,16 @@ class ProvinceServiceTest {
                     ),
             )
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(provinceRepository.existsProvinceByCode(16)).thenReturn(true)
         `when`(municipalityRepository.findMunicipalitiesByDistrictProvinceCode(16, pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
         val result =
-            provinceService.getProvinceMunicipalitiesByCode(listOf(" AR , en ", "12", "!"), 16, pageable)
+            provinceService.getProvinceMunicipalitiesByCode(listOf(" AR , en ", "12", "!"), 16, pageQuery)
 
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en")
 
         verify(provinceRepository).existsProvinceByCode(16)
@@ -789,15 +802,16 @@ class ProvinceServiceTest {
                     ),
             )
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(provinceRepository.existsProvinceByCode(16)).thenReturn(true)
         `when`(municipalityRepository.findMunicipalitiesByDistrictProvinceCode(16, pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
         val result =
-            provinceService.getProvinceMunicipalitiesByCode(listOf("1", "!!", "", "e"), 16, pageable)
+            provinceService.getProvinceMunicipalitiesByCode(listOf("1", "!!", "", "e"), 16, pageQuery)
 
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(provinceRepository).existsProvinceByCode(16)
@@ -806,12 +820,13 @@ class ProvinceServiceTest {
 
     @Test
     fun `getProvinceMunicipalitiesByCode returns an empty page when province has no municipalities`() {
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(provinceRepository.existsProvinceByCode(16)).thenReturn(true)
         `when`(municipalityRepository.findMunicipalitiesByDistrictProvinceCode(16, pageable))
             .thenReturn(PageImpl(emptyList(), pageable, 0))
 
-        val result = provinceService.getProvinceMunicipalitiesByCode(emptyList(), 16, pageable)
+        val result = provinceService.getProvinceMunicipalitiesByCode(emptyList(), 16, pageQuery)
 
         assertThat(result.totalElements).isZero()
         assertThat(result.content).isEmpty()

@@ -74,6 +74,17 @@ class GlobalExceptionHandler : ResponseEntityExceptionHandler() {
                 instance = URI.create(request.requestURI)
             }
 
+    @ExceptionHandler(IllegalArgumentException::class)
+    fun handleIllegalArgumentException(
+        ex: IllegalArgumentException,
+        request: HttpServletRequest,
+    ): ProblemDetail =
+        ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.message ?: "Invalid request.").apply {
+            title = "Invalid request"
+            type = URI.create("about:blank")
+            instance = URI.create(request.requestURI)
+        }
+
     @ExceptionHandler(Exception::class)
     fun handleGenericException(
         ex: Exception,

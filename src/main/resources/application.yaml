@@ -36,10 +36,19 @@ spring:
   kotlinx:
     serialization:
       json:
-        naming-strategy: snake_case
+        naming-strategy: kebab_case
   threads:
     virtual:
       enabled: true
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
 
 logging:
   level:

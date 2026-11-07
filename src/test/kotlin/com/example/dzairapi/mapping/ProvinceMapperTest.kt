@@ -18,22 +18,11 @@ package com.example.dzairapi.mapping
 import com.example.dzairapi.helpers.testLanguage
 import com.example.dzairapi.helpers.testProvince
 import com.example.dzairapi.helpers.testProvinceTranslation
-import com.example.dzairapi.model.Province
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.UUID
-import kotlin.collections.emptySet
 
 class ProvinceMapperTest {
-    @Test
-    fun `null province maps to empty response`() {
-        val result = (null as Province?).toResponse(listOf("fr"), null)
-
-        assertThat(result.code).isNull()
-        assertThat(result.slug).isNull()
-        assertThat(result.names).isEmpty()
-    }
-
     @Test
     fun `province with no translations maps to empty names`() {
         val province =
@@ -69,7 +58,7 @@ class ProvinceMapperTest {
         val result = province.toResponse(listOf("fr", "ar"), null)
 
         assertThat(result.names).hasSize(2)
-        assertThat(result.names.map { it.language?.code })
+        assertThat(result.names.map { it.language.code })
             .containsExactlyInAnyOrder("fr", "ar")
         assertThat(result.names.map { it.name })
             .containsExactlyInAnyOrder("Alger", "الجزائر")
@@ -166,7 +155,7 @@ class ProvinceMapperTest {
         val result = province.toResponse(listOf("ar", "fr", "en"), null)
 
         assertThat(result.names).hasSize(3)
-        assertThat(result.names.associate { it.language?.code to it.name })
+        assertThat(result.names.associate { it.language.code to it.name })
             .containsExactlyInAnyOrderEntriesOf(
                 mapOf(
                     "ar" to "الجزائر",

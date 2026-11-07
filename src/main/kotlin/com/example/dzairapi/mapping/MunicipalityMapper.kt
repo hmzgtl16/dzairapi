@@ -20,19 +20,18 @@ import com.example.dzairapi.dto.MunicipalityResponse
 import com.example.dzairapi.model.Municipality
 import com.example.dzairapi.model.MunicipalityTranslation
 
-fun Municipality?.toResponse(languages: List<String>): MunicipalityResponse =
+fun Municipality.toResponse(languages: List<String>): MunicipalityResponse =
     MunicipalityResponse(
-        slug = this?.slug,
-        code = this?.code?.let { String.format("%04d", it) },
+        code = String.format("%04d", code),
+        slug = slug,
         names =
-            this
-                ?.translations
-                ?.filter { languages.contains(it.language?.code) }
-                ?.map(MunicipalityTranslation::toResponse) ?: emptyList(),
+            translations
+                .filter { languages.contains(it.language?.code) }
+                .map(MunicipalityTranslation::toResponse),
     )
 
-fun MunicipalityTranslation?.toResponse(): MunicipalityNameResponse =
+fun MunicipalityTranslation.toResponse(): MunicipalityNameResponse =
     MunicipalityNameResponse(
-        name = this?.name,
-        language = this?.language?.toResponse(),
+        name = name,
+        language = language!!.toResponse(),
     )

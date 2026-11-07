@@ -45,6 +45,9 @@ class SecurityConfig {
                     .requestMatchers("/api/**")
                     .permitAll()
                 it
+                    .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html")
+                    .permitAll()
+                it
                     .anyRequest()
                     .denyAll()
             }.headers { headersConfigurer ->

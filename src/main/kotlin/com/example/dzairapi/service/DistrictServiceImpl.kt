@@ -17,14 +17,14 @@ package com.example.dzairapi.service
 
 import com.example.dzairapi.dto.DistrictResponse
 import com.example.dzairapi.dto.MunicipalityResponse
+import com.example.dzairapi.dto.PageQuery
+import com.example.dzairapi.dto.PageResponse
 import com.example.dzairapi.exception.DistrictNotFoundException
 import com.example.dzairapi.mapping.toResponse
 import com.example.dzairapi.model.District
 import com.example.dzairapi.repository.DistrictRepository
 import com.example.dzairapi.repository.DistrictStatsRepository
 import com.example.dzairapi.repository.MunicipalityRepository
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import com.example.dzairapi.mapping.toResponse as toMunicipalityResponse
@@ -38,23 +38,26 @@ class DistrictServiceImpl(
     @Transactional(readOnly = true)
     override fun getDistricts(
         languages: List<String>,
-        pageable: Pageable,
-    ): Page<DistrictResponse> {
+        pageQuery: PageQuery,
+    ): PageResponse<DistrictResponse> {
         val districts =
             districtRepository
-                .findDistrictsBy(pageable)
+                .findDistrictsBy(pageQuery.toPageable())
 
         val stats =
             districtStatsRepository
                 .findDistrictStatsByCodeIn(districts.content.map(District::code))
 
         val response =
-            districts.map {
-                it.toResponse(
-                    languages.normalizeOrDefaults(),
-                    stats.firstOrNull { s -> s.code == it.code }.toResponse(),
-                )
-            }
+            PageResponse.from(
+                districts,
+                {
+                    it.toResponse(
+                        languages.normalizeOrDefaults(),
+                        stats.firstOrNull { s -> s.code == it.code }.toResponse(),
+                    )
+                },
+            )
 
         return response
     }
@@ -83,16 +86,21 @@ class DistrictServiceImpl(
     override fun getDistrictMunicipalitiesByCode(
         languages: List<String>,
         code: Short,
-        pageable: Pageable,
-    ): Page<MunicipalityResponse> {
+        pageQuery: PageQuery,
+    ): PageResponse<MunicipalityResponse> {
         if (!districtRepository.existsDistrictByCode(code)) {
             throw DistrictNotFoundException(code)
         }
 
-        val response =
+        val municipalities =
             municipalityRepository
-                .findMunicipalitiesByDistrictCode(code, pageable)
-                .map { it.toMunicipalityResponse(languages.normalizeOrDefaults()) }
+                .findMunicipalitiesByDistrictCode(code, pageQuery.toPageable())
+
+        val response =
+            PageResponse.from(
+                municipalities,
+                { it.toMunicipalityResponse(languages.normalizeOrDefaults()) },
+            )
 
         return response
     }

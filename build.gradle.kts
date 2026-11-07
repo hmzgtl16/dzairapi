@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.spring.boot.starter.security)
     implementation(libs.spring.boot.starter.webmvc)
     implementation(libs.spring.boot.starter.validation)
+    implementation(libs.springdoc.openapi.starter.webmvc.ui)
     developmentOnly(libs.spring.boot.docker.compose)
     runtimeOnly(libs.postgresql)
     testImplementation(libs.spring.boot.starter.data.jpa.test)
@@ -128,6 +129,7 @@ kover {
                     "com.example.dzairapi.dto.*",
                     "com.example.dzairapi.model.*",
                     "com.example.dzairapi.generated.*",
+                    "com.example.dzairapi.utils.*",
                 )
                 annotatedBy(
                     "org.springframework.boot.autoconfigure.SpringBootApplication",

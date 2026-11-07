@@ -18,8 +18,8 @@ package com.example.dzairapi.mapping
 import com.example.dzairapi.dto.LanguageResponse
 import com.example.dzairapi.model.Language
 
-fun Language?.toResponse(): LanguageResponse =
+fun Language.toResponse(): LanguageResponse =
     LanguageResponse(
-        code = this?.code,
-        name = this?.name,
+        code = code,
+        name = name,
     )

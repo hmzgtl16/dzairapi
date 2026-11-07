@@ -18,20 +18,11 @@ package com.example.dzairapi.mapping
 import com.example.dzairapi.helpers.testDistrict
 import com.example.dzairapi.helpers.testDistrictTranslation
 import com.example.dzairapi.helpers.testLanguage
-import com.example.dzairapi.model.District
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
 class DistrictMapperTest {
-    @Test
-    fun `null District returns empty response`() {
-        val result = (null as District?).toResponse(listOf("fr"), null)
-
-        assertThat(result.slug).isNull()
-        assertThat(result.names).isEmpty()
-    }
-
     @Test
     fun `district with no translations returns empty names`() {
         val district =
@@ -66,7 +57,7 @@ class DistrictMapperTest {
         val result = district.toResponse(listOf("fr", "ar"), null)
 
         assertThat(result.names).hasSize(2)
-        assertThat(result.names.map { it.language?.code })
+        assertThat(result.names.map { it.language.code })
             .containsExactlyInAnyOrder("fr", "ar")
         assertThat(result.names.map { it.name })
             .containsExactlyInAnyOrder("Cheraga", "الشراقة")
@@ -175,7 +166,7 @@ class DistrictMapperTest {
         val result = district.toResponse(listOf("ar", "fr", "en"), null)
 
         assertThat(result.names).hasSize(3)
-        assertThat(result.names.associate { it.language?.code to it.name })
+        assertThat(result.names.associate { it.language.code to it.name })
             .containsExactlyInAnyOrderEntriesOf(
                 mapOf(
                     "ar" to "الشراقة",
