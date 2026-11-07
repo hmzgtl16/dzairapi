@@ -54,3 +54,20 @@ logging:
   level:
     org.hibernate.validator.internal.metadata.aggregated.CascadingMetaDataBuilder: error
     org.springframework.boot.security.autoconfigure.UserDetailsServiceAutoConfiguration: off
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when-authorized
+      show-components: when-authorized
+  info:
+    env:
+      enabled: true
+    java:
+      enabled: true
+    build:
+      enabled: true
