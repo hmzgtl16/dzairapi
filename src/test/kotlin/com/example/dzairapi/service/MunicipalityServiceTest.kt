@@ -15,6 +15,7 @@
  */
 package com.example.dzairapi.service
 
+import com.example.dzairapi.dto.PageQuery
 import com.example.dzairapi.exception.MunicipalityNotFoundException
 import com.example.dzairapi.helpers.testLanguage
 import com.example.dzairapi.helpers.testMunicipality
@@ -30,7 +31,6 @@ import org.mockito.Mockito.verify
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 import org.springframework.data.domain.PageImpl
-import org.springframework.data.domain.PageRequest
 import org.springframework.test.context.ActiveProfiles
 import java.util.UUID
 
@@ -51,11 +51,12 @@ class MunicipalityServiceTest {
     fun `getMunicipalities returns a page of mapped responses`() {
         val municipality = testMunicipality(code = 1601, slug = "test-slug", translations = emptySet())
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         val municipalityPage = PageImpl(listOf(municipality), pageable, 1)
         `when`(municipalityRepository.findAll(pageable)).thenReturn(municipalityPage)
 
-        val result = municipalityService.getMunicipalities(emptyList(), pageable)
+        val result = municipalityService.getMunicipalities(emptyList(), pageQuery)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
@@ -93,17 +94,18 @@ class MunicipalityServiceTest {
                     ),
             )
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
-        val result = municipalityService.getMunicipalities(emptyList(), pageable)
+        val result = municipalityService.getMunicipalities(emptyList(), pageQuery)
 
         assertThat(result.totalElements).isEqualTo(1)
         assertThat(result.content).isNotEmpty
         assertThat(result.content[0].code).isEqualTo("1601")
         assertThat(result.content[0].names).hasSize(municipality.translations.size)
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(municipalityRepository).findAll(pageable)
@@ -137,11 +139,12 @@ class MunicipalityServiceTest {
                     ),
             )
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
-        val result = municipalityService.getMunicipalities(listOf("en"), pageable)
+        val result = municipalityService.getMunicipalities(listOf("en"), pageQuery)
 
         assertThat(result.content[0].names).hasSize(1)
         assertThat(
@@ -149,7 +152,7 @@ class MunicipalityServiceTest {
                 .names
                 .single()
                 .language
-                ?.code,
+                .code,
         ).isEqualTo("en")
 
         verify(municipalityRepository).findAll(pageable)
@@ -183,17 +186,18 @@ class MunicipalityServiceTest {
                     ),
             )
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
         val result =
             municipalityService.getMunicipalities(
                 listOf(" EN ", "fr,ar", "en", "12", "e"),
-                pageable,
+                pageQuery,
             )
 
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("en", "fr", "ar")
 
         verify(municipalityRepository).findAll(pageable)
@@ -227,14 +231,15 @@ class MunicipalityServiceTest {
                     ),
             )
 
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(listOf(municipality), pageable, 1))
 
         val result =
-            municipalityService.getMunicipalities(listOf("1", "!!", "", "e", "ara"), pageable)
+            municipalityService.getMunicipalities(listOf("1", "!!", "", "e", "ara"), pageQuery)
 
-        assertThat(result.content[0].names.map { it.language?.code })
+        assertThat(result.content[0].names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(municipalityRepository).findAll(pageable)
@@ -242,11 +247,12 @@ class MunicipalityServiceTest {
 
     @Test
     fun `getMunicipalities returns an empty page when no municipalities exist`() {
-        val pageable = PageRequest.of(0, 10)
+        val pageQuery = PageQuery(0, 10)
+        val pageable = pageQuery.toPageable()
         `when`(municipalityRepository.findAll(pageable))
             .thenReturn(PageImpl(emptyList(), pageable, 0))
 
-        val result = municipalityService.getMunicipalities(emptyList(), pageable)
+        val result = municipalityService.getMunicipalities(emptyList(), pageQuery)
 
         assertThat(result.totalElements).isZero()
         assertThat(result.content).isEmpty()
@@ -291,7 +297,7 @@ class MunicipalityServiceTest {
         val result = municipalityService.getMunicipalityByCode(emptyList(), 1601)
 
         assertThat(result.code).isEqualTo("1601")
-        assertThat(result.names.map { it.language?.code })
+        assertThat(result.names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(municipalityRepository).findMunicipalityByCode(1601)
@@ -340,7 +346,7 @@ class MunicipalityServiceTest {
         val result =
             municipalityService.getMunicipalityByCode(listOf("EN, fr", "en", "!"), 1601)
 
-        assertThat(result.names.map { it.language?.code })
+        assertThat(result.names.map { it.language.code })
             .containsExactlyInAnyOrder("en", "fr")
 
         verify(municipalityRepository).findMunicipalityByCode(1601)
@@ -379,7 +385,7 @@ class MunicipalityServiceTest {
         val result =
             municipalityService.getMunicipalityByCode(listOf("1", "!!", "", "e"), 1601)
 
-        assertThat(result.names.map { it.language?.code })
+        assertThat(result.names.map { it.language.code })
             .containsExactlyInAnyOrder("ar", "en", "fr")
 
         verify(municipalityRepository).findMunicipalityByCode(1601)
