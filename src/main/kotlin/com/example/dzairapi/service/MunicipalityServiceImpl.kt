@@ -16,10 +16,10 @@
 package com.example.dzairapi.service
 
 import com.example.dzairapi.dto.MunicipalityResponse
+import com.example.dzairapi.dto.PageResponse
 import com.example.dzairapi.exception.MunicipalityNotFoundException
 import com.example.dzairapi.mapping.toResponse
 import com.example.dzairapi.repository.MunicipalityRepository
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -32,12 +32,15 @@ class MunicipalityServiceImpl(
     override fun getMunicipalities(
         languages: List<String>,
         pageable: Pageable,
-    ): Page<MunicipalityResponse> {
+    ): PageResponse<MunicipalityResponse> {
         val municipalities = municipalityRepository.findAll(pageable)
-        val response =
-            municipalities.map {
+
+        val response = PageResponse.from(
+            municipalities,
+            {
                 it.toResponse(languages.normalizeOrDefaults())
             }
+        )
 
         return response
     }

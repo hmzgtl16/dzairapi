@@ -17,15 +17,15 @@ package com.example.dzairapi.service
 
 import com.example.dzairapi.dto.DistrictResponse
 import com.example.dzairapi.dto.MunicipalityResponse
+import com.example.dzairapi.dto.PageResponse
 import com.example.dzairapi.dto.ProvinceResponse
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
 interface ProvinceService {
     fun getProvinces(
         languages: List<String>,
         pageable: Pageable,
-    ): Page<ProvinceResponse>
+    ): PageResponse<ProvinceResponse>
 
     fun getProvinceByCode(
         languages: List<String>,
@@ -36,11 +36,11 @@ interface ProvinceService {
         languages: List<String>,
         code: Short,
         pageable: Pageable,
-    ): Page<DistrictResponse>
+    ): PageResponse<DistrictResponse>
 
     fun getProvinceMunicipalitiesByCode(
         languages: List<String>,
         code: Short,
         pageable: Pageable,
-    ): Page<MunicipalityResponse>
+    ): PageResponse<MunicipalityResponse>
 }

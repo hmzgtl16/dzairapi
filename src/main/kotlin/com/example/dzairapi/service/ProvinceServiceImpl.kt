@@ -17,6 +17,7 @@ package com.example.dzairapi.service
 
 import com.example.dzairapi.dto.DistrictResponse
 import com.example.dzairapi.dto.MunicipalityResponse
+import com.example.dzairapi.dto.PageResponse
 import com.example.dzairapi.dto.ProvinceResponse
 import com.example.dzairapi.exception.ProvinceNotFoundException
 import com.example.dzairapi.mapping.toResponse
@@ -27,7 +28,6 @@ import com.example.dzairapi.repository.DistrictStatsRepository
 import com.example.dzairapi.repository.MunicipalityRepository
 import com.example.dzairapi.repository.ProvinceRepository
 import com.example.dzairapi.repository.ProvinceStatsRepository
-import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
@@ -46,7 +46,7 @@ class ProvinceServiceImpl(
     override fun getProvinces(
         languages: List<String>,
         pageable: Pageable,
-    ): Page<ProvinceResponse> {
+    ): PageResponse<ProvinceResponse> {
         val provinces =
             provinceRepository
                 .findProvincesBy(pageable)
@@ -55,13 +55,15 @@ class ProvinceServiceImpl(
             provinceStatsRepository
                 .findProvinceStatsByCodeIn(provinces.content.map(Province::code))
 
-        val response =
-            provinces.map {
+        val response = PageResponse.from(
+            provinces,
+            {
                 it.toResponse(
                     languages.normalizeOrDefaults(),
                     stats.firstOrNull { s -> s.code == it.code }.toResponse(),
                 )
             }
+        )
 
         return response
     }
@@ -89,7 +91,7 @@ class ProvinceServiceImpl(
         languages: List<String>,
         code: Short,
         pageable: Pageable,
-    ): Page<DistrictResponse> {
+    ): PageResponse<DistrictResponse> {
         if (!provinceRepository.existsProvinceByCode(code)) {
             throw ProvinceNotFoundException(code)
         }
@@ -102,13 +104,16 @@ class ProvinceServiceImpl(
                 .findDistrictStatsByCodeIn(
                     districts.content.map(District::code),
                 )
-        val response =
-            districts.map {
+
+        val response = PageResponse.from(
+            districts,
+            {
                 it.toDistrictResponse(
                     languages.normalizeOrDefaults(),
                     stats.firstOrNull { s -> s.code == it.code }.toResponse(),
                 )
             }
+        )
 
         return response
     }
@@ -118,15 +123,18 @@ class ProvinceServiceImpl(
         languages: List<String>,
         code: Short,
         pageable: Pageable,
-    ): Page<MunicipalityResponse> {
+    ): PageResponse<MunicipalityResponse> {
         if (!provinceRepository.existsProvinceByCode(code)) {
             throw ProvinceNotFoundException(code)
         }
 
-        val response =
-            municipalityRepository
-                .findMunicipalitiesByDistrictProvinceCode(code, pageable)
-                .map { it.toMunicipalityResponse(languages.normalizeOrDefaults()) }
+        val municipalities = municipalityRepository
+            .findMunicipalitiesByDistrictProvinceCode(code, pageable)
+
+        val response = PageResponse.from(
+            municipalities,
+            { it.toMunicipalityResponse(languages.normalizeOrDefaults()) }
+        )
 
         return response
     }
