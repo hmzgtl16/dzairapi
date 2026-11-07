@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.caffeine.jcache)
     implementation(libs.flyway.postgresql)
     implementation(libs.kotlin.reflect)
+    implementation(libs.spring.boot.starter.actuator)
     implementation(libs.spring.boot.starter.bucket4j)
     implementation(libs.spring.boot.starter.cache)
     implementation(libs.spring.boot.starter.data.jpa)
@@ -58,6 +59,7 @@ dependencies {
     implementation(libs.spring.boot.starter.validation)
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     developmentOnly(libs.spring.boot.docker.compose)
+    runtimeOnly(libs.micrometer.registry.prometheus)
     runtimeOnly(libs.postgresql)
     testImplementation(libs.spring.boot.starter.data.jpa.test)
     testImplementation(libs.spring.boot.starter.flyway.test)
@@ -73,6 +75,10 @@ kotlin {
     compilerOptions {
         freeCompilerArgs.addAll("-Xjsr305=strict", "-Xannotation-default-target=param-property")
     }
+}
+
+springBoot {
+    buildInfo()
 }
 
 tasks.withType<Test> {
