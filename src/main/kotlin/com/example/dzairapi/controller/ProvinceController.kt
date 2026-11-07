@@ -73,7 +73,7 @@ class ProvinceController(
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<ProvinceResponse>> {
         val response = provinceService
-            .getProvinces(languages, query.toPageable())
+            .getProvinces(languages, query)
 
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
@@ -178,7 +178,7 @@ class ProvinceController(
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<DistrictResponse>> {
         val response = provinceService
-            .getProvinceDistrictsByCode(languages, code, query.toPageable())
+            .getProvinceDistrictsByCode(languages, code, query)
 
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
@@ -232,7 +232,7 @@ class ProvinceController(
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<MunicipalityResponse>> {
         val response = provinceService
-            .getProvinceMunicipalitiesByCode(languages, code, query.toPageable())
+            .getProvinceMunicipalitiesByCode(languages, code, query)
 
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }

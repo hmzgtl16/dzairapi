@@ -72,7 +72,7 @@ class DistrictController(
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<DistrictResponse>> {
         val response = districtService
-            .getDistricts(languages, query.toPageable())
+            .getDistricts(languages, query)
         return ResponseEntity.ok(response)
     }
 
@@ -176,7 +176,7 @@ class DistrictController(
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<MunicipalityResponse>> {
         val response = districtService
-            .getDistrictMunicipalitiesByCode(languages, code, query.toPageable())
+            .getDistrictMunicipalitiesByCode(languages, code, query)
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }

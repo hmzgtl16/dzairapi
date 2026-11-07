@@ -71,7 +71,7 @@ class MunicipalityController(
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<MunicipalityResponse>> {
         val response = municipalityService
-            .getMunicipalities(languages, query.toPageable())
+            .getMunicipalities(languages, query)
 
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
