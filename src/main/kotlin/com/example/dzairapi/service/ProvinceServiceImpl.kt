@@ -55,15 +55,16 @@ class ProvinceServiceImpl(
             provinceStatsRepository
                 .findProvinceStatsByCodeIn(provinces.content.map(Province::code))
 
-        val response = PageResponse.from(
-            provinces,
-            {
-                it.toResponse(
-                    languages.normalizeOrDefaults(),
-                    stats.firstOrNull { s -> s.code == it.code }.toResponse(),
-                )
-            }
-        )
+        val response =
+            PageResponse.from(
+                provinces,
+                {
+                    it.toResponse(
+                        languages.normalizeOrDefaults(),
+                        stats.firstOrNull { s -> s.code == it.code }.toResponse(),
+                    )
+                },
+            )
 
         return response
     }
@@ -105,15 +106,16 @@ class ProvinceServiceImpl(
                     districts.content.map(District::code),
                 )
 
-        val response = PageResponse.from(
-            districts,
-            {
-                it.toDistrictResponse(
-                    languages.normalizeOrDefaults(),
-                    stats.firstOrNull { s -> s.code == it.code }.toResponse(),
-                )
-            }
-        )
+        val response =
+            PageResponse.from(
+                districts,
+                {
+                    it.toDistrictResponse(
+                        languages.normalizeOrDefaults(),
+                        stats.firstOrNull { s -> s.code == it.code }.toResponse(),
+                    )
+                },
+            )
 
         return response
     }
@@ -128,13 +130,15 @@ class ProvinceServiceImpl(
             throw ProvinceNotFoundException(code)
         }
 
-        val municipalities = municipalityRepository
-            .findMunicipalitiesByDistrictProvinceCode(code, pageQuery.toPageable())
+        val municipalities =
+            municipalityRepository
+                .findMunicipalitiesByDistrictProvinceCode(code, pageQuery.toPageable())
 
-        val response = PageResponse.from(
-            municipalities,
-            { it.toMunicipalityResponse(languages.normalizeOrDefaults()) }
-        )
+        val response =
+            PageResponse.from(
+                municipalities,
+                { it.toMunicipalityResponse(languages.normalizeOrDefaults()) },
+            )
 
         return response
     }

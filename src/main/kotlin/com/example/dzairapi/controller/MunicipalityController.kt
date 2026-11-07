@@ -70,8 +70,9 @@ class MunicipalityController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<MunicipalityResponse>> {
-        val response = municipalityService
-            .getMunicipalities(languages, query)
+        val response =
+            municipalityService
+                .getMunicipalities(languages, query)
 
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }

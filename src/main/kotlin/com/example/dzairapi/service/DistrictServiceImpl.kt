@@ -48,15 +48,16 @@ class DistrictServiceImpl(
             districtStatsRepository
                 .findDistrictStatsByCodeIn(districts.content.map(District::code))
 
-        val response = PageResponse.from(
-            districts,
-            {
-                it.toResponse(
-                    languages.normalizeOrDefaults(),
-                    stats.firstOrNull { s -> s.code == it.code }.toResponse(),
-                )
-            }
-        )
+        val response =
+            PageResponse.from(
+                districts,
+                {
+                    it.toResponse(
+                        languages.normalizeOrDefaults(),
+                        stats.firstOrNull { s -> s.code == it.code }.toResponse(),
+                    )
+                },
+            )
 
         return response
     }
@@ -91,13 +92,15 @@ class DistrictServiceImpl(
             throw DistrictNotFoundException(code)
         }
 
-        val municipalities = municipalityRepository
-            .findMunicipalitiesByDistrictCode(code, pageQuery.toPageable())
+        val municipalities =
+            municipalityRepository
+                .findMunicipalitiesByDistrictCode(code, pageQuery.toPageable())
 
-        val response = PageResponse.from(
-            municipalities,
-            { it.toMunicipalityResponse(languages.normalizeOrDefaults()) }
-        )
+        val response =
+            PageResponse.from(
+                municipalities,
+                { it.toMunicipalityResponse(languages.normalizeOrDefaults()) },
+            )
 
         return response
     }

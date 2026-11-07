@@ -72,8 +72,9 @@ class ProvinceController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<ProvinceResponse>> {
-        val response = provinceService
-            .getProvinces(languages, query)
+        val response =
+            provinceService
+                .getProvinces(languages, query)
 
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
@@ -177,8 +178,9 @@ class ProvinceController(
         @PathVariable code: Short,
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<DistrictResponse>> {
-        val response = provinceService
-            .getProvinceDistrictsByCode(languages, code, query)
+        val response =
+            provinceService
+                .getProvinceDistrictsByCode(languages, code, query)
 
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
@@ -231,8 +233,9 @@ class ProvinceController(
         @PathVariable code: Short,
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<MunicipalityResponse>> {
-        val response = provinceService
-            .getProvinceMunicipalitiesByCode(languages, code, query)
+        val response =
+            provinceService
+                .getProvinceMunicipalitiesByCode(languages, code, query)
 
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }

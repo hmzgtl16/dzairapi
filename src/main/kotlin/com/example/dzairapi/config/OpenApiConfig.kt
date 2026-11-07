@@ -72,7 +72,8 @@ class OpenApiConfig {
     fun schemaCustomizer(): OpenApiCustomizer =
         OpenApiCustomizer { openApi ->
             val components =
-                openApi.components?.schemas
+                openApi.components
+                    ?.schemas
                     ?.takeIf { it.isNotEmpty() } ?: return@OpenApiCustomizer
 
             components.values.forEach(Schema<*>::renamePropertiesToKebabCase)

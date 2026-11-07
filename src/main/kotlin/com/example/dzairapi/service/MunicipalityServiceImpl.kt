@@ -35,12 +35,13 @@ class MunicipalityServiceImpl(
     ): PageResponse<MunicipalityResponse> {
         val municipalities = municipalityRepository.findAll(pageQuery.toPageable())
 
-        val response = PageResponse.from(
-            municipalities,
-            {
-                it.toResponse(languages.normalizeOrDefaults())
-            }
-        )
+        val response =
+            PageResponse.from(
+                municipalities,
+                {
+                    it.toResponse(languages.normalizeOrDefaults())
+                },
+            )
 
         return response
     }

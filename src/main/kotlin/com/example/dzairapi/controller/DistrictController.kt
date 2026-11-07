@@ -71,8 +71,9 @@ class DistrictController(
         @RequestParam(name = "lang", defaultValue = "") languages: List<String>,
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<DistrictResponse>> {
-        val response = districtService
-            .getDistricts(languages, query)
+        val response =
+            districtService
+                .getDistricts(languages, query)
         return ResponseEntity.ok(response)
     }
 
@@ -175,8 +176,9 @@ class DistrictController(
         @PathVariable code: Short,
         @Valid @ParameterObject query: PageQuery,
     ): ResponseEntity<PageResponse<MunicipalityResponse>> {
-        val response = districtService
-            .getDistrictMunicipalitiesByCode(languages, code, query)
+        val response =
+            districtService
+                .getDistrictMunicipalitiesByCode(languages, code, query)
         return ResponseEntity.status(HttpStatus.OK).body(response)
     }
 }

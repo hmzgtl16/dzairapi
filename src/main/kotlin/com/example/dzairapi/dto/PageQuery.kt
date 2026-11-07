@@ -33,7 +33,5 @@ data class PageQuery(
     @field:Schema(type = "integer", minimum = "1", maximum = "100", defaultValue = "20")
     val size: Int = 20,
 ) {
-    fun toPageable(): Pageable {
-        return PageRequest.of(page, size)
-    }
+    fun toPageable(): Pageable = PageRequest.of(page, size)
 }
