@@ -129,6 +129,7 @@ kover {
                     "com.example.dzairapi.dto.*",
                     "com.example.dzairapi.model.*",
                     "com.example.dzairapi.generated.*",
+                    "com.example.dzairapi.utils.*",
                 )
                 annotatedBy(
                     "org.springframework.boot.autoconfigure.SpringBootApplication",
