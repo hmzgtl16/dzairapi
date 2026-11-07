@@ -56,6 +56,16 @@ class ProvinceController(
             description = "List of provinces",
         ),
         ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
             responseCode = "500",
             description = "Unexpected error",
             content = [
@@ -101,6 +111,16 @@ class ProvinceController(
         ApiResponse(
             responseCode = "404",
             description = "Province not found",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
             content = [
                 Content(
                     mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
@@ -160,6 +180,16 @@ class ProvinceController(
             ],
         ),
         ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
             responseCode = "500",
             description = "Unexpected error",
             content = [
@@ -207,6 +237,16 @@ class ProvinceController(
         ApiResponse(
             responseCode = "404",
             description = "Province not found",
+            content = [
+                Content(
+                    mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
+                    schema = Schema(implementation = ProblemDetail::class),
+                ),
+            ],
+        ),
+        ApiResponse(
+            responseCode = "429",
+            description = "Rate limit exceeded.",
             content = [
                 Content(
                     mediaType = MediaType.APPLICATION_PROBLEM_JSON_VALUE,
