@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.dzairapi.health
+package com.example.dzairapi.utils.health
 
 import jakarta.persistence.EntityManager
 import org.springframework.boot.health.contributor.AbstractHealthIndicator
