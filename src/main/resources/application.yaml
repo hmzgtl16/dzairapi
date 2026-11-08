@@ -40,6 +40,14 @@ spring:
   threads:
     virtual:
       enabled: true
+  cache:
+    jcache:
+      provider: com.github.benmanes.caffeine.jcache.spi.CaffeineCachingProvider
+    cache-names:
+      - dzairapi-filter-config-cache
+      - dzairapi-rate-limit-buckets
+    caffeine:
+      spec: maximumSize=1000000,expireAfterAccess=3600s
 
 springdoc:
   api-docs:
@@ -68,10 +76,32 @@ management:
       show-components: never
       probes:
         enabled: false
-  info:
-    env:
-      enabled: true
-    java:
-      enabled: true
-    build:
-      enabled: true
+
+bucket4j:
+  enabled: true
+  filter-config-caching-enabled: true
+  filter-config-cache-name: dzairapi-filter-config-cache
+
+  filters:
+    - id: dzairapi-rate-limit-filter
+      cache-name: dzairapi-rate-limit-buckets
+      filter-method: servlet
+      url: .*
+      http-content-type: application/problem+json
+      http-status-code: too_many_requests
+      http-response-body: |
+        {
+          "type": "about:blank",
+          "title": "Too Many Requests",
+          "status": 429,
+          "detail": "Rate limit exceeded."
+        }
+      rate-limits:
+        - cache-key: getRemoteAddr()
+          bandwidths:
+            - capacity: 10
+              refill-capacity: 1
+              time: 10
+              unit: seconds
+              initial-capacity: 5
+              refill-speed: interval
