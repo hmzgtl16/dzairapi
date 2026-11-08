@@ -30,7 +30,7 @@ plugins {
 }
 
 group = "com.example"
-version = "0.0.1-SNAPSHOT"
+version = "0.0.1"
 description = "dzairapi"
 
 java {
@@ -49,7 +49,9 @@ dependencies {
     implementation(libs.flyway.postgresql)
     implementation(libs.kotlin.reflect)
     implementation(libs.spring.boot.starter.actuator)
-    implementation(libs.spring.boot.starter.bucket4j)
+    implementation(libs.spring.boot.starter.bucket4j.aop)
+    implementation(libs.spring.boot.starter.bucket4j.jcache)
+    implementation(libs.spring.boot.starter.bucket4j.servlet)
     implementation(libs.spring.boot.starter.cache)
     implementation(libs.spring.boot.starter.data.jpa)
     implementation(libs.spring.boot.starter.flyway)
@@ -59,7 +61,6 @@ dependencies {
     implementation(libs.spring.boot.starter.validation)
     implementation(libs.springdoc.openapi.starter.webmvc.ui)
     developmentOnly(libs.spring.boot.docker.compose)
-    runtimeOnly(libs.micrometer.registry.prometheus)
     runtimeOnly(libs.postgresql)
     testImplementation(libs.spring.boot.starter.data.jpa.test)
     testImplementation(libs.spring.boot.starter.flyway.test)

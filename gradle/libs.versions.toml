@@ -1,5 +1,5 @@
 [versions]
-bucket4j-spring-boot-starter = "0.14.0"
+bucket4jSpring = "0.20.0-RC1"
 caffeine = "3.3.0"
 graalvm = "1.1.18"
 graalvmReachabilityMetadata = "1.0.22"
@@ -23,9 +23,10 @@ kotlin-reflect = { group = "org.jetbrains.kotlin", name = "kotlin-reflect"}
 kotlin-test-junit5= { group = "org.jetbrains.kotlin", name = "kotlin-test-junit5" }
 postgresql = { group = "org.postgresql", name = "postgresql" }
 springdoc-openapi-starter-webmvc-ui = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-ui", version.ref = "springdoc" }
-micrometer-registry-prometheus = { group = "io.micrometer", name = "micrometer-registry-prometheus" }
 spring-boot-starter-actuator = { group = "org.springframework.boot", name = "spring-boot-starter-actuator" }
-spring-boot-starter-bucket4j = { group = "com.giffing.bucket4j.spring.boot.starter", name = "bucket4j-spring-boot-starter", version.ref = "bucket4j-spring-boot-starter" }
+spring-boot-starter-bucket4j-aop = { group = "com.giffing.bucket4j.spring.boot.starter", name = "starter-aop", version.ref = "bucket4jSpring" }
+spring-boot-starter-bucket4j-jcache = { group = "com.giffing.bucket4j.spring.boot.starter", name = "cache-jcache", version.ref = "bucket4jSpring" }
+spring-boot-starter-bucket4j-servlet = { group = "com.giffing.bucket4j.spring.boot.starter", name = "starter-servlet", version.ref = "bucket4jSpring" }
 spring-boot-starter-cache = { group = "org.springframework.boot", name = "spring-boot-starter-cache" }
 spring-boot-starter-data-jpa = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa" }
 spring-boot-starter-data-jpa-test = { group = "org.springframework.boot", name = "spring-boot-starter-data-jpa-test" }
