@@ -1,0 +1,68 @@
+name: Feature Request
+description: Suggest a new feature or improvement
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the problem or limitation you are encountering.
+      placeholder: "There is no way to filter provinces by name, so I have to fetch all provinces and filter client-side."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-solution
+    attributes:
+      label: Proposed solution
+      description: Describe the proposed solution with example requests and responses.
+      placeholder: |
+        Add a `name` query parameter to the provinces endpoint:
+
+        Request:
+        GET /api/v1/provinces?name=alger
+
+        Response:
+        {
+          "content": [
+            {
+              "code": "16",
+              "slug": "alger",
+              "names": [...]
+            }
+          ],
+          ...
+        }
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Any alternative solutions or workarounds you have considered.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: api-impact
+    attributes:
+      label: API impact
+      description: How would this change affect the public API?
+      options:
+        - New endpoint
+        - New query parameter or filter
+        - Change to an existing response (may be breaking)
+        - Documentation or tooling only
+        - Not sure
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: pr-willing
+    attributes:
+      label: Contribution
+      options:
+        - label: I am willing to open a pull request for this feature.
+          required: false
