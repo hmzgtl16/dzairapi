@@ -1,0 +1,69 @@
+name: Data Correction
+description: Propose a correction to administrative division data
+labels:
+  - data
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Data corrections require a verifiable public source. Please provide an official document, government publication, or other authoritative reference to support the proposed change.
+
+  - type: dropdown
+    id: entity
+    attributes:
+      label: Entity
+      description: The type of entity being corrected.
+      options:
+        - Province
+        - District
+        - Municipality
+        - Translation
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: code
+    attributes:
+      label: Code or ID
+      description: The numeric code of the entity (e.g., province code 16 for Algiers).
+      placeholder: "16"
+    validations:
+      required: true
+
+  - type: textarea
+    id: current-value
+    attributes:
+      label: Current value
+      description: The current value in the API response.
+      placeholder: |
+        Name: "Algiers" (language: en)
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposed-value
+    attributes:
+      label: Proposed value
+      description: The corrected value. For translations, include the language code.
+      placeholder: |
+        Name: "Alger" (language: fr)
+    validations:
+      required: true
+
+  - type: input
+    id: source
+    attributes:
+      label: Source
+      description: Link to an official or public document supporting this correction.
+      placeholder: "https://example.com/official-document"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Additional notes
+      description: Any additional context, such as related entities affected or historical reasons for the change.
+    validations:
+      required: false

@@ -1,0 +1,95 @@
+name: Bug Report
+description: Report unexpected behavior, errors, or incorrect responses
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for reporting a bug. Please fill in the fields below so the maintainers can reproduce and fix the issue.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: Describe the bug and what you were doing when it occurred.
+      placeholder: "When I requested a province by code, the response contained an unexpected error."
+    validations:
+      required: true
+
+  - type: input
+    id: request
+    attributes:
+      label: Request that triggers the bug
+      description: The full request URL or curl command that reproduces the issue.
+      placeholder: 'curl "http://localhost:8081/api/v1/provinces?lang=fr"'
+      render: shell
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: What you expected to happen.
+      placeholder: "A 200 OK response with a paginated list of provinces in French."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual-behavior
+    attributes:
+      label: Actual behavior
+      description: The actual response, including HTTP status code and response body.
+      placeholder: |
+        Status: 500 Internal Server Error
+        Body:
+        {
+          "type": "about:blank",
+          "title": "Internal Server Error",
+          "status": 500,
+          "detail": "..."
+        }
+      render: json
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: The API version or release tag where you encountered the bug.
+      placeholder: "v0.0.1"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Environment
+      description: Where you encountered the issue.
+      options:
+        - Local (dev profile)
+        - Production
+        - Other
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Paste any relevant server or client logs. Remove secrets, credentials, and personal data before submitting.
+      render: text
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Confirmations
+      options:
+        - label: I have searched for existing issues and this has not been reported.
+          required: true
+        - label: This is not a security vulnerability. Security issues should be reported via the security policy.
+          required: true
