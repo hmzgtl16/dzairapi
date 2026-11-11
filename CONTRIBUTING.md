@@ -144,4 +144,4 @@ Reviews are handled by a solo maintainer, so review turnaround may take time.
 
 ## License of Contributions
 
-By contributing, you agree that your contributions to the source code will be licensed under the project's [Apache License, Version 2.0](./LICENSE).
+By contributing, you agree that your contributions to the source code will be licensed under the project's [Apache-2.0 License](./LICENSE).

@@ -1,3 +1,4 @@
+Data licensed under the [Creative Commons Attribution 4.0 International License](./LICENSE_DATA).
 # Terms of Use
 
 Last updated: 2026-11-09
@@ -41,7 +42,8 @@ The data is provided for convenience and should be independently verified before
 
 ## License and Attribution
 
-The code is licensed under the [Apache License, Version 2.0](./LICENSE). The data license is `TODO: decide the data license`.
+The code is licensed under the [Apache-2.0 License](./LICENSE). The data licensed under the [Creative Commons Attribution 4.0 International License](./LICENSE_DATA).
+
 
 ## Changes
 
