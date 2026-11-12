@@ -103,7 +103,7 @@ DzairAPI is an independent open-source project. It is not affiliated with, endor
 
 DzairAPI is an independent project, not an official publication. For legal or critical use, verify the data against the Official Journal.
 
-**Data license:** `TODO: decide the data license`.
+**Data license:** [Creative Commons Attribution 4.0 International License](./LICENSE_DATA).
 
 ### Loading data
 
@@ -574,6 +574,7 @@ For security issues, see [SECURITY.md](./SECURITY.md).
 
 ## License
 
-Copyright 2026 Hamza Gattal. Source code licensed under the [Apache License, Version 2.0](./LICENSE). Data license: `TODO: decide the data license`.
+Copyright 2026 Hamza Gattal. 
+Source code licensed under the [Apache-2.0 License](./LICENSE). Data licensed under the [Creative Commons Attribution 4.0 International License](./LICENSE_DATA).
 
 See also [Terms of Use](./TERMS.md) and [Privacy Policy](./PRIVACY.md).

@@ -1,16 +1,20 @@
+-- dzairapi
 -- Copyright 2026 Hamza Gattal
 --
--- Licensed under the Apache License, Version 2.0 (the "License");
--- you may not use this file except in compliance with the License.
--- You may obtain a copy of the License at
+-- This database and its contents are licensed under a
+-- Creative Commons Attribution 4.0 International License (CC BY 4.0).
 --
---     http://www.apache.org/licenses/LICENSE-2.0
+-- You are free to:
+--   - Share: copy and redistribute the material in any medium or format
+--   - Adapt: remix, transform, and build upon the material for any purpose,
+--     even commercially.
 --
--- Unless required by applicable law or agreed to in writing, software
--- distributed under the License is distributed on an "AS IS" BASIS,
--- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
--- See the License for the specific language governing permissions and
--- limitations under the License.
+-- Under the following terms:
+--   - Attribution: You must give appropriate credit, provide a link to the
+--     license, and indicate if changes were made.
+--
+-- Full license text: https://creativecommons.org/licenses/by/4.0/
+-- SPDX-License-Identifier: CC-BY-4.0
 CREATE EXTENSION IF NOT EXISTS pg_trgm SCHEMA public;
 
 CREATE TABLE IF NOT EXISTS public.language (
@@ -60,6 +64,15 @@ CREATE TABLE IF NOT EXISTS public.municipality_translation (
   municipality_id UUID NOT NULL REFERENCES public.municipality (id) ON DELETE CASCADE,
   name VARCHAR(150) NOT NULL,
   PRIMARY KEY (municipality_id, language_id)
+);
+
+CREATE TABLE IF NOT EXISTS public.metadata (
+  id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
+  api_version VARCHAR(20) NOT NULL,
+  dataset_version VARCHAR(20) NOT NULL,
+  last_updated timestamp NOT NULL,
+  sources JSONB NOT NULL,
+  counts JSONB NOT NULL
 );
 
 CREATE INDEX IF NOT EXISTS idx_province_translation_name_trgm ON public.province_translation USING gin (name gin_trgm_ops);

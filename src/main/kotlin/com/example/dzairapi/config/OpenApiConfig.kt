@@ -29,6 +29,7 @@ import io.swagger.v3.oas.models.responses.ApiResponses
 import io.swagger.v3.oas.models.servers.Server
 import io.swagger.v3.oas.models.tags.Tag
 import org.springdoc.core.customizers.OpenApiCustomizer
+import org.springframework.boot.info.BuildProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.http.MediaType
@@ -36,18 +37,19 @@ import org.springframework.http.MediaType
 @Configuration
 class OpenApiConfig {
     @Bean
-    fun openApi(): OpenAPI =
+    fun openApi(buildProperties: BuildProperties): OpenAPI =
         OpenAPI()
             .info(
                 Info()
                     .title("DzairAPI")
-                    .version("1.0")
+                    .version(buildProperties.version)
                     .description("REST API for Algerian provinces, districts and municipalities.")
                     .contact(Contact().name("Hamza Gattal").url("https://github.com/hmzgtl16"))
                     .license(License().name("Apache 2.0").url("https://www.apache.org/licenses/LICENSE-2.0")),
             ).tags(
                 listOf(
                     Tag().name("System").description("Service status and diagnostics"),
+                    Tag().name("Metadata").description("API and dataset metadata"),
                     Tag().name("Provinces").description("Algerian provinces (wilayas)"),
                     Tag().name("Districts").description("Algerian districts (dairas)"),
                     Tag().name("Municipalities").description("Algerian municipalities (communes)"),
@@ -128,7 +130,7 @@ class OpenApiConfig {
 
             openApi.path("/health", PathItem().get(operation))
 
-            val order = listOf("System", "Provinces", "Districts", "Municipalities")
+            val order = listOf("System", "Metadata", "Provinces", "Districts", "Municipalities")
             openApi.tags = openApi.tags?.sortedBy { order.indexOf(it.name).takeIf { i -> i >= 0 } ?: Int.MAX_VALUE }
         }
 }
