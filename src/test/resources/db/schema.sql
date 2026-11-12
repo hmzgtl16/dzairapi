@@ -63,3 +63,12 @@ CREATE TABLE IF NOT EXISTS municipality_translation (
   name VARCHAR(150) NOT NULL,
   PRIMARY KEY (municipality_id, language_id)
 );
+
+CREATE TABLE IF NOT EXISTS metadata (
+  id INT DEFAULT 1 PRIMARY KEY CHECK (id = 1),
+  api_version VARCHAR(20) NOT NULL,
+  dataset_version VARCHAR(20) NOT NULL,
+  last_updated TIMESTAMP NOT NULL,
+  sources JSON NOT NULL,
+  counts JSON NOT NULL
+);
